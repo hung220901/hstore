@@ -1,0 +1,224 @@
+#header{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 0 5%;
+    font-weight: 900;
+    font-style: normal;
+    background-color: transparent;
+}
+
+#header .header__navigation ul li{
+    display: inline-block; 
+}
+#header .header__navigation ul li a{
+    text-decoration: none;
+    color: black;
+    padding: 30px 10px;
+}
+#header .header__navigation ul li ul li a{
+    padding: 5px 20px;
+}
+.notify{
+    position: absolute;
+    background-color:#ff5b5b;
+    width: 18px;
+    height: 18px;
+    border-radius: 100rem;
+    z-index: 1;
+    transform: translateX(-10px);
+    color: white;
+    
+}
+.number-product{
+    font-size: 10px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%,-50%);
+
+}
+
+#header .header__logo img{
+    width: 111px;
+    height: 43px;
+}
+#header .header__action{
+    padding: 25px 0;
+    width: 30%;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 40px;
+    font-size: 24px!important;
+}
+
+
+#header .header__navigation ul li ul{
+    position: absolute;
+    width: 500px;
+    display: none;
+    padding: 10px 20px;
+    grid-template-columns: auto auto auto;
+    box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+    background-color: #fff;
+
+}
+ 
+#header .header__navigation ul li ul li:hover{
+    opacity: 0.7;
+    z-index: 2;
+}
+#header .header__navigation ul li:hover ul{
+    display: grid;
+}
+.search__box.show{
+    display: flex !important; 
+}
+.search__box input{
+    border-radius: 10px;
+    outline: none;
+    border: none;
+    width: 100%;
+    padding: 5px 10px;
+    position: relative;
+}
+.category__dropdown{
+    position: absolute;
+    top: 0;
+    right: 40px;
+    
+}
+.category__dropdown select{
+    height: 38px;
+    border-top: none;
+    border-bottom: none;
+    border-left: 1px solid black;
+    border-right: 1px solid black;
+}
+.btn-search{
+    position: absolute;
+    right: 0;
+    display: block; 
+    margin: 0 auto;
+    
+}
+#search{
+    border-radius: 15px;
+}
+.search__box{
+    font-size: 15px;
+    display: none;
+    background-color: #ccc;
+    border: 6px solid #ccc;
+    position: absolute;
+    border-radius: 25px;
+    width: 400px;
+    height: 50px;
+    z-index: 11;
+    top: 10%; 
+    right: 10%;    
+}
+
+.search-result{
+    background-color: white;
+    position: absolute;
+    top: 50px;
+    width: 100%;
+    border-radius: 5px;
+}
+.search-result ul{
+    list-style: none;
+}
+.search-result ul li{
+    padding: 15px 20px;
+}
+
+/* CART */
+.view-cart{
+    position: absolute;
+    font-size: 16px;
+    width: 25%;
+    height: auto;
+    padding: 10px 20px;
+    font-weight: normal;
+    background-color: white;
+    box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+    top: 10%;
+    right: 5%;
+    display: block;
+}
+ 
+
+.cart-heading{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid black;
+    margin-bottom: 10px;
+    font-weight: 900;
+}
+.cart-list-product{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.cart-title{
+    padding: 18px 0;
+    font-weight: 400;
+    color: #222529;
+}
+.product-item{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 10px 10px;
+}
+
+.product-info{
+    display: flex;
+    justify-content: flex-end;
+    flex-direction: column;
+    margin-right: 6px;
+}
+.product-name{
+    display: block; 
+    text-overflow: ellipsis;
+    width: 160px;
+    overflow: hidden;
+    white-space: nowrap;
+    word-wrap: break-word;
+    font-weight: 900;
+}
+.subtotal{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-weight: 900;
+    margin: 5px 0;
+}
+.btn-checkout{
+    width: 100%;
+    background-color: black;
+    color: white;
+    text-align: center;
+    font-weight: bold;
+    padding:10px 0;
+}
+.product-image{
+    position: relative;
+}
+.product-image .remove-item{
+    position: absolute;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    top: 0px;
+    right: 0px;
+    width: 20px;
+    height: 20px;
+    border-radius: 100rem;
+    background-color: white;
+    box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+    transform: translate(40%,-50%);
+}
