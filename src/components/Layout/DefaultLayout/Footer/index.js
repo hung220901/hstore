@@ -1,75 +1,79 @@
 import React from 'react'
 import {Link} from 'react-router-dom';
-import './footer.css'
+import './footer.scss' 
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faInstagram, faFacebook, faTwitter } from '@fortawesome/free-brands-svg-icons';
+
+
 export default function Footer() {
   return (
-    <footer id='footer'>
-      <div className="footer__subscribe">
-          <div className="subscribe-content">
-              <h3 className='footer__title'>SUBSCRIBE NEWSLETTER</h3>
+    <footer className='bg-[#222529] color-[#A8A8A8] px-[60px] py-[90px] text-[13px]' >
+      <div className="flex justify-between items-center">
+          <div className="w-1/4 text-white">
+              <h3>SUBSCRIBE NEWSLETTER</h3>
               <p>Get all latest information on Events, Sales and Offers. Sign up for newsletter today.</p>
           </div>
-          <div className="subscribe-sent">
-            <input type="text" placeholder='Email Address' />
-            <button className="btn-sent-mail"> SUBSCRIBE</button>
+          <div className="px-[30px] w-1/2 flex">
+            <input className='border-none outline-none rounded-tl-[20px] rounded-bl-[20px] px-[30px] py-[10px] w-full' type="text" placeholder='Email Address'/> 
+            <button className=' rounded-tr-[20px] rounded-br-[20px] bg-[#ff7272] text-white px-5 py-[10px]'> SUBSCRIBE</button> 
           </div>
-          <div className="subscribe-social">
-              <div className="visit-instagram"><box-icon type='logo' name='instagram' color='#ffffff'></box-icon></div>
-              <div className="visit-twitter"><box-icon name='twitter' type='logo' color='#ffffff' ></box-icon></div>
-              <div className="visit-facebook"><box-icon name='facebook' type='logo' color='#ffffff' ></box-icon></div>
+          <div className="flex justify-between items-center text-white">
+              <div className="w-12 h-12 flex justify-center items-center rounded-full hover:bg-[#734638] border-solid border-[#313438] border-[1px]"><FontAwesomeIcon size='lg' icon={faInstagram} /> </div>
+              <div className="w-12 h-12 mx-5 flex justify-center items-center rounded-full hover:bg-[#1b9ccf] border-solid border-[#313438] border-[1px]"><FontAwesomeIcon size='lg' icon={faTwitter} ></FontAwesomeIcon></div>
+              <div className="w-12 h-12 flex justify-center items-center rounded-full hover:bg-[#39558f] border-solid border-[#313438] border-[1px]"><FontAwesomeIcon size='lg' icon={faFacebook} ></FontAwesomeIcon></div>
           </div>
       </div>
-      <div className="footer__bottom">
-        <div className="footer__contact">
-          <div className="footer__contact__item">
-            <h3 className='footer__title'>ADDRESS</h3>
+      <div className="mt-10 flex justify-between gap-5">
+        <div className="flex-grow-[1] flex-shrink-[1] basis-0 text-white">
+          <div>
+            <h3>ADDRESS</h3>
             <span>123 Street Name, City</span>
           </div>
-          <div className="footer__contact__item">
-            <h3 className='footer__title'>PHONE</h3>
+          <div>
+            <h3>PHONE</h3>
             <span>Toll Free: 023212323232</span>
           </div>
-          <div className="footer__contact__item">
-            <h3 className='footer__title'>Email</h3>
+          <div>
+            <h3>Email</h3>
             <span>hung@gmail.com</span>
           </div>
         </div>  
-          <div className="footer__right">
-            <div className="footer__right__top">
-              <div className="footer__nav">
-                <h3 className='footer__title'>My Account</h3>
-                <div className="footer__nav__list">
-                  <div className="row">
+          <div className="flex-grow-[5] flex-shrink-[1] basis-0 text-white">
+            <div className=" flex justify-between gap-5">
+              <div className='text-white' >
+                <h3>My Account</h3>
+                <div className="flex justify-between">
+                  <div className="flex flex-col">
                       <Link to='/'>About us</Link>
                       <Link to='/'>Contact us</Link>
                       <Link to='/'>My Account</Link>
                   </div>
-                  <div className="row">
+                  <div className="flex flex-col">
                       <Link to='/'>Order history</Link>
                       <Link to='/'>Advanced search</Link>
                       <Link to='/'>Login</Link>
                   </div>
                 </div>
               </div>
-              <div className="main__features">
-                <h3 className='footer__title'>MAIN FEATURES</h3>
-                <div className="footer__nav__list">
-                  <div className="row">
+              <div>
+                <h3>MAIN FEATURES</h3>
+                <div className="flex justify-between">
+                  <div className="flex flex-col">
                     <Link to='/'>Super Fast Wordpress</Link>
                     <Link to='/'>Theme</Link>
                     <Link to='/'>1st Fully working Ajax</Link>
                     <Link to='/'>Theme</Link>
                     <Link to='/'>36 Unique Shop Layouts</Link>
                   </div>
-                  <div className="row">
+                  <div className="flex flex-col">
                     <Link to='/'>Powerful Admin Panel</Link>
                     <Link to='/'>Mobile & Retina</Link>
                     <Link to='/'>Optimized</Link>
                   </div>
                 </div>
               </div>
-              <div className="working-time">
-                <h3 className='footer__title'>WORKING DAYS/HOURS</h3>
+              <div className="text-white">
+                <h3 >WORKING DAYS/HOURS</h3>
                 <span>Mon - Sun / 9:00AM - 8:00OM</span>
               </div>
             </div>
