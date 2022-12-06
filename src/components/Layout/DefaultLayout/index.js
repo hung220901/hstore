@@ -4,7 +4,7 @@ export default function DefaultLayout({children}) {
   return (
     <>
         <Header/>
-            {/* {children} */}
+            {children}
         <Footer/>
     </>
   )

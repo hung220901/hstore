@@ -10,7 +10,7 @@ export default function Footer() {
     <footer className='bg-[#222529] color-[#A8A8A8] px-[60px] py-[90px] text-[13px]' >
       <div className="flex justify-between items-center">
           <div className="w-1/4 text-white">
-              <h3>SUBSCRIBE NEWSLETTER</h3>
+              <h3 className='text-[15px] font-bold mb-1'>SUBSCRIBE NEWSLETTER</h3>
               <p>Get all latest information on Events, Sales and Offers. Sign up for newsletter today.</p>
           </div>
           <div className="px-[30px] w-1/2 flex">
@@ -26,23 +26,23 @@ export default function Footer() {
       <div className="mt-10 flex justify-between gap-5">
         <div className="flex-grow-[1] flex-shrink-[1] basis-0 text-white">
           <div>
-            <h3>ADDRESS</h3>
+            <h3 className='text-[15px] font-bold mb-1'>ADDRESS</h3>
             <span>123 Street Name, City</span>
           </div>
           <div>
-            <h3>PHONE</h3>
+            <h3 className='text-[15px] font-bold mb-1'>PHONE</h3>
             <span>Toll Free: 023212323232</span>
           </div>
           <div>
-            <h3>Email</h3>
+            <h3 className='text-[15px] font-bold mb-1'>Email</h3>
             <span>hung@gmail.com</span>
           </div>
         </div>  
           <div className="flex-grow-[5] flex-shrink-[1] basis-0 text-white">
             <div className=" flex justify-between gap-5">
               <div className='text-white' >
-                <h3>My Account</h3>
-                <div className="flex justify-between">
+                <h3 className='text-[15px] font-bold mb-1'>My Account</h3>
+                <div className="flex justify-between gap-10">
                   <div className="flex flex-col">
                       <Link to='/'>About us</Link>
                       <Link to='/'>Contact us</Link>
@@ -56,8 +56,8 @@ export default function Footer() {
                 </div>
               </div>
               <div>
-                <h3>MAIN FEATURES</h3>
-                <div className="flex justify-between">
+                <h3 className='text-[15px] font-bold mb-1'>MAIN FEATURES</h3>
+                <div className="flex justify-between gap-10">
                   <div className="flex flex-col">
                     <Link to='/'>Super Fast Wordpress</Link>
                     <Link to='/'>Theme</Link>
@@ -73,12 +73,12 @@ export default function Footer() {
                 </div>
               </div>
               <div className="text-white">
-                <h3 >WORKING DAYS/HOURS</h3>
+                <h3 className='text-[15px] font-bold mb-1'>WORKING DAYS/HOURS</h3>
                 <span>Mon - Sun / 9:00AM - 8:00OM</span>
               </div>
             </div>
-            <div className="footer__right__bottom">
-              <span>© Porto Magento 2021. All Rights Reserved</span>
+            <div className="flex justify-between items-center py-[10px] mt-5 border-solid border-[#313438] border-t-[1px] ">
+              <span>© Porto Magneto 2021. All Rights Reserved</span>
               <img src="./payment_logo.png" alt="" />
             </div>
           </div>

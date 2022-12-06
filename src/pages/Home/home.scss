@@ -1,0 +1,32 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+.swiper {
+    width:100%;
+    height: 100%;
+}
+
+.swiper-pagination-bullet ,.swiper-pagination-bullet-active {
+    width: 20px;
+    height: 20px;
+    text-align: center;
+    line-height: 20px;
+    font-size: 12px;
+    background-color: transparent;
+    opacity: 1;
+    border: 2px solid black;
+    position: relative;
+}
+.swiper-pagination-bullet-active::after{
+    content:'';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%,-50%);
+    width: 10px;
+    height: 10px;
+    background-color: black;
+    border-radius: 100rem;
+}

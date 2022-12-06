@@ -105,14 +105,14 @@ export default function Header() {
               </ul>
             </div>
           </div>
-          <div   onClick={()=>setActive(!active)}>
+          <div onClick={()=>setActive(!active)}>
             <FontAwesomeIcon icon={faBagShopping} size='xl'/>
             <span className='absolute bg-[#ff5b5b] w-4 h-4 rounded-full z-10 translate-x-[-8px] text-white'>
               <span className='text-s absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2'>{products.length}</span>
             </span> 
           </div>
           { active &&
-            <div className="absolute text-base w-1/4 height-auto px-6 py-2 font-normal bg-white shadow-[0_7px_29px_0_rgba(100,100,111,0.2)] top-20 block z-1 right-10">
+            <div className="absolute text-base w-1/4 height-auto px-6 py-2 font-normal bg-white shadow-[0_7px_29px_0_rgba(100,100,111,0.2)] top-20 block z-10 right-10">
               <div className="flex justify-between items-center border-b-2 border-solid border-black">
                 <span>{products.length} ITEM</span>
                 <span>VIEW CART</span>
