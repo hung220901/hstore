@@ -12,7 +12,7 @@ module.exports = {
       },
       fontFamily:{
         'segoe':['Segoe Script','Savoye LET']
-      }
+      }, 
     },
   },
   variants:{

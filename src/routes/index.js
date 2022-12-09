@@ -1,12 +1,19 @@
+import routesConfig from '../config/routes'
 import Home from '../pages/Home/index'
 import ProductDetail from '../pages/ProductDetail/index'
+
+
 const publicRoutes = [
     {
-        path:'/',
+        path: routesConfig.home,
         component: Home
     },
     {
-        path:'/product-detail',
+        path: routesConfig.productDetail,
+        component: ProductDetail
+    },
+    {
+        path: routesConfig.cart,
         component: ProductDetail
     },
 ]

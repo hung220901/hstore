@@ -1,4 +1,4 @@
-import React from 'react'
+import React  from 'react'
 import { Swiper, SwiperSlide } from 'swiper/react';
 import SwiperCore, { Pagination, Scrollbar, A11y , Autoplay} from 'swiper';
 import 'swiper/css'; 
@@ -8,7 +8,7 @@ import './home.scss'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faHeart, faStar} from '@fortawesome/free-regular-svg-icons';
 import { faShoppingBag, faHeadset, faCreditCard,faShare, faTruckFast} from '@fortawesome/free-solid-svg-icons'; 
-  export default function index() { 
+  export default function index() {  
     SwiperCore.use([Autoplay])
     return (
       <>
@@ -119,8 +119,10 @@ import { faShoppingBag, faHeadset, faCreditCard,faShare, faTruckFast} from '@for
                 <img className='w-full h-full' src="./images/product2.jpeg" alt="" />   
                 <button className="absolute top-1 right-1 
                   rounded-full bg-white w-8 h-8 outline-none border-none hover:bg-[#ff7272] hover:text-white 
-                  m-2 hidden group-hover:block
-                  transition-all delay-100 duration-[0.25em]">
+                  m-2 invisible group-hover:visible
+                  transition-all ease-in duration-500
+                  opacity-50
+                  group-hover:opacity-100">
                     <FontAwesomeIcon icon={faShoppingBag} />
                 </button>
                 <div className="bg-[#ff7272]
@@ -159,7 +161,9 @@ import { faShoppingBag, faHeadset, faCreditCard,faShare, faTruckFast} from '@for
                   <img className='w-full h-full'  src="./images/product3.jpeg" alt="" />   
                   <button className="absolute top-1 right-1 
                   rounded-full bg-white w-8 h-8 outline-none border-none hover:bg-[#ff7272] hover:text-white 
-                  m-2 hidden group-hover:block
+                  m-2 invisible group-hover:visible transition-all ease-in duration-500
+                  opacity-50
+                  group-hover:opacity-100
                   ">
                       <FontAwesomeIcon  icon={faShoppingBag} />
                   </button>
@@ -227,8 +231,11 @@ import { faShoppingBag, faHeadset, faCreditCard,faShare, faTruckFast} from '@for
                   <img className='w-full h-full' src="./images/product_men1.jpeg" alt="" />   
                   <button className="absolute top-1 right-1 
                     rounded-full bg-white w-8 h-8 outline-none border-none hover:bg-[#ff7272] hover:text-white 
-                    m-2 hidden group-hover:block
-                    transition-all delay-100 duration-[0.25em]">
+                    m-2 invisible group-hover:visible
+                    transition-all ease-in duration-200
+                    opacity-50
+                    group-hover:opacity-100
+                    ">
                       <FontAwesomeIcon icon={faShoppingBag} />
                   </button>
                   <div className="bg-[#ff7272]
@@ -267,7 +274,10 @@ import { faShoppingBag, faHeadset, faCreditCard,faShare, faTruckFast} from '@for
                     <img className='w-full h-full'  src="./images/product_men2.jpeg" alt="" />   
                     <button className="absolute top-1 right-1 
                     rounded-full bg-white w-8 h-8 outline-none border-none hover:bg-[#ff7272] hover:text-white 
-                    m-2 hidden group-hover:block
+                    m-2 invisible group-hover:visible
+                    transition-all ease-in duration-200
+                    opacity-50
+                    group-hover:opacity-100
                     ">
                         <FontAwesomeIcon  icon={faShoppingBag} />
                     </button>
@@ -307,30 +317,295 @@ import { faShoppingBag, faHeadset, faCreditCard,faShare, faTruckFast} from '@for
       </div>
       {/* END MEN COLLECTION */}
 
+    <div className="px-[50px]">
       {/* SERVICE */}
-      <div className="flex w-full">
-        <div className="item">
-          <div className="bg-[#222529] text-white rounded-full w-20 h-20 flex justify-center items-center">
+      <div className="flex w-full text-[#777777] justify-around text-xs leading-6 my-20">
+        <div className="flex justify-center items-center flex-col basis-1/4 px-[10px]">
+          <div className="bg-[#222529] text-white rounded-full w-20 h-20 flex justify-center items-center mb-2">
             <FontAwesomeIcon icon={faHeadset} size='2x' beatFade ></FontAwesomeIcon>
           </div>
+          <h3 className="font-bold uppercase text-[#222529] text-center text-xl">
+            customer support
+          </h3>
+          <p className='text-sm pb-4 text-[#555555]'>Need Assistance?</p>
+          <div className='text-inherit text-center text-[13px]'>
+            Lorem ipsum dolor sit amet consectetur adipisicing elit. Eaque, tenetur. Molestiae adipisci expedita iure placeat maxime. Cumque accusamus distinctio vel sed officiis non, incidunt facere quas, sint sapiente laborum molestiae!
+          </div>
         </div>
-        <div className="item">
-          <div className="bg-[#222529] text-white rounded-full w-20 h-20 flex justify-center items-center">
+        <div className="flex justify-center items-center flex-col basis-1/4 px-[10px]">
+          <div className="bg-[#222529] text-white rounded-full w-20 h-20 flex justify-center items-center mb-2">
             <FontAwesomeIcon icon={faCreditCard} size='2x' bounce ></FontAwesomeIcon>
           </div>
-        </div>
-        <div className="item">
-          <div className="bg-[#222529] text-white rounded-full w-20 h-20 flex justify-center items-center">
-            <FontAwesomeIcon icon={faShare} flip={'horizontal'} size='2x' spin={true} ></FontAwesomeIcon>
+          <h3 className="font-bold uppercase text-[#222529] text-center text-xl">
+            secured payment
+          </h3>
+          <p className='text-sm pb-4 text-[#555555]'>Safe & Fast</p>
+          <div className='text-inherit text-center text-[13px]'>
+            Lorem ipsum dolor sit amet consectetur adipisicing elit. Eaque, tenetur. Molestiae adipisci expedita iure placeat maxime. Cumque accusamus distinctio vel sed officiis non, incidunt facere quas, sint sapiente laborum molestiae!
           </div>
         </div>
-        <div className="item">
-          <div className="bg-[#222529] text-white rounded-full w-20 h-20 flex justify-center items-center">
+        <div className="flex justify-center items-center flex-col basis-1/4 px-[10px]">
+          <div className="bg-[#222529] text-white rounded-full w-20 h-20 flex justify-center items-center mb-2">
+            <FontAwesomeIcon icon={faShare} flip={'horizontal'} size='2x' spin={true} ></FontAwesomeIcon>
+          </div>
+          <h3 className="font-bold uppercase text-[#222529] text-center text-xl">
+            free returns
+          </h3>
+          <p className='text-sm pb-4 text-[#555555]'>Easy & Free</p>
+          <div className='text-inherit text-center text-[13px]'>
+            Lorem ipsum dolor sit amet consectetur adipisicing elit. Eaque, tenetur. Molestiae adipisci expedita iure placeat maxime. Cumque accusamus distinctio vel sed officiis non, incidunt facere quas, sint sapiente laborum molestiae!
+          </div>
+        </div>
+        <div className="flex justify-center items-center flex-col basis-1/4 px-[10px]">
+          <div className="bg-[#222529] text-white rounded-full w-20 h-20 flex justify-center items-center mb-2">
             <FontAwesomeIcon icon={faTruckFast} size='2x'></FontAwesomeIcon>
+          </div>
+          <h3 className="font-bold uppercase text-[#222529] text-center text-xl">
+            free shipping
+          </h3>
+          <p className='text-sm pb-4 text-[#555555]'>Order Over $99</p>
+          <div className='text-inherit text-center text-[13px]'>
+            Lorem ipsum dolor sit amet consectetur adipisicing elit. Eaque, tenetur. Molestiae adipisci expedita iure placeat maxime. Cumque accusamus distinctio vel sed officiis non, incidunt facere quas, sint sapiente laborum molestiae!
           </div>
         </div>
       </div>
       {/* END SERVICE */}
-      </>
+      <hr className="text-[#777777] bg-[#e7e7e7] text-sm leading-6" />
+      {/* FEATURE PRODUCT */}
+      <h3 className='text-[#313131] block text-lg font-bold leading-5 -tracking-[0.18px] text-center uppercase w-full mt-20'>feature product</h3>
+      <Swiper
+              slidesPerView={5} 
+              speed={1000} 
+              modules={[ Scrollbar, A11y]}  
+              loop={true}
+            >
+            <SwiperSlide>
+              <div className="px-5 py-10 ">
+                <div className='relative group'>
+                  <img className='w-full h-full' src="./images/product_men1.jpeg" alt="" />   
+                  <button className="absolute top-1 right-1 
+                    rounded-full bg-white w-8 h-8 outline-none border-none hover:bg-[#ff7272] hover:text-white 
+                    m-2 invisible group-hover:visible
+                    transition-all ease-in duration-200
+                    opacity-50
+                    group-hover:opacity-100
+                    ">
+                      <FontAwesomeIcon icon={faShoppingBag} />
+                  </button>
+                  <div className="bg-[#ff7272]
+                     text-white absolute 
+                      bottom-0  left-0  right-0 
+                      text-center group 
+                      opacity-90
+                      w-full h-auto indent-0
+                      transition-all duration-[0.25em]  ease-in 
+                      invisible group-hover:visible group-hover:delay-100
+                      group-hover:py-2 cursor-pointer">
+                    QUICK REVIEW
+                  </div>
+                </div> 
+                <div className="cart-bottom flex justify-between pt-1">
+                    <div className="item-left">
+                      <div className="product-name">
+                        Girl Black
+                      </div>
+                      <div className="text-gray-300">
+                        <FontAwesomeIcon icon={faStar}  />
+                        <FontAwesomeIcon icon={faStar}  />
+                        <FontAwesomeIcon icon={faStar}  />
+                        <FontAwesomeIcon icon={faStar}  />
+                        <FontAwesomeIcon icon={faStar}  />
+                      </div>
+                      <div className="product-price">$49.00</div>
+                    </div>
+                    <div className="add-to-wishlist">
+                      <FontAwesomeIcon icon={faHeart} />
+                    </div>
+                </div> 
+              </div>  
+            </SwiperSlide>
+            <SwiperSlide>
+              <div className="px-5 py-10 ">
+                <div className='relative group'>
+                  <img className='w-full h-full' src="./images/product2.jpeg" alt="" />   
+                  <button className="absolute top-1 right-1 
+                    rounded-full bg-white w-8 h-8 outline-none border-none hover:bg-[#ff7272] hover:text-white 
+                    m-2 invisible group-hover:visible
+                    transition-all ease-in duration-200
+                    opacity-50
+                    group-hover:opacity-100
+                    ">
+                      <FontAwesomeIcon icon={faShoppingBag} />
+                  </button>
+                  <div className="bg-[#ff7272]
+                     text-white absolute 
+                      bottom-0  left-0  right-0 
+                      text-center group 
+                      opacity-90
+                      w-full h-auto indent-0
+                      transition-all duration-[0.25em]  ease-in 
+                      invisible group-hover:visible group-hover:delay-100
+                      group-hover:py-2 cursor-pointer">
+                    QUICK REVIEW
+                  </div>
+                </div> 
+                <div className="cart-bottom flex justify-between pt-1">
+                    <div className="item-left">
+                      <div className="product-name">
+                        Girl Black
+                      </div>
+                      <div className="text-gray-300">
+                        <FontAwesomeIcon icon={faStar}  />
+                        <FontAwesomeIcon icon={faStar}  />
+                        <FontAwesomeIcon icon={faStar}  />
+                        <FontAwesomeIcon icon={faStar}  />
+                        <FontAwesomeIcon icon={faStar}  />
+                      </div>
+                      <div className="product-price">$49.00</div>
+                    </div>
+                    <div className="add-to-wishlist">
+                      <FontAwesomeIcon icon={faHeart} />
+                    </div>
+                </div> 
+              </div>  
+            </SwiperSlide>
+            <SwiperSlide>
+              <div className="px-5 py-10 ">
+                <div className='relative group'>
+                  <img className='w-full h-full' src="./images/product3.jpeg" alt="" />   
+                  <button className="absolute top-1 right-1 
+                    rounded-full bg-white w-8 h-8 outline-none border-none hover:bg-[#ff7272] hover:text-white 
+                    m-2 invisible group-hover:visible
+                    transition-all ease-in duration-200
+                    opacity-50
+                    group-hover:opacity-100
+                    ">
+                      <FontAwesomeIcon icon={faShoppingBag} />
+                  </button>
+                  <div className="bg-[#ff7272]
+                     text-white absolute 
+                      bottom-0  left-0  right-0 
+                      text-center group 
+                      opacity-90
+                      w-full h-auto indent-0
+                      transition-all duration-[0.25em]  ease-in 
+                      invisible group-hover:visible group-hover:delay-100
+                      group-hover:py-2 cursor-pointer">
+                    QUICK REVIEW
+                  </div>
+                </div> 
+                <div className="cart-bottom flex justify-between pt-1">
+                    <div className="item-left">
+                      <div className="product-name">
+                        Girl Black
+                      </div>
+                      <div className="text-gray-300">
+                        <FontAwesomeIcon icon={faStar}  />
+                        <FontAwesomeIcon icon={faStar}  />
+                        <FontAwesomeIcon icon={faStar}  />
+                        <FontAwesomeIcon icon={faStar}  />
+                        <FontAwesomeIcon icon={faStar}  />
+                      </div>
+                      <div className="product-price">$49.00</div>
+                    </div>
+                    <div className="add-to-wishlist">
+                      <FontAwesomeIcon icon={faHeart} />
+                    </div>
+                </div> 
+              </div>  
+            </SwiperSlide>
+            <SwiperSlide>
+              <div className="px-5 py-10 ">
+                <div className='relative group'>
+                  <img className='w-full h-full' src="./images/product_men1.jpeg" alt="" />   
+                  <button className="absolute top-1 right-1 
+                    rounded-full bg-white w-8 h-8 outline-none border-none hover:bg-[#ff7272] hover:text-white 
+                    m-2 invisible group-hover:visible
+                    transition-all ease-in duration-200
+                    opacity-50
+                    group-hover:opacity-100
+                    ">
+                      <FontAwesomeIcon icon={faShoppingBag} />
+                  </button>
+                  <div className="bg-[#ff7272]
+                     text-white absolute 
+                      bottom-0  left-0  right-0 
+                      text-center group 
+                      opacity-90
+                      w-full h-auto indent-0
+                      transition-all duration-[0.25em]  ease-in 
+                      invisible group-hover:visible group-hover:delay-100
+                      group-hover:py-2 cursor-pointer">
+                    QUICK REVIEW
+                  </div>
+                </div> 
+                <div className="cart-bottom flex justify-between pt-1">
+                    <div className="item-left">
+                      <div className="product-name">
+                        Girl Black
+                      </div>
+                      <div className="text-gray-300">
+                        <FontAwesomeIcon icon={faStar}  />
+                        <FontAwesomeIcon icon={faStar}  />
+                        <FontAwesomeIcon icon={faStar}  />
+                        <FontAwesomeIcon icon={faStar}  />
+                        <FontAwesomeIcon icon={faStar}  />
+                      </div>
+                      <div className="product-price">$49.00</div>
+                    </div>
+                    <div className="add-to-wishlist">
+                      <FontAwesomeIcon icon={faHeart} />
+                    </div>
+                </div> 
+              </div>  
+            </SwiperSlide>
+            <SwiperSlide>
+              <div className="px-5 py-10 ">
+                <div className='relative group'>
+                  <img className='w-full h-full' src="./images/product_men2.jpeg" alt="" />   
+                  <button className="absolute top-1 right-1 
+                    rounded-full bg-white w-8 h-8 outline-none border-none hover:bg-[#ff7272] hover:text-white 
+                    m-2 invisible group-hover:visible
+                    transition-all ease-in duration-200
+                    opacity-50
+                    group-hover:opacity-100
+                    ">
+                      <FontAwesomeIcon icon={faShoppingBag} />
+                  </button>
+                  <div className="bg-[#ff7272]
+                     text-white absolute 
+                      bottom-0  left-0  right-0 
+                      text-center group 
+                      opacity-90
+                      w-full h-auto indent-0
+                      transition-all duration-[0.25em]  ease-in 
+                      invisible group-hover:visible group-hover:delay-100
+                      group-hover:py-2 cursor-pointer">
+                    QUICK REVIEW
+                  </div>
+                </div> 
+                <div className="cart-bottom flex justify-between pt-1">
+                    <div className="item-left">
+                      <div className="product-name">
+                        Girl Black
+                      </div>
+                      <div className="text-gray-300">
+                        <FontAwesomeIcon icon={faStar}  />
+                        <FontAwesomeIcon icon={faStar}  />
+                        <FontAwesomeIcon icon={faStar}  />
+                        <FontAwesomeIcon icon={faStar}  />
+                        <FontAwesomeIcon icon={faStar}  />
+                      </div>
+                      <div className="product-price">$49.00</div>
+                    </div>
+                    <div className="add-to-wishlist">
+                      <FontAwesomeIcon icon={faHeart} />
+                    </div>
+                </div> 
+              </div>  
+            </SwiperSlide>
+      </Swiper>
+    </div>
+    </>
   )
 }
