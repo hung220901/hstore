@@ -1,4 +1,4 @@
-import React  from 'react'
+import React, { useState }  from 'react'
 import { Swiper, SwiperSlide } from 'swiper/react';
 import SwiperCore, { Pagination, Scrollbar, A11y , Autoplay} from 'swiper';
 import 'swiper/css'; 
@@ -8,18 +8,25 @@ import './home.scss'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faHeart, faStar} from '@fortawesome/free-regular-svg-icons';
 import { faShoppingBag, faHeadset, faCreditCard,faShare, faTruckFast} from '@fortawesome/free-solid-svg-icons'; 
-  export default function index() {  
+  export default function Home() {  
     SwiperCore.use([Autoplay])
+    const [showQuickView, setShowQuickView] = useState(false) 
+    function handleShow(e){
+      console.log('clicked!')
+      // e.stopPropagation()
+      // setShowQuickView(!showQuickView)
+    }
+
     return (
       <>
       {/* BANNER SLIDER */}
         <Swiper
               slidesPerView={1} 
-              speed={1000}
-              // autoplay={{ delay: 1000 }}
+              speed={1000} 
               modules={[  Pagination, Scrollbar, A11y]} 
               pagination={{ clickable: true }}
               loop={true}
+              className="banner-slider"
             >
               <SwiperSlide>
                 <img className='object-cover min-h-full' src="./images/home_slide1.jpg" alt="" />
@@ -400,14 +407,16 @@ import { faShoppingBag, faHeadset, faCreditCard,faShare, faTruckFast} from '@for
                       w-full h-auto indent-0
                       transition-all duration-[0.25em]  ease-in 
                       invisible group-hover:visible group-hover:delay-100
-                      group-hover:py-2 cursor-pointer">
+                      group-hover:py-2 cursor-pointer" 
+                      onClick={()=> setShowQuickView(!showQuickView)}
+                    >
                     QUICK REVIEW
                   </div>
                 </div> 
                 <div className="cart-bottom flex justify-between pt-1">
                     <div className="item-left">
                       <div className="product-name">
-                        Girl Black
+                        Girl Black TEST QUICK VIEW
                       </div>
                       <div className="text-gray-300">
                         <FontAwesomeIcon icon={faStar}  />
@@ -606,6 +615,13 @@ import { faShoppingBag, faHeadset, faCreditCard,faShare, faTruckFast} from '@for
             </SwiperSlide>
       </Swiper>
     </div>
+    {/* TOAST QUICK VIEW */}
+      <div className={` ${showQuickView ? 'fixed':'hidden'} bg-[rgba(68,70,69,0.8)]  z-40 left-0 top-0  w-full  h-full  overflow-hidden`} 
+      onClick={(e)=>handleShow}>
+        <div className=" fixed left-[10%] top-[10%] bottom-[10%] right-[10%] bg-white shadow-lg">
+
+        </div>
+      </div>
     </>
   )
 }

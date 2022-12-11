@@ -1,5 +1,5 @@
 import routesConfig from '../config/routes'
-import Home from '../pages/Home/index'
+import Home from '../pages/Home/Home'
 import ProductDetail from '../pages/ProductDetail/index'
 
 

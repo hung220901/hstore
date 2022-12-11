@@ -1,6 +1,5 @@
 import React, { useState }  from 'react'
-import {Link} from 'react-router-dom'
-import './header.scss'; 
+import {Link} from 'react-router-dom' 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import {faUser, faHeart} from '@fortawesome/free-regular-svg-icons'
 import {faMagnifyingGlass,faBagShopping, faX} from '@fortawesome/free-solid-svg-icons'

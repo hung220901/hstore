@@ -3,12 +3,12 @@
 @tailwind utilities;
 
 
-.swiper {
+.banner-slider {
     width:100%;
     height: 100%;
 }
 
-.swiper-pagination-bullet ,.swiper-pagination-bullet-active {
+.banner-slider .swiper-pagination-bullet ,.banner-slider  .swiper-pagination-bullet-active {
     width: 20px;
     height: 20px;
     text-align: center;
@@ -19,7 +19,7 @@
     border: 2px solid black;
     position: relative;
 }
-.swiper-pagination-bullet-active::after{
+.banner-slider .swiper-pagination-bullet-active::after{
     content:'';
     position: absolute;
     top: 50%;
