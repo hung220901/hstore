@@ -114,7 +114,7 @@ export default function Header() {
             <div className="absolute text-base w-1/4 height-auto px-6 py-2 font-normal bg-white shadow-[0_7px_29px_0_rgba(100,100,111,0.2)] top-20 block z-10 right-10">
               <div className="flex justify-between items-center border-b-2 border-solid border-black">
                 <span>{products.length} ITEM</span>
-                <span>VIEW CART</span>
+                <Link to="/cart">VIEW CART</Link>
               </div>
               <div className="flex flex-col items-center">
                 {products.length > 0 ? 

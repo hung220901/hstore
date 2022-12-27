@@ -4,7 +4,17 @@ import React, { useState }  from 'react'
 
 export default function Cart() {
     const showItem = false;
+    const [quantity, setQuantity] = useState(1)
     const [shippingTaxForm, setShippingTaxForm] = useState(false); 
+    const handleDecrease = () =>{
+        if(quantity > 0)
+            setQuantity(quantity - 1)
+    }
+    const handleIncrease = () =>{ 
+        setQuantity(quantity + 1)
+    }
+
+
   return (
     <div className='text-[#777777] text-sm p-5'>
         <div className='py-8'>
@@ -25,7 +35,7 @@ export default function Cart() {
         <div className='mx-5 flex'>
             <div className='flex-[3]'>
                 <table className="list-product text-left ">
-                    <thead>
+                 <thead>
                         <tr className='text-[#212529] text-left border-b-[1px] border-solid border-[#e7e7e7]'>
                             <th className='w-[500px] p-2'>ITEM</th>
                             <th className='p-2 w-[200px]'>PRICE</th>
@@ -48,9 +58,16 @@ export default function Cart() {
                             </td>
                             <td >
                                 <div className='flex justify-start items-center text-sm text-[#777777] '>
-                                    <div className='border-solid border-[#e7e7e7] border-[1px] px-3 py-4 text-[#222529] cursor-pointer hover:text-[#ff7272]'>-</div>
-                                    <input type="number" className='outline-none w-10 border-solid border-[#e7e7e7] border-[1px] px-3 py-4 text-center text-[#222529] font-bold' defaultValue='1' />
-                                    <div className='border-solid border-[#e7e7e7] border-[1px] px-3 py-4 text-[#222529] cursor-pointer hover:text-[#ff7272]' >+</div>
+                                    <div 
+                                      className='border-solid border-[#e7e7e7] border-[1px] px-3 py-4
+                                       text-[#222529] cursor-pointer hover:text-[#ff7272]'
+                                      onClick={handleDecrease}
+                                    >-</div>
+                                    <input type="number" className='outline-none w-10 border-solid border-[#e7e7e7] border-[1px] px-3 py-4 text-center text-[#222529] font-bold' value={quantity} onChange={(e)=>setQuantity(e.target.value)} />
+                                    <div className='border-solid border-[#e7e7e7] border-[1px] px-3 py-4 
+                                    text-[#222529] cursor-pointer hover:text-[#ff7272]' 
+                                    onClick={handleIncrease}
+                                    >+</div>
                                 </div>
                             </td>
                             <td className='text-right font-semibold text-[#222529] leading-4'><span>1000$</span></td>
@@ -71,8 +88,8 @@ export default function Cart() {
             </div>
             <div className='flex-[1] border-2 border-solid border-[#e7e7e7] py-6 px-8'>
                 <h3 className='font-bold text-[#222529] -tracking-[0.16px] leading-5 mb-5 text-[20px]'> <strong>SUMMARY</strong> </h3>
-                <div className='flex justify-between  border-t-[1px] border-solid border-[#e7e7e7] pt-2' onClick={()=>setShippingTaxForm(!shippingTaxForm)}>
-                    <h3>Estimate Shipping and Tax</h3> 
+                <div className='flex justify-between  border-t-[1px] border-solid border-[#e7e7e7] py-2' onClick={()=>setShippingTaxForm(!shippingTaxForm)}>
+                    <h3 className='cursor-pointer'>Estimate Shipping and Tax</h3> 
                     <FontAwesomeIcon icon={faAngleUp} rotation={shippingTaxForm? 180: 0}/>
                 </div>
                 { shippingTaxForm && 
@@ -89,19 +106,19 @@ export default function Cart() {
                         <input type="text" className='w-full px-3 py-2 border-solid border-[1px] border-[#e7e7e7] outline-none bg-[#ffffff]'/>
                     </div>}
                 <div className='subtotal flex justify-between border-t-[1px] border-solid border-[#e7e7e7]'> 
-                    <h3 className=''>Subtotal</h3>
+                    <h3 className='py-1'>Subtotal</h3>
                     <span>$190.00</span>
                 </div>
                 <div className='Tax flex justify-between border-b-[1px] border-solid border-[#e7e7e7] '> 
-                    <h3 className=''>Tax</h3>
+                    <h3 className='py-1'>Tax</h3>
                     <span>$00</span>
                 </div>
-                <div className="orderTotal flex justify-between font-extrabold text-[#222529] text-xl">
-                    <h3>Order Total</h3>
+                <div className="orderTotal flex justify-between font-extrabold text-[#222529] text-xl py-2">
+                    <h3>Order Total:</h3>
                     <span>$190.00</span>
                 </div>
-                <div className="checkout-btn text-white bg-black text-center px-4 py-2 text-[15px] font-bold">GO TO CHECKOUT <FontAwesomeIcon icon={faArrowRight} size="1x" /> </div>
-                <div className="text-[#ff7272] text-[14px] leading-6 text-center">
+                <div className="checkout-btn text-white bg-black text-center px-4 py-2 text-[15px] font-bold cursor-pointer">GO TO CHECKOUT <FontAwesomeIcon icon={faArrowRight} size="1x" /> </div>
+                <div className="text-[#ff7272] text-[14px] leading-6 text-center py-2 cursor-pointer">
                     Check Out with Multiple Address
                 </div>
             </div> 
