@@ -1,4 +1,5 @@
 import routesConfig from '../config/routes'
+import Cart from '../pages/Cart/Cart'
 import Home from '../pages/Home/Home'
 import ProductDetail from '../pages/ProductDetail/index'
 
@@ -14,7 +15,7 @@ const publicRoutes = [
     },
     {
         path: routesConfig.cart,
-        component: ProductDetail
+        component: Cart
     },
 ]
 const privateRoutes = [
