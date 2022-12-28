@@ -1,11 +1,25 @@
-import { faAngleUp, faArrowRight, faBasketShopping, faMultiply } from '@fortawesome/free-solid-svg-icons'
+import { faAngleUp, faArrowRight, faBasketShopping, faHeart, faMultiply } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import React, { useState }  from 'react'
 
 export default function Cart() {
     const showItem = false;
-    const [quantity, setQuantity] = useState(1)
+    const [quantity, setQuantity] = useState(1) 
     const [shippingTaxForm, setShippingTaxForm] = useState(false); 
+    const products = [
+        {
+            id:1,
+            name: 'shirt black',
+            img: './images/product1.jpeg',
+            size: 'xs',
+            color: 'black',
+            price: 50.22,
+            qty: quantity,
+        }, 
+    ]
+    
+    
+    // const totalPrice = products.reduce((acc, cur)=>acc + parseFloat(cur.price * cur.qty),0) 
     const handleDecrease = () =>{
         if(quantity > 0)
             setQuantity(quantity - 1)
@@ -13,7 +27,6 @@ export default function Cart() {
     const handleIncrease = () =>{ 
         setQuantity(quantity + 1)
     }
-
 
   return (
     <div className='text-[#777777] text-sm p-5'>
@@ -44,37 +57,42 @@ export default function Cart() {
                         </tr>
                     </thead>
                     <tbody>
-                        <tr className='relative border-b-[1px] border-solid border-[#e7e7e7]'>
-                            <td className='flex justify-start gap-5 px-2 py-5'>
-                                <div><img src="./images/product1.jpeg" alt="" /></div>
-                                <div className='flex flex-col justify-between'>
-                                    <span className='font-medium text-[#222529] text-sm -tracking-[0.14px] leading-5'>Shirt Male</span>
-                                    <h3 className='font-bold'>Color: <span className='font-normal'>Brown</span></h3>
-                                    <h3 className='font-bold'>Size: <span className='font-normal'>XS</span></h3>
+                        {products.map((prod)=>( 
+                            <tr key={prod.id} className='relative border-b-[1px] border-solid border-[#e7e7e7]'>
+                                <td className='flex justify-start gap-5 px-2 py-5'>
+                                    <div><img src={prod.img} alt="" /></div>
+                                    <div className='flex flex-col justify-between'>
+                                        <span className='font-medium text-[#222529] text-sm -tracking-[0.14px] leading-5'>{prod.name}</span>
+                                        <h3 className='font-bold'>Color: <span className='font-normal'>{prod.color}</span></h3>
+                                        <h3 className='font-bold'>Size: <span className='font-normal'>{prod.size}</span></h3>
+                                    </div>
+                                </td>
+                                <td>
+                                    {prod.price}
+                                </td>
+                                <td >
+                                    <div className='flex justify-start items-center text-sm text-[#777777] '>
+                                        <div 
+                                        className='border-solid border-[#e7e7e7] border-[1px] px-3 py-4
+                                        text-[#222529] cursor-pointer hover:text-[#ff7272]'
+                                        onClick={handleDecrease}
+                                        >-</div>
+                                        <input type="number" className='outline-none w-10 border-solid border-[#e7e7e7] border-[1px] px-3 py-4 text-center text-[#222529] font-bold' value={quantity} onChange={(e)=>setQuantity(parseInt(e.target.value))} />
+                                        <div className='border-solid border-[#e7e7e7] border-[1px] px-3 py-4 
+                                        text-[#222529] cursor-pointer hover:text-[#ff7272]' 
+                                        onClick={handleIncrease}
+                                        >+</div>
+                                    </div>
+                                </td>
+                                <td className='text-right font-semibold text-[#222529] leading-4'><span>{(prod.price * prod.qty).toFixed(2)}</span></td>
+                                <div className="absolute w-5 h-5 top-0 right-0 translate-x-2 translate-y-1 rounded-full flex justify-center items-center bg-white shadow-md cursor-pointer">
+                                    <FontAwesomeIcon icon={faMultiply} />
                                 </div>
-                            </td>
-                            <td>
-                                39.00$
-                            </td>
-                            <td >
-                                <div className='flex justify-start items-center text-sm text-[#777777] '>
-                                    <div 
-                                      className='border-solid border-[#e7e7e7] border-[1px] px-3 py-4
-                                       text-[#222529] cursor-pointer hover:text-[#ff7272]'
-                                      onClick={handleDecrease}
-                                    >-</div>
-                                    <input type="number" className='outline-none w-10 border-solid border-[#e7e7e7] border-[1px] px-3 py-4 text-center text-[#222529] font-bold' value={quantity} onChange={(e)=>setQuantity(e.target.value)} />
-                                    <div className='border-solid border-[#e7e7e7] border-[1px] px-3 py-4 
-                                    text-[#222529] cursor-pointer hover:text-[#ff7272]' 
-                                    onClick={handleIncrease}
-                                    >+</div>
+                                <div className="absolute w-5 h-5 top-0 right-0 -translate-x-4 translate-y-1 rounded-full flex justify-center items-center bg-white shadow-md cursor-pointer">
+                                    <FontAwesomeIcon icon={faHeart} color="#ff7272" />
                                 </div>
-                            </td>
-                            <td className='text-right font-semibold text-[#222529] leading-4'><span>1000$</span></td>
-                            <div className="absolute w-5 h-5 top-0 right-0 translate-x-2 translate-y-1 rounded-full flex justify-center items-center bg-white shadow-md cursor-pointer">
-                                <FontAwesomeIcon icon={faMultiply} />
-                            </div>
-                        </tr>
+                            </tr>
+                        ))}
                     </tbody>
                 </table> 
                 <div className='discount flex my-2 gap-5'>
@@ -118,9 +136,11 @@ export default function Cart() {
                     <span>$190.00</span>
                 </div>
                 <div className="checkout-btn text-white bg-black text-center px-4 py-2 text-[15px] font-bold cursor-pointer">GO TO CHECKOUT <FontAwesomeIcon icon={faArrowRight} size="1x" /> </div>
-                <div className="text-[#ff7272] text-[14px] leading-6 text-center py-2 cursor-pointer">
-                    Check Out with Multiple Address
-                </div>
+                {products.length > 1 &&
+                    <div className="text-[#ff7272] text-[14px] leading-6 text-center py-2 cursor-pointer">
+                        Check Out with Multiple Address
+                    </div>
+                }
             </div> 
         </div>
     </div>
