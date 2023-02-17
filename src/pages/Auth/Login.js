@@ -17,7 +17,7 @@ export default function Login() {
                     <input type="text" className='border-solid border-[1px] border-[#e7e7e7] outline-none py-2 px-3 inline-block text-sm text-[#777777] leading-8 w-full'/>
                     <Link to="/login" className='text-[#222529] inline text-sm font-medium leading-6'>Forgot Your Password?</Link>
                     <button className='block bg-[#222529] text-white font-bold -tracking-[0.24px] leading-[22px] text-center px-[14px] py-4 w-full my-2'>SIGN IN</button>
-                    <button className='block bg-[#222529] text-white font-bold -tracking-[0.24px] leading-[22px] text-center px-[14px] py-4 w-full my-2'>CREATE AN ACCOUNT</button>
+                    <Link to="/register" className='block bg-[#222529] text-white font-bold -tracking-[0.24px] leading-[22px] text-center px-[14px] py-4 w-full my-2'>CREATE AN ACCOUNT</Link>
                     <p className='text-red-500 text-sm'>*Required Field</p>
                 </form>
             </div>

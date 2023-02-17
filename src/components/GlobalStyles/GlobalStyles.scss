@@ -5,11 +5,20 @@
 @layer base{
   @import url('https://fonts.googleapis.com/css2?family=Poppins&display=swap');
   body {
-  font-family: 'Poppins',sans-serif;
+    font-family: 'Poppins',sans-serif;
   }
   input::-webkit-outer-spin-button,
   input::-webkit-inner-spin-button {
-  -webkit-appearance: none;
-  margin: 0;
-}
+    -webkit-appearance: none;
+    margin: 0;
+  }
+  .limit-text{
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 1;
+    overflow: hidden;
+  }
+  .bg-gradient{
+    background-image: repeating-linear-gradient(45deg,#6fa6d6,#6fa6d6 33px,transparent 0,transparent 41px,#f18d9b 0,#f18d9b 74px,transparent 0,transparent 82px);
+  }
 }

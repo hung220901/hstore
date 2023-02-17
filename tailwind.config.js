@@ -11,7 +11,8 @@ module.exports = {
         s:['10px']
       },
       fontFamily:{
-        'segoe':['Segoe Script','Savoye LET']
+        'segoe':['Segoe Script','Savoye LET'],
+        'opensans':['Open Sans']
       }, 
     },
   },

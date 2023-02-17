@@ -15,12 +15,11 @@ export default function ThumbsGallery() {
     const [thumbsSwiper, setThumbsSwiper] = useState(null); 
     SwiperCore.use([Zoom])
     const [quantity, setQuantity] = useState({qty:1})
-    const handleIncrease = () =>{
-      setQuantity(quantity.qty + 1)
-      // onChange={e=>setQuantity(e.target.value)}
+    const handleIncrease = (e) =>{
+      setQuantity(quantity.qty  + 1)  
     }
     const handleDecrease = () =>{
-      setQuantity(quantity.qty - 1)
+      setQuantity( quantity.qty - 1)
     }
     const prodImg = [
         {
