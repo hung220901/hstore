@@ -207,7 +207,8 @@ useEffect(()=>{
             </div>
           }
           <div>
-            <Link to="/profile">
+
+            <Link to='/login'>
               <FontAwesomeIcon icon={faUser} size='xl'/>
             </Link>
           </div>
