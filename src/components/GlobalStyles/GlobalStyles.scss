@@ -21,4 +21,9 @@
   .bg-gradient{
     background-image: repeating-linear-gradient(45deg,#6fa6d6,#6fa6d6 33px,transparent 0,transparent 41px,#f18d9b 0,#f18d9b 74px,transparent 0,transparent 82px);
   }
+  .active{
+    background-color: #fff;
+    padding: 1rem 0;
+    color: #333!important;
+  }
 }

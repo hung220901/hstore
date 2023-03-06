@@ -332,7 +332,7 @@ import { faShoppingBag, faHeadset, faCreditCard,faShare, faTruckFast} from '@for
       <div className="flex flex-wrap items-start w-full text-[#777777] justify-around text-xs leading-6 my-20">
         <div className="flex justify-center items-center flex-col sm:basis-1/2 lg:basis-1/4 px-[10px]">
           <div className="bg-[#222529] text-white rounded-full w-20 h-20 flex justify-center items-center mb-2">
-            <FontAwesomeIcon icon={faHeadset} size='2x'   ></FontAwesomeIcon>
+            <FontAwesomeIcon icon={faHeadset} size='2x'></FontAwesomeIcon>
           </div>
           <h3 className="font-bold uppercase text-[#222529] text-center text-xl">
             customer support
@@ -344,7 +344,7 @@ import { faShoppingBag, faHeadset, faCreditCard,faShare, faTruckFast} from '@for
         </div>
         <div className="flex justify-center items-center flex-col sm:basis-1/2 lg:basis-1/4 px-[10px]">
           <div className="bg-[#222529] text-white rounded-full w-20 h-20 flex justify-center items-center mb-2">
-            <FontAwesomeIcon icon={faCreditCard} size='2x'   ></FontAwesomeIcon>
+            <FontAwesomeIcon icon={faCreditCard} size='2x'  ></FontAwesomeIcon>
           </div>
           <h3 className="font-bold uppercase text-[#222529] text-center text-xl">
             secured payment

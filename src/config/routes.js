@@ -1,5 +1,3 @@
-
-
 const route = {
     home:'/',
     productDetail:'/product-detail',
@@ -15,5 +13,8 @@ const route = {
     profile: '/profile',
     order: '/order',
     orderTracking: '/tracking',
+    // Admin
+    dashBoard:'/admin/dashboard',
+    productManager:'/admin/product',
 }
 export default route;

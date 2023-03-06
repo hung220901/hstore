@@ -13,6 +13,8 @@ import Checkout from '../pages/Checkout/Checkout'
 import Profile from '../pages/Account/Profile'
 import Order from '../pages/Account/Order'
 import OrderTracking from '../pages/Account/OrderTracking'
+import DashBoard from '../components/Admin/Dashboard'
+import Product from '../components/Admin/Product'
 
 
 const publicRoutes = [
@@ -74,7 +76,14 @@ const publicRoutes = [
     },
 ]
 const privateRoutes = [
- 
+    {
+        path: routesConfig.dashBoard,
+        component: DashBoard
+    },
+    {
+        path: routesConfig.productManager,
+        component: Product
+    },
 ]
 
 export { publicRoutes, privateRoutes}

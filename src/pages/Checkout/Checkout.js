@@ -1,9 +1,43 @@
-import React, {useState } from 'react'
+import React, {useEffect, useState } from 'react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import  { faAngleDown, faAngleUp, faCheck} from '@fortawesome/free-solid-svg-icons'
+import * as request from '../../utils/requestCountry'
 export default function Checkout() {
   const [showCart, setShowCart] = useState(false)
- 
+  const [countryList, setCountryList] = useState([])
+  const [country, setCountry] = useState('')
+  const [districtList, setDistrictList] = useState([])
+  const [district, setDistrict] = useState('') 
+  const [wardsList, setWardsList] = useState([]) 
+  useEffect(()=>{
+    const fetchCountry = async()=>{
+      const res = await request.get('/p/')
+      if(res.status === 200){
+        setCountryList(res.data)  
+      } 
+    } 
+    fetchCountry()
+  },[])
+
+  useEffect(() => {
+    const fetchDistrict = async()=>{
+      const resD = await request.get(`/p/${country}?depth=2`)
+      if(resD.status === 200){
+        setDistrictList(resD.data.districts)  
+      }  
+    } 
+    country && fetchDistrict() 
+  }, [country])
+  
+  useEffect(() => {
+    const fetchWards = async()=>{
+      const resW = await request.get(`/d/${district}?depth=2`)
+      if(resW.status === 200){
+        setWardsList(resW.data.wards)   
+      } 
+    } 
+    district && fetchWards()  
+  }, [district])
 
   return (
     <div className='px-5 pb-10 relative'>
@@ -53,28 +87,37 @@ export default function Checkout() {
             </div>
             <div className="box-input">
               <label htmlFor='city'>City <span className='text-red-500'>*</span></label>
-              <select name="city" id="" className='px-3 py-2 border-solid border-[1px] border-[#e7e7e7] outline-none w-full'>
-                <option value="Ho Chi Min">TP. Ho Chi Minh</option>
-                <option value="HaNoi">Ha Noi</option>
+              <select name="city" className='px-3 py-2 border-solid border-[1px] border-[#e7e7e7] outline-none w-full' onChange={e=>setCountry(e.target.value)} defaultValue={''}>
+                <option defaultValue={''}>Vui lòng chọn thành phố</option>
+                { countryList && countryList?.map((c,i)=>( 
+                  <option key={i} value={c.code}>{c.name}</option>
+                ))
+                } 
               </select>
             </div>
             <div className="box-input">
             <label htmlFor='District'>District <span className='text-red-500'>*</span></label>
-              <select name="District" id="" className='px-3 py-2 border-solid border-[1px] border-[#e7e7e7] outline-none w-full'>
-                <option value="Nha Be">Nha Be</option>
-                <option value="Quan 7">Quan 7</option>
+              <select name="District" className='px-3 py-2 border-solid border-[1px] border-[#e7e7e7] outline-none w-full' onChange={e=>setDistrict(e.target.value)} disabled={!districtList.length}  defaultValue={''}>
+                <option  defaultValue={''}>Vui lòng chọn quận/huyện</option>
+                { districtList && districtList?.map((c,i)=>( 
+                      <option key={i} value={c.code}>{c.name}</option>
+                    ))
+                }
               </select>
             </div>
             <div className="box-input">
               <label htmlFor='village'>Sub-district/Village <span className='text-red-500'>*</span></label>
-              <select name="village" id="" className='px-3 py-2 border-solid border-[1px] border-[#e7e7e7] outline-none w-full'>
-                <option value="Hiep Phuoc">Hiep Phuoc</option>
-                <option value="Nhon Duc">Nhon Duc</option>
+              <select name="village" className='px-3 py-2 border-solid border-[1px] border-[#e7e7e7] outline-none w-full' disabled={!wardsList.length} defaultValue={''}>
+                <option defaultValue={''}>Vui lòng chọn xã/thị trấn</option>
+                { wardsList && wardsList?.map((c,i)=>( 
+                    <option key={i} value={c.code}>{c.name}</option>
+                  ))
+                }
               </select>
             </div>
             <div className="box-input">
               <h2>Phone number <span className='text-red-500'>*</span></h2>
-              <input type="text" name="" id="" className='px-3 py-2 border-solid border-[1px] border-[#e7e7e7] outline-none w-full' />
+              <input type="number" name="" id="" className='px-3 py-2 border-solid border-[1px] border-[#e7e7e7] outline-none w-full' />
             </div>
           </div> 
           <div className={`cart ${showCart ? 'max-md:fixed' : 'hidden'} w-full h-full top-0 right-0 z-20 left-[20%] bg-white 

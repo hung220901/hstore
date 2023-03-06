@@ -3,8 +3,9 @@ import {Link} from 'react-router-dom'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import {faUser, faHeart} from '@fortawesome/free-regular-svg-icons'
 import {faMagnifyingGlass,faBagShopping, faX, faBars, faAngleDown, faAngleUp, faAngleRight} from '@fortawesome/free-solid-svg-icons'
-
-
+import {useDebounce} from '../../../../hook'
+import * as request from '../../../../utils/request'
+import * as catReq from '../../../../services/categoryServices'
 
 
 export default function Header() {
@@ -15,13 +16,18 @@ export default function Header() {
     categoryMenu:false,
   }) 
   const [searchValue, setSearchValue] = useState('') 
+  const debounced = useDebounce(searchValue, 1500)
   const [products, setProducts] = useState([]) 
+  const [categories, setCategories] = useState([]) 
   const  name ='Porto White Girl Shirt'
   const price = 70;
-  const  image ='product1.jpeg';
-
+  const  image ='product1.jpeg'; 
   const total = products.reduce((result,prod)=>result + prod.price,0)
-  const newProduct = products.filter((prod)=>prod.name.toLowerCase().includes(searchValue)) 
+  const searchResult = products.filter((prod)=>prod.name.toLowerCase().includes(searchValue)) 
+
+
+
+
   const addProduct = () =>{
     setProducts([
       ...products,{
@@ -34,22 +40,46 @@ export default function Header() {
   const handleDeleteProduct = (id)=>{
     setProducts(products.filter((pro)=>pro.id !== id))
   } 
-// Handle Scroll Sticky
-  const headerRef = useRef(null) 
- 
-  useEffect(()=>{
-    window.addEventListener('scroll',function(){ 
-      if(this.window.scrollY > 90){ 
-        headerRef.current?.classList.add('sticky')  
-      }
-      else{
-        headerRef.current?.classList.remove('sticky') 
+// Call API Search
+useEffect(()=>{
+  if(!debounced.trim()){
+    setSearchValue('')
+    return;
+  }
+  const fetchApi = async(q)=>{
+    const res = await request.get('/product', {
+      params:{
+        q
       }
     })
+    setProducts(res.product)
+  }
+  fetchApi()
+},[debounced])
+
+useEffect(()=>{
+  const fetchCategoryApi = async()=>{
+    const resCate = await catReq.getAllCategory()
+    setCategories(resCate.categories) 
+  }
+  fetchCategoryApi() 
+},[])
+
+// Handle Scroll Sticky
+  const headerRef = useRef(null)  
+  useEffect(()=>{
+    window.addEventListener('scroll',function(){  
+      if(document.documentElement.scrollTop > 90){ 
+        headerRef.current?.classList.add('bg-white')  
+      }
+      else{
+        headerRef.current?.classList.remove('bg-white') 
+      }
+    }) 
   },[])
 
   return (
-    <header className='flex items-center justify-between font-black bg-white px-5 top-0 right-0 left-0 z-20 ' ref={headerRef}>
+    <header className={`flex items-center justify-between bg-none font-black px-5 top-0 right-0 left-0 z-30 ${window.location.pathname === '/' ? 'fixed' :'sticky'} transition-all duration-300`} ref={headerRef}>
         <div className='hidden lg:block'>
             <ul>
               <li className='inline-block py-3 px-2 h-full'>
@@ -57,18 +87,18 @@ export default function Header() {
               </li>
               <li className='inline-block py-3 px-2 h-full group '>
                 <Link to="/categories">CATEGORY <FontAwesomeIcon icon={faAngleDown} size='sm' /> </Link>
-                <div className='hidden absolute w-[650px] px-4 py-5 group-hover:block  z-10 bg-white grid-cols-3 mt-2 shadow-2xl'>
+                <div className='hidden absolute w-[650px] px-4 py-5 group-hover:block z-10 bg-white grid-cols-3 mt-2 shadow-2xl'>
                   <div className='w-full flex justify-between'>
                     <ul className='w-full flex text-[#777] text-xs tracking-[0.33px]'>  
                       <li className='w-full h-full'> 
                         <ul>
                           <li className='px-3 py-2 text-[#222529] pointer-events-none font-bold'>CLOTHES</li>
-                          <li className='px-3 py-2 hover:underline'><Link to='/categories'>SHIRT</Link></li>
-                          <li className='px-3 py-2 hover:underline'><Link to='/categories'>T-SHIRT</Link></li>
-                          <li className='px-3 py-2 hover:underline'><Link to='/categories'>DRESS</Link></li>
-                          <li className='px-3 py-2 hover:underline'><Link to='/categories'>SHOES</Link></li>
-                          <li className='px-3 py-2 hover:underline'><Link to='/categories'>JEAN</Link></li> 
-                          <li className='px-3 py-2 hover:underline'><Link to='/categories'>COAT</Link></li> 
+                          { 
+                            categories && categories?.map((cat,i)=>(
+                              <li key={i} className='px-3 py-2 hover:underline uppercase'><Link to={`/categories/${cat.name}`}>{cat.name}</Link></li> 
+                            ))
+                          }
+ 
                         </ul>
                       </li>
                       <li className='w-full h-full'> 
@@ -189,7 +219,8 @@ export default function Header() {
           <div onClick={()=>setShow({menu:false,cart:false,search:!show.search})}>
             <FontAwesomeIcon icon={faMagnifyingGlass} size='xl'/>
           </div>
-          <div className={`text-sm hidden bg-gray-300 border-solid border-gray-300 border-8 absolute rounded-3xl w-[400px] h-auto z-10 top-24 right-10 ${show.search? '!flex':'' }`}>
+          <div className={`text-sm hidden bg-gray-300 border-solid border-gray-300 border-8 absolute rounded-3xl w-[400px] h-auto z-10 top-24 right-10 ${show.search ? '!flex':'' }`}>
+            {/* Search */}
             <input 
               className='rounded-lg outline-none border-none w-full py-1 px-4 relative h-12'
               type="text" 
@@ -211,8 +242,8 @@ export default function Header() {
             </div>
           <div className="absolute z-10  bg-white top-16 w-full rounded ">
               <ul className='list-none'>
-                {newProduct&& newProduct.map((prod)=>(
-                  <li className='px-5 py-3' key={prod.id}>{prod.name }</li>
+                {searchResult && searchValue.length > 0 && searchResult.map((prod, index)=>(
+                  <li className='px-5 py-3' key={index}>{prod.name }</li>
                 ))}
               </ul>
             </div>

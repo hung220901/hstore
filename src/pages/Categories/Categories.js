@@ -54,7 +54,7 @@ export default function Categories() {
       </div>
       <div className='flex py-2 '>
         {/* SIDEBAR */}
-        <div className="sidebar hidden lg:block basis-1/4 border-solid border-[#e7e7e7] border-[1px] ">
+        <div className="sidebar hidden lg:block basis-1/4 border-solid border-[#e7e7e7] border-[1px] h-fit">
           <div className=" px-1 py-2 border-solid border-[#e7e7e7] border-b-[1px] categories">
             <h2>CATEGORIES</h2>
             <div className="categories-item text-[#777777] ">
@@ -105,7 +105,7 @@ export default function Categories() {
             }
           </div>
           <div className="px-1 py-2 size">
-            <div className="flex items-center justify-between" onClick={()=>setShow({...show,size: !show.size})}>
+            <div className="flex items-center justify-between py-2" onClick={()=>setShow({...show,size: !show.size})}>
               <h2>SIZE</h2>
               {show.size ?
                 <FontAwesomeIcon icon={faMinus} />  

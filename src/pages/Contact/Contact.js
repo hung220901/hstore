@@ -2,11 +2,12 @@ import React from 'react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import {faEnvelope, faPhone} from '@fortawesome/free-solid-svg-icons'
 import {faFacebook, faSkype} from '@fortawesome/free-brands-svg-icons';
+import Map from '../../components/GoogleMap/Map'
 export default function Contact() {
   return (
     <>
       <div className='px-5 py-5'>
-        <iframe title='gg-map' src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d245.0823754221854!2d106.73656784742766!3d10.63238450736941!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x31753a128b8a73b9%3A0x6a01fd490229e9ee!2zUGhhbiBWxINuIELhuqN5LCBIaeG7h3AgUGjGsOG7m2MsIE5ow6AgQsOoLCBUaMOgbmggcGjhu5EgSOG7kyBDaMOtIE1pbmgsIFZp4buHdCBOYW0!5e0!3m2!1svi!2s!4v1673611633544!5m2!1svi!2s" width="100%" height="300"  style={{border:0}} loading="lazy" referrerPolicy="no-referrer-when-downgrade"></iframe>
+        <div className='w-full h-[50vh]'><Map/> </div>
         <div className="content text-[#777777] md:flex md:justify-start gap-5 ">
           <div className="send-msg md:flex md:justify-between md:basis-3/4">
             <div className='md:flex-1 md:mr-5'>

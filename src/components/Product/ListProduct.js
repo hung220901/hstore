@@ -7,11 +7,11 @@ import 'swiper/css/pagination';
 import 'swiper/css/scrollbar'; 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faHeart, faStar} from '@fortawesome/free-regular-svg-icons';
-import { faMultiply, faShoppingBag} from '@fortawesome/free-solid-svg-icons'; 
-// import request from '../../utils/request'
+import { faMultiply, faShoppingBag} from '@fortawesome/free-solid-svg-icons';  
+import * as productServices from '../../services/productServices'
 export default function ListProduct() {
     const [showQuickView, setShowQuickView] = useState(false) 
-
+    const [product, setProduct] = useState()
     const [quantity, setQuantity] = useState({qty:1})
     const handleIncrease = () =>{
       setQuantity(quantity.qty + 1) 
@@ -20,27 +20,21 @@ export default function ListProduct() {
       setQuantity(quantity.qty - 1)
     }
     const handleShow =(e) =>{  
-      e.preventDefault() 
-      console.log('show!')
+      e.preventDefault()  
       setShowQuickView(!showQuickView)
     } 
  
-// Call API
-    // const getProd = async() =>{
-    //   try {
-    //     const res = await request.get('/product')
-    //     console.log(res.data.product);
-    //   } catch (error) {
-    //     console.log('something went wrong!');
-    //   }
-    // }
-
+// Call API 
   useEffect(()=>{
-    // getProd()
+    const fetchApi = async ()=>{
+      const result = await productServices.getAllProduct();  
+      setProduct(result) 
+    }
+    fetchApi()
   },[])
   return (
     <>
-        <h3 className='text-[#313131] block text-lg font-bold leading-5 -tracking-[0.18px] text-center uppercase w-full mt-10'>feature product</h3>
+      <h3 className='text-[#313131] block text-lg font-bold leading-5 -tracking-[0.18px] text-center uppercase w-full mt-10'>feature product</h3>
       <Swiper
               slidesPerView={4} 
               speed={1000} 
@@ -61,56 +55,60 @@ export default function ListProduct() {
               }}
               loop={true}
             >
-            <SwiperSlide>
-              <Link to="/product-detail">
-                <div className="px-5 py-10 ">
-                  <div className='relative group'>
-                    <img className='w-full h-full' src="./images/product_men1.jpeg" alt="" />
-                    <button className="absolute top-1 right-1
-                      rounded-full bg-white w-8 h-8 outline-none border-none hover:bg-[#ff7272] hover:text-white
-                      m-2 invisible group-hover:visible
-                      transition-all ease-in duration-200
-                      opacity-50
-                      group-hover:opacity-100
-                      ">
-                        <FontAwesomeIcon icon={faShoppingBag} />
-                    </button>
-                    <div className="bg-[#ff7272]
-                       text-white absolute
-                        bottom-0  left-0  right-0
-                        text-center group
-                        opacity-90
-                        w-full h-auto indent-0
-                        transition-all duration-[0.25em]  ease-in
-                        invisible group-hover:visible group-hover:delay-100
-                        group-hover:py-2 cursor-pointer"
-                        onClick={(e)=>handleShow(e)}
-                      >
-                      QUICK REVIEW
+            { product?.map((prod,index)=>(
+              <SwiperSlide key={index}>
+                <Link to={`/product-detail/${prod.slug}`}>
+                  <div className="px-5 py-10 ">
+                    <div className='relative group'> 
+                      <img className='w-full h-full' src={prod.image.url} alt="" />
+                      <button className="absolute top-1 right-1
+                        rounded-full bg-white w-8 h-8 outline-none border-none hover:bg-[#ff7272] hover:text-white
+                        m-2 invisible group-hover:visible
+                        transition-all ease-in duration-200
+                        opacity-50
+                        group-hover:opacity-100
+                        ">
+                          <FontAwesomeIcon icon={faShoppingBag} />
+                      </button>
+                      <div className="bg-[#ff7272]
+                        text-white absolute
+                          bottom-0  left-0  right-0
+                          text-center group
+                          opacity-90
+                          w-full h-auto indent-0
+                          transition-all duration-[0.25em]  ease-in
+                          invisible group-hover:visible group-hover:delay-100
+                          group-hover:py-2 cursor-pointer"
+                          onClick={(e)=>handleShow(e)}
+                        >
+                        QUICK REVIEW
+                      </div>
+                    </div>
+                    <div className="cart-bottom flex justify-between pt-1">
+                        <div className="item-left">
+                          <div className="product-name">
+                            {prod.name}
+                          </div>
+                          <div className="text-gray-300">
+                            <FontAwesomeIcon icon={faStar}  />
+                            <FontAwesomeIcon icon={faStar}  />
+                            <FontAwesomeIcon icon={faStar}  />
+                            <FontAwesomeIcon icon={faStar}  />
+                            <FontAwesomeIcon icon={faStar}  />
+                          </div>
+                          <div className="product-price">{prod.price}</div>
+                        </div>
+                        <div className="add-to-wishlist">
+                          <FontAwesomeIcon icon={faHeart} />
+                        </div>
                     </div>
                   </div>
-                  <div className="cart-bottom flex justify-between pt-1">
-                      <div className="item-left">
-                        <div className="product-name">
-                          Girl Black
-                        </div>
-                        <div className="text-gray-300">
-                          <FontAwesomeIcon icon={faStar}  />
-                          <FontAwesomeIcon icon={faStar}  />
-                          <FontAwesomeIcon icon={faStar}  />
-                          <FontAwesomeIcon icon={faStar}  />
-                          <FontAwesomeIcon icon={faStar}  />
-                        </div>
-                        <div className="product-price">$49.00</div>
-                      </div>
-                      <div className="add-to-wishlist">
-                        <FontAwesomeIcon icon={faHeart} />
-                      </div>
-                  </div>
-                </div>
-              </Link>
-            </SwiperSlide>
-            <SwiperSlide>
+                </Link>
+              </SwiperSlide>               
+            ))
+
+            }
+            {/* <SwiperSlide>
               <Link to="/product-detail">
                 <div className="px-5 py-10 ">
                   <div className='relative group'>
@@ -207,7 +205,7 @@ export default function ListProduct() {
                   </div>
                 </div>
               </Link>
-            </SwiperSlide> 
+            </SwiperSlide>  */}
       </Swiper> 
        {/* TOAST QUICK VIEW */}
       <div className={` ${showQuickView ? 'fixed':'hidden'} bg-[rgba(68,70,69,0.8)]  z-40 left-0 top-0  w-full  h-full  overflow-hidden`} 
