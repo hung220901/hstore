@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState , memo} from 'react'
 import SwiperCore, { FreeMode, Navigation, Thumbs, Zoom } from 'swiper'
 import { Swiper, SwiperSlide } from 'swiper/react'
 import { faEnvelope, faShoppingBag, faStar } from '@fortawesome/free-solid-svg-icons'
@@ -11,34 +11,19 @@ import "swiper/css/free-mode";
 import "swiper/css/navigation";
 import "swiper/css/thumbs";
 import './gallery.scss'  
-export default function ThumbsGallery() {
-    const [thumbsSwiper, setThumbsSwiper] = useState(null); 
-    SwiperCore.use([Zoom])
-    const [quantity, setQuantity] = useState({qty:1})
-    const handleIncrease = (e) =>{
-      setQuantity(quantity.qty  + 1)  
-    }
-    const handleDecrease = () =>{
-      setQuantity( quantity.qty - 1)
-    }
-    const prodImg = [
-        {
-            id:1,
-            img:'product-detail-img-1.jpeg'
-        },
-        {
-            id:2,
-            img:'product-detail-img-2.jpeg'
-        },
-        {
-            id:3,
-            img:'product-detail-img-3.jpeg'
-        },
-        {
-            id:4,
-            img:'product-detail-img-4.jpeg'
-        }
-    ] 
+import { useSelector } from 'react-redux'
+export default function ThumbsGallery() { 
+  const product = useSelector(state => state.products.products) 
+  const [thumbsSwiper, setThumbsSwiper] = useState(null); 
+  SwiperCore.use([Zoom])
+  const [quantity, setQuantity] = useState(1) 
+  const handleIncrease = () =>{
+    setQuantity(parseInt(quantity)  + 1)  
+  }
+  const handleDecrease = () =>{
+    setQuantity( parseInt(quantity) - 1)
+  }
+ 
  
   return (
     <div className='flex flex-wrap md:flex-nowrap'>
@@ -55,10 +40,10 @@ export default function ThumbsGallery() {
           zoom={{maxRatio:2, minRatio:1 }}
           className="mySwiper2"
         >
-          {prodImg.map((prod,i)=>(        
+          {product?.thumbnail?.map((prod,i)=>(        
               <SwiperSlide  key={i} className="swiper-slide-1">
               <div className="swiper-zoom-container"> 
-                  <img src={`./images/${prod.img}`} alt=''/>
+                  <img src={prod.url} alt=''/>
               </div>
               </SwiperSlide>
           ))}        
@@ -72,17 +57,17 @@ export default function ThumbsGallery() {
           modules={[FreeMode, Navigation, Thumbs]} 
           className="mySwiper3" 
         >
-          {prodImg.map((prod,i)=>(        
+          {product?.thumbnail?.map((prod,i)=>(        
               <SwiperSlide key={i}>
               <div className="swiper-zoom-container"> 
-                  <img src={`./images/${prod.img}`} alt=''/>
+                  <img src={prod.url} alt=''/>
               </div>
               </SwiperSlide>
           ))}         
         </Swiper>
       </div>
       <div className="flex flex-col w-[100%] md:w-[50%] items-start">
-          <h3 className='text-[#222529] inline text-3xl font-bold -tracking-[0.3px] leading-9'>Women Casual Bag Spring</h3>
+          <h3 className='text-[#222529] inline text-3xl font-bold -tracking-[0.3px] leading-9 uppercase'>{product.name}</h3>
           <div className="inline-block text-[#999999] text-[13px] leading-6 my-5">
             <div className='inline mr-2'>
               <FontAwesomeIcon icon={faStar} />
@@ -94,7 +79,7 @@ export default function ThumbsGallery() {
             <span>Be the first to review this product</span>
           </div>
           <div className="text-[#222529] text-[24px] font-semibold -tracking-[0.48px] leading-6 mb-5">
-            $101.00
+            ${product.price}
           </div>
           <div className="text-[#777777] text-base -tracking-[0.24px] leading-[27px] mb-5">
             Lorem ipsum dolor sit amet consectetur adipisicing elit. Eaque corporis beatae praesentium consequatur provident ducimus, commodi inventore adipisci harum a, autem dolore voluptatem sed iusto placeat aspernatur distinctio? Recusandae, cupiditate!
@@ -105,12 +90,12 @@ export default function ThumbsGallery() {
           </div>
           <div className="inline-block uppercase text-[#777777] text-xs mb-5">
             <span>SKU:</span>
-            <span className='font-bold text-[#222529]'> 34534222</span>
+            <span className='font-bold text-[#222529]'> {product.sku}</span>
           </div> 
           <div className="border-solid border-[#e7e7e7] border-t-[1px] border-b-[1px] py-5 w-full">
             <div className="flex items-center justify-start">
               <button className='h-10 w-12 border-solid border-[#e7e7e7] border-[1px] hover:text-[#666666]' onClick={handleDecrease}>-</button>
-              <input defaultValue={quantity.qty} className='border-solid border-[#e7e7e7] border-[1px] outline-none h-10 w-12 text-center' type="text" />
+              <input defaultValue={quantity} className='border-solid border-[#e7e7e7] border-[1px] outline-none h-10 w-12 text-center' type="number" />
               <button className='h-10 w-12 border-solid border-[#e7e7e7] border-[1px] hover:text-[#666666]' onClick={handleIncrease}>+</button>
               <button className="bg-[#222529] text-white h-10 mx-2 px-[2em] uppercase text-[1em] font-bold leading-[3rem] flex items-center gap-2 hover:bg-white hover:text-[#222529] hover:border-[#222529] border-2 hover:border-solid">
                 <FontAwesomeIcon icon={faShoppingBag} />

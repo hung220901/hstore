@@ -7,7 +7,7 @@ import Cart from '../pages/Cart/Cart'
 import Contact from '../pages/Contact/Contact'
 import Home from '../pages/Home/Home'
 import Categories from '../pages/Categories/Categories'
-import ProductDetail from '../pages/ProductDetail/index'
+import ProductDetail from '../pages/ProductDetail/ProductDetail'
 import Wishlist from '../pages/Account/Wishlist'
 import Checkout from '../pages/Checkout/Checkout'
 import Profile from '../pages/Account/Profile'
@@ -15,6 +15,7 @@ import Order from '../pages/Account/Order'
 import OrderTracking from '../pages/Account/OrderTracking'
 import DashBoard from '../components/Admin/Dashboard'
 import Product from '../components/Admin/Product'
+import Search from '../pages/Search/Search'
 
 
 const publicRoutes = [
@@ -73,6 +74,10 @@ const publicRoutes = [
     {
         path: routesConfig.orderTracking,
         component: OrderTracking
+    },
+    {
+        path: routesConfig.searchCatalog,
+        component: Search
     },
 ]
 const privateRoutes = [

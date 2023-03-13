@@ -1,5 +1,6 @@
 import React from 'react'
-import {Link} from 'react-router-dom';
+import {Link} from 'react-router-dom'; 
+import LGoogle from '../../components/GoogleAuth/LoginGoogle'
 export default function Login() {
   return (
     <>
@@ -20,6 +21,9 @@ export default function Login() {
                     <Link to="/register" className='block bg-[#222529] text-white font-bold -tracking-[0.24px] leading-[22px] text-center px-[14px] py-4 w-full my-2'>CREATE AN ACCOUNT</Link>
                     <p className='text-red-500 text-sm'>*Required Field</p>
                 </form>
+                <div className='py-5 '>  
+                    <LGoogle />
+                </div> 
             </div>
         </div>
     </>

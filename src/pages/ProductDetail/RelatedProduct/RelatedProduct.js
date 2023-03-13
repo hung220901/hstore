@@ -5,7 +5,9 @@ import { faHeart, faStar } from '@fortawesome/free-regular-svg-icons'
 import { faShoppingBag } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import './related-product.scss'
+import { useSelector } from 'react-redux';
 export default function RelatedProduct() {
+  const product = useSelector(state => state.products.products)   
   return (
     <>
       <div className='flex justify-between items-center border-solid border-[#777777] border-b-[1px]'>
@@ -51,7 +53,7 @@ export default function RelatedProduct() {
             <div className="cart-bottom flex justify-between pt-1">
                 <div className="item-left">
                   <div className="product-name">
-                    Girl Black
+                    {product.name}
                   </div>
                   <div className="text-gray-300">
                     <FontAwesomeIcon icon={faStar}  />

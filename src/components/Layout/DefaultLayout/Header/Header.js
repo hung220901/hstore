@@ -1,12 +1,16 @@
 import React, { useEffect, useRef, useState }  from 'react'
-import {Link} from 'react-router-dom' 
+import {Link, useNavigate} from 'react-router-dom' 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import {faUser, faHeart} from '@fortawesome/free-regular-svg-icons'
 import {faMagnifyingGlass,faBagShopping, faX, faBars, faAngleDown, faAngleUp, faAngleRight} from '@fortawesome/free-solid-svg-icons'
-import {useDebounce} from '../../../../hook'
-import * as request from '../../../../utils/request'
+import {useDebounce} from '../../../../hook' 
 import * as catReq from '../../../../services/categoryServices'
-
+import * as prodReq from '../../../../services/productServices'
+import Loading from '../../../Loading/Loading'
+import { useDispatch, useSelector } from 'react-redux'
+import {getCategoriesSuccess} from '../../../../redux/categorySlice'
+import {getProductsSuccess} from '../../../../redux/productSlice'
+import { removeFromCart } from '../../../../redux/cartSlice'
 
 export default function Header() {
   const [show, setShow] = useState({
@@ -15,58 +19,56 @@ export default function Header() {
     menu:false,
     categoryMenu:false,
   }) 
+  const dispatch = useDispatch()  
   const [searchValue, setSearchValue] = useState('') 
-  const debounced = useDebounce(searchValue, 1500)
-  const [products, setProducts] = useState([]) 
-  const [categories, setCategories] = useState([]) 
-  const  name ='Porto White Girl Shirt'
-  const price = 70;
-  const  image ='product1.jpeg'; 
-  const total = products.reduce((result,prod)=>result + prod.price,0)
-  const searchResult = products.filter((prod)=>prod.name.toLowerCase().includes(searchValue)) 
+  const debounced = useDebounce(searchValue, 1500) 
+  const products = useSelector((state) =>state.products.products) 
+  const cartItem =  useSelector(state=>state.carts.items)  
+  const categories = useSelector((state) =>state.categories.categories) 
+  const [loading, setLoading] = useState(false)
+  const searchResult =products && products?.length >= 0 && products?.filter((prod)=>prod.name.toLowerCase().includes(searchValue)) 
+  const headerRef = useRef(null) 
+  const navigate = useNavigate()
 
-
-
-
-  const addProduct = () =>{
-    setProducts([
-      ...products,{
-      id:Math.floor(Math.random()*10),
-      name,
-      price,
-      image        
-      }])
+  function handleChangePage(e){
+    e.preventDefault(); 
+    navigate('/cart')
   }
-  const handleDeleteProduct = (id)=>{
-    setProducts(products.filter((pro)=>pro.id !== id))
-  } 
+
+
+
 // Call API Search
-useEffect(()=>{
-  if(!debounced.trim()){
-    setSearchValue('')
-    return;
-  }
-  const fetchApi = async(q)=>{
-    const res = await request.get('/product', {
-      params:{
-        q
-      }
-    })
-    setProducts(res.product)
-  }
-  fetchApi()
-},[debounced])
+  useEffect(()=>{
+    if(!debounced.trim()){
+      setSearchValue('')
+      return;
+    }
+    const fetchApi = async()=>{ 
+      const res = await prodReq.getAllProduct() 
+      dispatch(getProductsSuccess(res)) 
+    }
+    searchValue && fetchApi()
+  },[debounced])
 
-useEffect(()=>{
-  const fetchCategoryApi = async()=>{
-    const resCate = await catReq.getAllCategory()
-    setCategories(resCate.categories) 
-  }
-  fetchCategoryApi() 
-},[])
+  useEffect(()=>{  
+    const fetchCategoryApi = async()=>{
+      const resCate = await catReq.getAllCategory()  
+      dispatch(getCategoriesSuccess(resCate.categories))
+      setLoading(true)
+    }
+    fetchCategoryApi()   
+  },[])
 
+
+
+  // Cart
+  const handleRemoveItem = (e,id) =>{
+    e.preventDefault()
+    e.stopPropagation()
+    dispatch(removeFromCart(id))
+  }
+ 
 // Handle Scroll Sticky
-  const headerRef = useRef(null)  
   useEffect(()=>{
     window.addEventListener('scroll',function(){  
       if(document.documentElement.scrollTop > 90){ 
@@ -80,6 +82,7 @@ useEffect(()=>{
 
   return (
     <header className={`flex items-center justify-between bg-none font-black px-5 top-0 right-0 left-0 z-30 ${window.location.pathname === '/' ? 'fixed' :'sticky'} transition-all duration-300`} ref={headerRef}>
+      {!loading && <Loading/>}  
         <div className='hidden lg:block'>
             <ul>
               <li className='inline-block py-3 px-2 h-full'>
@@ -94,7 +97,7 @@ useEffect(()=>{
                         <ul>
                           <li className='px-3 py-2 text-[#222529] pointer-events-none font-bold'>CLOTHES</li>
                           { 
-                            categories && categories?.map((cat,i)=>(
+                            categories && categories.map((cat,i)=>(
                               <li key={i} className='px-3 py-2 hover:underline uppercase'><Link to={`/categories/${cat.name}`}>{cat.name}</Link></li> 
                             ))
                           }
@@ -135,7 +138,9 @@ useEffect(()=>{
           <img className='w-full h-full' src="https://www.portotheme.com/magento2/porto/pub/media/logo/stores/17/logo_ecomblack_lg.png" alt="" />
         </div> 
         <div className="py-[25px] flex justify-end items-center gap-10 text-base">
-          <div className='lg:hidden' onClick={()=>setShow({cart:false,search:false,menu:!show.menu})}>
+          <div className='lg:hidden' 
+          onClick={()=>setShow({cart:false,search:false,menu:!show.menu})}
+          >
             <FontAwesomeIcon icon={faBars} /> 
           </div>  
           {
@@ -217,7 +222,9 @@ useEffect(()=>{
             <FontAwesomeIcon icon={faHeart} size='xl' />
           </Link>
           </div>
-          <div onClick={()=>setShow({menu:false,cart:false,search:!show.search})}>
+          <div 
+          onClick={()=>setShow({menu:false,cart:false,search:!show.search})}
+          >
             <FontAwesomeIcon icon={faMagnifyingGlass} size='xl'/>
           </div>
           <div className={`text-sm hidden bg-gray-300 border-solid border-gray-300 border-8 absolute rounded-3xl w-[400px] h-auto z-10 top-24 right-10 ${show.search ? '!flex':'' }`}>
@@ -243,39 +250,45 @@ useEffect(()=>{
             </div>
           <div className="absolute z-10  bg-white top-16 w-full rounded ">
               <ul className='list-none'>
-                {searchResult && searchValue.length > 0 && searchResult.map((prod, index)=>(
+                {searchResult && searchValue?.length > 0 && searchResult.map((prod, index)=>(
                   <li className='px-5 py-3' key={index}>{prod.name }</li>
                 ))}
               </ul>
             </div>
           </div>
-          <div onClick={()=>setShow({menu:false,cart:!show.cart,search:false})}>
+          <div 
+          onClick={()=>setShow({menu:false,cart:!show.cart,search:false})}
+          >
             <FontAwesomeIcon icon={faBagShopping} size='xl'/>
             <span className='absolute bg-[#ff5b5b] w-4 h-4 rounded-full z-10 translate-x-[-8px] text-white'>
-              <span className='text-s absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2'>{products.length}</span>
+              <span className='text-s absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2'>{cartItem?.length}</span>
             </span> 
           </div>
+
+          {/* CART */}
           { show.cart &&
-            <div className="absolute text-base w-1/4 height-auto px-6 py-2 font-normal bg-white shadow-[0_7px_29px_0_rgba(100,100,111,0.2)] top-20 block z-10 right-10">
-              <div className="flex justify-between items-center border-b-2 border-solid border-black">
-                <span>{products.length} ITEM</span>
-                <Link to="/cart">VIEW CART</Link>
+            <div className="absolute text-base w-[350px] height-auto px-6 py-2 font-normal bg-white shadow-[0_7px_29px_0_rgba(100,100,111,0.2)] top-20 block z-10 right-10">
+              <div className="flex justify-between items-center border-b-2 border-solid border-black mb-5">
+                <span>{cartItem?.length} ITEM</span>
+                <Link to="/cart" onClick={handleChangePage}>VIEW CART</Link>
               </div>
               <div className="flex flex-col items-center">
-                {products.length > 0 ? 
-                  products.map((prod)=>(
-                  <div key={prod.id} className="flex justify-center items-center px-2 py-2">
+                {cartItem?.length > 0 ? 
+                  cartItem?.map((item,i)=>(
+                  <div key={i} className="flex justify-center items-center px-2 py-2">
                       <div className="flex justify-end flex-col mr-3">
                         <div className="block overflow-ellipsis w-40 overflow-hidden whitespace-nowrap break-words">
-                            {prod.name}
+                            {item.name}
                         </div>
                         <span>See Detail</span>
-                        <span>${prod.price}</span>
-                        <span>Qty: 1</span>
+                        <span>${item.price}</span>
+                        <span>Qty: {item.quantity}</span>
                       </div>
                       <div className="relative">
-                        <img src={'./images/'+prod.image} alt="" />
-                        <div className='absolute flex justify-center items-center top-0 right-0 w-5 h-5 rounded-full bg-white shadow translate-x-1/2 -translate-y-1/2 text-[8px]' onClick={()=> handleDeleteProduct(prod.id)}>
+                        <img className='min-w-[70px] h-[100px]' src={item.image.url} alt="" />
+                        <div className='absolute flex justify-center items-center top-0 right-0 w-5 h-5 rounded-full bg-white shadow translate-x-1/2 -translate-y-1/2 text-[8px]'
+                        onClick={(e)=>handleRemoveItem(e,item._id)}
+                        >
                           <FontAwesomeIcon icon={faX} size='xl'/>
                         </div>
                       </div>
@@ -290,9 +303,10 @@ useEffect(()=>{
               </div>
               <div className="flex justify-between items-center font-black my-1">
                 <span>SUBTOTAL:</span>
-                <span>${total}</span>  
+                {/* <span>${total}</span>   */}
               </div>
-              <div className="w-full bg-black text-white text-center font-bold py-2" onClick={() => addProduct()}>
+              <div className="w-full bg-black text-white text-center font-bold py-2" 
+               >
               GO TO CHECKOUT
               </div>
             </div>              

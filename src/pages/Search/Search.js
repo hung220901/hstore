@@ -1,53 +1,27 @@
+import React from 'react'
 import { faAngleRight, faArrowRight, faSliders, faHomeAlt, faArrowUpShortWide, faArrowDownShortWide, faShoppingBag, faMinus, faPlus } from '@fortawesome/free-solid-svg-icons'  
 import { faHeart, faStar  } from '@fortawesome/free-regular-svg-icons'  
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import React, { useEffect }  from 'react' 
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome' 
 import { useState } from 'react' 
-import './categories.scss'   
-
-import * as request from '../../services/productServices'
-import { useDispatch, useSelector } from 'react-redux'
-import { getProductsFailure, getProductsStart, getProductsSuccess } from '../../redux/productSlice';
-
-export default function Categories() {
-  const [ascending, setAscending] = useState(true);
-  const dispatch = useDispatch()
-  const product = useSelector((state)=> state.products.products)
-  const [show, setShow] = useState({
-    price:false,
-    color:false,
-    size:false,
-  });  
-
-
-  // CALL API
-  useEffect(()=>{
-    const fetchALlProduct = async ()=>{
-      try {
-        dispatch(getProductsStart())
-        const res = await request.getAllProduct();
-        dispatch(getProductsSuccess(res))
-      } catch (error) {
-        dispatch(getProductsFailure(error))
-      }
-    }
-    fetchALlProduct()
-  },[])
-
-
-
+import '../Categories/categories.scss'   
+import { useLocation } from 'react-router-dom'
+export default function Search() {
+    const [ascending, setAscending] = useState(true);
+    const location = useLocation()
+    const searchParams = new URLSearchParams(location.search)
+    const searchValue = searchParams.get('q');
+    const [show, setShow] = useState({
+        price:false,
+        color:false,
+        size:false,
+    });  
   return (
     <div className='px-5 py-5'>
-      <div className='w-full h-auto relative cursor-pointer'> 
-        <img src="./images/banner_categories.jpg" alt="" className='lg:m-auto lg:w-full'/>
-        <div className='absolute left-[10%] top-[10%]'> 
-           <div className='font-segoe font-bold text-[1.5em] md:text-[2.5em] lg:text-[3em]'>New Hot Cosmetics</div>
-           <div className='relative pl-[0.265em] text-[1.75em] font-bold sm:text-[2em] md:text-[2.5em] md:pl-[0.365em] lg:text-[3.5em] lg:pl-[0.565em] '><span className='-translate-y-1/2 text-[0.265em] -rotate-90 absolute -left-[1em] top-1/2 md:text-[0.365em] lg:text-[0.565em]'>UP TO</span> 50% OFF </div>
-           <div className='lg:py-3 lg:text-[20px]'>SHOP NOW <FontAwesomeIcon icon={faArrowRight} /> </div>
-        </div>
-      </div>
       <div className='navigate py-5'>
-        <span><FontAwesomeIcon icon={faHomeAlt}/></span>  <span> <FontAwesomeIcon icon={faAngleRight} size="xs" /> </span> <span>Home</span>
+        <span>Home</span>  <span> <FontAwesomeIcon icon={faAngleRight} size="xs" /> </span>SEARCH RESULT FOR: {searchValue} <span></span>
+      </div>
+      <div className='py-5'>
+        <span className='text-[#ff7272] text-xl font-bold leading-[44px]'>Search result for: "{searchValue}"</span>
       </div>
       <div className="action flex bg-[#f4f4f4] text-xs py-3 px-3 font-bold items-center justify-between">
         <div className='flex items-center'>
@@ -152,7 +126,7 @@ export default function Categories() {
         {/* LIST PRODUCT */}
         <div className='  px-2 w-full'>
           <div className="list-product flex flex-wrap  ">
-            { 
+            {/* { 
               product.map((prod, index)=>(
                 <div key={index} className="product-item m-2  p-1">
                   <div className='relative group'>
@@ -194,7 +168,7 @@ export default function Categories() {
                   </div>
                 </div>  
               ))
-            }
+            } */}
           </div>
           {/* pagination */}
           <div className='flex justify-between'>

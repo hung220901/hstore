@@ -1,6 +1,6 @@
 const route = {
     home:'/',
-    productDetail:'/product-detail',
+    productDetail:'/product-detail/:slug',
     cart:'/cart',
     login:'/login',
     register:'/register',
@@ -13,6 +13,7 @@ const route = {
     profile: '/profile',
     order: '/order',
     orderTracking: '/tracking',
+    searchCatalog:'/catalogsearch/result',
     // Admin
     dashBoard:'/admin/dashboard',
     productManager:'/admin/product',
