@@ -153,7 +153,7 @@ export default function Categories() {
         <div className='  px-2 w-full'>
           <div className="list-product flex flex-wrap  ">
             { 
-              product.map((prod, index)=>(
+              product && product?.map((prod, index)=>(
                 <div key={index} className="product-item m-2  p-1">
                   <div className='relative group'>
                     <img className='w-[200px] h-auto' src={prod.image.url} alt="" />

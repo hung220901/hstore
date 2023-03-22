@@ -81,7 +81,7 @@ export default function Header() {
   },[])
 
   return (
-    <header className={`flex items-center justify-between bg-none font-black px-5 top-0 right-0 left-0 z-30 ${window.location.pathname === '/' ? 'fixed' :'sticky'} transition-all duration-300`} ref={headerRef}>
+    <header className={` flex items-center justify-between bg-none font-black px-5 top-0 right-0 left-0 z-30 ${window.location.pathname === '/' ? 'fixed' :'sticky'} transition-all duration-300`} ref={headerRef}>
       {!loading && <Loading/>}  
         <div className='hidden lg:block'>
             <ul>
@@ -98,7 +98,7 @@ export default function Header() {
                           <li className='px-3 py-2 text-[#222529] pointer-events-none font-bold'>CLOTHES</li>
                           { 
                             categories && categories.map((cat,i)=>(
-                              <li key={i} className='px-3 py-2 hover:underline uppercase'><Link to={`/categories/${cat.name}`}>{cat.name}</Link></li> 
+                              <li key={i} className='px-3 py-2 hover:underline uppercase'><Link to={`/categories?q=${cat.name}`}>{cat.name}</Link></li> 
                             ))
                           }
  

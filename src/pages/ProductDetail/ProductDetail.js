@@ -13,10 +13,11 @@ export default function ProductDetail() {
   const params = useParams(); 
   const dispatch = useDispatch()
   const product = useSelector(state => state.products.products) 
+  console.log(product);
   useEffect(()=>{
     const fetchOneProduct = async () =>{
       dispatch(getProductsStart()) 
-      const res = await request.getProductBySlug(params.slug) 
+      const res = await request.getProductBySlug(params.slug)  
       if(res){ 
         dispatch(getProductsSuccess(res)) 
       }
