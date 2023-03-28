@@ -3,9 +3,12 @@ import axios from 'axios';
 import {GoogleLoginButton}  from 'react-social-login-buttons'  
 import { useNavigate } from 'react-router-dom';
 import * as request from '../../services/authServices'
+import { useDispatch } from 'react-redux';
+import {getCurrentUser} from '../../redux/authSlice'
+import {getUserByEmail} from '../../services/userServices'
  export default function LoginGoogle() {
   const navigate = useNavigate()
-  
+  const dispatch = useDispatch()
   const login = useGoogleLogin({
     onSuccess: async codeResponse =>{ 
       try { 
@@ -15,14 +18,32 @@ import * as request from '../../services/authServices'
           }
         })  
         if(responseGoogle.data.email_verified){
-          const res = await request.login({
-            'name':responseGoogle.data.name,
-            'email':responseGoogle.data.email,
-            'password':responseGoogle.data.sub
-          })
-          localStorage.setItem('token',res.data.token)
-          console.log(res);
-          navigate('/')
+          // register
+          // Check tk da co trong db  
+          const existedAccount = await getUserByEmail(responseGoogle.data.email); 
+          if(existedAccount.length){
+            // login 
+            const res = await request.login({
+              'name':responseGoogle.data.name,
+              'email':responseGoogle.data.email,
+              'avatar':{'url':responseGoogle.data.picture},
+              'password':responseGoogle.data.sub, 
+            })  
+            localStorage.setItem('token',res.token) 
+            dispatch(getCurrentUser({userName: res.userName,role: res.role,avatar:{url:responseGoogle.data.picture}}))
+            navigate('/') 
+          }
+          else{
+            const register = await request.register({
+              'name':responseGoogle.data.name,
+              'email':responseGoogle.data.email,
+              'avatar':{'url':responseGoogle.data.picture},
+              'password':responseGoogle.data.sub, 
+            })  
+            localStorage.setItem('token',register.data.token) 
+            dispatch(getCurrentUser({userName: register.data.userName,role: register.data.role,avatar:{url:responseGoogle.data.picture}}))
+            navigate('/') 
+          }
         }
         else{
           console.log('Your google account is not verified!');

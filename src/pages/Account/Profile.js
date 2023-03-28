@@ -33,7 +33,7 @@ export default function Profile() {
               {/* ACTION */}
               <div className='Action flex gap-5 bg-[#f5f5f5] leading-5 py-2 px-3 '>
                 <div className="Edit text-[#ff7272] leading-5">Edit</div>
-                <div className="Change-password  text-[#ff7272] leading-5">Change Password</div>
+                <div className="Change-password  text-[#ff7272] leading-5">Change Password</div> 
               </div>
             </div>
             {/* NEWSLETTERS */}

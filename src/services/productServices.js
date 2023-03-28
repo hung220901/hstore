@@ -21,3 +21,5 @@ export const getProductBySlug = async(slug) =>{
       console.log('something went wrong!');
     }
 }
+
+ 

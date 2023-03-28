@@ -1,9 +1,31 @@
 import React, { useState } from 'react'
-import {Link} from 'react-router-dom'; 
+import { useDispatch } from 'react-redux';
+import {Link, useNavigate} from 'react-router-dom'; 
 import LGoogle from '../../components/GoogleAuth/LoginGoogle'
+import * as request from '../../services/authServices'
+import {getCurrentUser} from '../../redux/authSlice'
 export default function Login() {
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
+    const dispatch = useDispatch()
+    const navigate =useNavigate()
+    const handleLogin = async (e)=>{
+        try {
+            e.preventDefault()
+            const res = await request.login({
+                email,
+                password,
+            })
+            console.log(res);
+            localStorage.setItem("token",res.token)
+            dispatch(getCurrentUser({userName: res.userName,role: res.role}))
+            navigate('/')
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+
 
   return (
     <>
@@ -20,7 +42,7 @@ export default function Login() {
                     <h3>Password <span className='text-red-500'>*</span></h3>
                     <input type="password" className='border-solid border-[1px] border-[#e7e7e7] outline-none py-2 px-3 inline-block text-sm text-[#777777] leading-8 w-full' onChange={e=> setPassword(e.target.value)}/>
                     <Link to="/login" className='text-[#222529] inline text-sm font-medium leading-6'>Forgot Your Password?</Link>
-                    <button className='block bg-[#222529] text-white font-bold -tracking-[0.24px] leading-[22px] text-center px-[14px] py-4 w-full my-2'>SIGN IN</button>
+                    <button className='block bg-[#222529] text-white font-bold -tracking-[0.24px] leading-[22px] text-center px-[14px] py-4 w-full my-2' onClick={handleLogin}>SIGN IN</button>
                     <Link to="/register" className='block bg-[#222529] text-white font-bold -tracking-[0.24px] leading-[22px] text-center px-[14px] py-4 w-full my-2'>CREATE AN ACCOUNT</Link>
                     <p className='text-red-500 text-sm'>*Required Field</p>
                 </form>

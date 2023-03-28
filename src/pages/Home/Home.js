@@ -6,11 +6,16 @@ import 'swiper/css';
 import 'swiper/css/pagination';
 import 'swiper/css/scrollbar';
 import './home.scss' 
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faHeart, faStar} from '@fortawesome/free-regular-svg-icons';
-import { faShoppingBag, faHeadset, faCreditCard,faShare, faTruckFast} from '@fortawesome/free-solid-svg-icons'; 
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'; 
+import {  faHeadset, faCreditCard,faShare, faTruckFast} from '@fortawesome/free-solid-svg-icons';  
+import { useSelector } from 'react-redux';
+import ProductCard from '../../components/Product/ProductCard';
   export default function Home() {  
     SwiperCore.use([Autoplay]) 
+    const product = useSelector(state => state.products.products)
+    const productMale = product.filter(prod=>prod.gender === true).slice(0,2)
+    const productFemale = product.filter(prod=>prod.gender === false).slice(0,2) 
+
     return (
       <>
       {/* BANNER SLIDER */}
@@ -124,7 +129,7 @@ import { faShoppingBag, faHeadset, faCreditCard,faShare, faTruckFast} from '@for
       {/* WOMEN COLLECTION */}
       <div className="flex flex-wrap h-full w-full">
         <div className=" flex justify-center items-center md:basis-1/2 ">
-            <div className=" px-10 py-5 ">
+            {/* <div className=" px-10 py-5 ">
               <div className='relative group'>
                 <img className='w-full h-full' src="./images/product2.jpeg" alt="" />   
                 <button className="absolute top-1 right-1 
@@ -208,7 +213,11 @@ import { faShoppingBag, faHeadset, faCreditCard,faShare, faTruckFast} from '@for
                     <FontAwesomeIcon icon={faHeart} />
                   </div>
               </div> 
-            </div>  
+            </div>   */}
+            {  productFemale.map((prod, index)=>(
+                <ProductCard key={index} product={prod} />
+            ))
+            }
         </div>        
         <div className="relative md:basis-1/2">
           <img className='object-cover w-full h-full' src="./images/women.jpg" alt="" />
@@ -236,7 +245,7 @@ import { faShoppingBag, faHeadset, faCreditCard,faShare, faTruckFast} from '@for
             </div>
           </div> 
           <div className="md:basis-1/2 flex justify-center items-center ">
-              <div className="px-5 py-10 ">
+              {/* <div className="px-5 py-10 ">
                 <div className='relative group'>
                   <img className='w-full h-full' src="./images/product_men1.jpeg" alt="" />   
                   <button className="absolute top-1 right-1 
@@ -322,7 +331,11 @@ import { faShoppingBag, faHeadset, faCreditCard,faShare, faTruckFast} from '@for
                       <FontAwesomeIcon icon={faHeart} />
                     </div>
                 </div> 
-              </div>  
+              </div>   */}
+            {  productMale.map((prod, index)=>(
+                <ProductCard key={index} product={prod} />
+              ))
+            }
           </div>
       </div>
       {/* END MEN COLLECTION */}

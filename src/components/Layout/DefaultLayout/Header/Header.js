@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState }  from 'react'
 import {Link, useNavigate} from 'react-router-dom' 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import {faUser, faHeart} from '@fortawesome/free-regular-svg-icons'
-import {faMagnifyingGlass,faBagShopping, faX, faBars, faAngleDown, faAngleUp, faAngleRight} from '@fortawesome/free-solid-svg-icons'
+import {faMagnifyingGlass,faBagShopping, faX, faBars, faAngleDown, faAngleUp, faAngleRight, faCircleUser} from '@fortawesome/free-solid-svg-icons'
 import {useDebounce} from '../../../../hook' 
 import * as catReq from '../../../../services/categoryServices'
 import * as prodReq from '../../../../services/productServices'
@@ -11,6 +11,8 @@ import { useDispatch, useSelector } from 'react-redux'
 import {getCategoriesSuccess} from '../../../../redux/categorySlice'
 import {getProductsSuccess} from '../../../../redux/productSlice'
 import { removeFromCart } from '../../../../redux/cartSlice'
+import { getCurrentUser } from '../../../../redux/authSlice'
+
 
 export default function Header() {
   const [show, setShow] = useState({
@@ -20,15 +22,23 @@ export default function Header() {
     categoryMenu:false,
   }) 
   const dispatch = useDispatch()  
+  const user = useSelector(state => state.auth.users)
   const [searchValue, setSearchValue] = useState('') 
   const debounced = useDebounce(searchValue, 1500) 
   const products = useSelector((state) =>state.products.products) 
   const cartItem =  useSelector(state=>state.carts.items)  
+  const cartTotalPrice = useSelector(state=>state.carts.total)  
   const categories = useSelector((state) =>state.categories.categories) 
   const [loading, setLoading] = useState(false)
   const searchResult =products && products?.length >= 0 && products?.filter((prod)=>prod.name.toLowerCase().includes(searchValue)) 
   const headerRef = useRef(null) 
-  const navigate = useNavigate()
+  const navigate = useNavigate() 
+  const handleSignOut = ()=>{
+    localStorage.removeItem("token")
+    dispatch(getCurrentUser(null))
+    navigate('/login')
+  }
+
 
   function handleChangePage(e){
     e.preventDefault(); 
@@ -50,6 +60,10 @@ export default function Header() {
     searchValue && fetchApi()
   },[debounced])
 
+
+
+
+  
   useEffect(()=>{  
     const fetchCategoryApi = async()=>{
       const resCate = await catReq.getAllCategory()  
@@ -137,7 +151,7 @@ export default function Header() {
         <div className=' w-[111px] h-[43px] bg-cover '> 
           <img className='w-full h-full' src="https://www.portotheme.com/magento2/porto/pub/media/logo/stores/17/logo_ecomblack_lg.png" alt="" />
         </div> 
-        <div className="py-[25px] flex justify-end items-center gap-10 text-base">
+        <div className="flex justify-end items-center gap-10 text-base">
           <div className='lg:hidden' 
           onClick={()=>setShow({cart:false,search:false,menu:!show.menu})}
           >
@@ -211,11 +225,38 @@ export default function Header() {
               </ul>
             </div>
           }
-          <div>
+          <div className='py-3 px-2 group relative cursor-pointer'>  
+            {user?.userName ? 
+              (
+                <>
+                  <div className='w-6 h-6'>
+                    {
+                      user.avatar.url ?
+                      ( 
+                        <img src={user.avatar.url} alt="" className='w-full h-full rounded-full' />
+                      ) 
+                      :
+                      (
+                        <FontAwesomeIcon icon={faCircleUser} size='xl'/>
+                      ) 
+                    } 
+                  </div> 
+                  <div className='hidden absolute w-52 px-4 py-5 group-hover:block z-10 bg-white mt-2 shadow-2xl text-[#777777]'>
+                    <ul >
+                    <li className='uppercase text-xs hover:underline px-1 py-2'><Link to="/profile">Account Information</Link></li>
+                    <li className='uppercase text-xs hover:underline px-1 py-2' onClick={handleSignOut}> Sign Out</li>
+                    </ul>
+                  </div> 
+                </>
+              ) 
+              :
+              ( 
+                <Link to='/login'> 
+                  <FontAwesomeIcon icon={faUser} size='xl'/>
+                </Link>
+              )
+            } 
 
-            <Link to='/login'>
-              <FontAwesomeIcon icon={faUser} size='xl'/>
-            </Link>
           </div>
           <div>
           <Link to="/wishlist">
@@ -280,9 +321,8 @@ export default function Header() {
                         <div className="block overflow-ellipsis w-40 overflow-hidden whitespace-nowrap break-words">
                             {item.name}
                         </div>
-                        <span>See Detail</span>
-                        <span>${item.price}</span>
-                        <span>Qty: {item.quantity}</span>
+                        <span>Price: ${item.price}</span>
+                        <span>Quantity: {item.quantity}</span>
                       </div>
                       <div className="relative">
                         <img className='min-w-[70px] h-[100px]' src={item.image.url} alt="" />
@@ -303,11 +343,10 @@ export default function Header() {
               </div>
               <div className="flex justify-between items-center font-black my-1">
                 <span>SUBTOTAL:</span>
-                {/* <span>${total}</span>   */}
+                <span>${cartTotalPrice}</span>  
               </div>
-              <div className="w-full bg-black text-white text-center font-bold py-2" 
-               >
-              GO TO CHECKOUT
+              <div className="w-full bg-black text-white text-center font-bold py-2">
+                <Link to="/checkout">GO TO CHECKOUT</Link>
               </div>
             </div>              
           } 

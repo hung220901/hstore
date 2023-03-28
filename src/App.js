@@ -1,10 +1,27 @@
-import React from 'react';
+import React, { useCallback, useEffect } from 'react';
 import {BrowserRouter as  Router, Routes, Route} from 'react-router-dom'
 import {  privateRoutes, publicRoutes} from './routes/index'
 import DefaultLayout from './components/Layout/DefaultLayout'; 
 import PrivateLayout from './components/Layout/PrivateLayout';  
 import ScrollToTop from './components/ScrollToTop/ScrollToTop'; 
+import { useDispatch } from 'react-redux';
+import * as request from './services/authServices'
+import {getCurrentUser} from './redux/authSlice'
 function App() {
+  const dispatch = useDispatch()
+  const checkCurrentUser = useCallback(async()=>{
+    try {
+      const token = localStorage.getItem("token")
+      const res = await request.checkCurrentUser(token)
+      dispatch(getCurrentUser(res.data.user))
+    } catch (error) {
+      console.log(error);
+    }
+  },[dispatch])
+  useEffect(()=>{
+    checkCurrentUser()
+  },[checkCurrentUser])
+
   return ( 
     <Router>
       <ScrollToTop/>

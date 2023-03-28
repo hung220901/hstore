@@ -29,7 +29,7 @@ const cartSlice = createSlice({
         state.items.push({...newItem, quantity: 1 });
       }
 
-      state.total += newItem.price;
+      state.total += parseInt(newItem.price);
     },
     removeFromCart: (state, action) =>{
       const itemId = action.payload;
@@ -41,7 +41,7 @@ const cartSlice = createSlice({
         } else {
           existingItem.quantity--;
         } 
-        state.total -= existingItem.price;
+        state.total -= parseInt(existingItem.price);
       }
     },
     updateQuantity: (state, action) =>{

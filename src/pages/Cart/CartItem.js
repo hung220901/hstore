@@ -28,7 +28,7 @@ export default function CartItem({product}) {
             </div>
         </td>
         <td>
-            {product.price}
+            ${product.price}
         </td>
         <td >
             <div className='flex justify-start items-center text-sm text-[#777777] '>
@@ -44,12 +44,13 @@ export default function CartItem({product}) {
                 >+</div>
             </div>
         </td>
-        <td className='text-right font-semibold text-[#222529] leading-4'><span>{(parseInt(product.price) * parseInt(product.quantity)).toFixed(2)}</span></td>
+        <td className='text-right font-semibold text-[#222529] leading-4'><span>${(parseInt(product.price) * parseInt(product.quantity)).toFixed(2)}</span></td>
         <td className="absolute w-5 h-5 top-0 right-0 translate-x-2 translate-y-1 rounded-full flex justify-center items-center bg-white shadow-md cursor-pointer">
             <FontAwesomeIcon icon={faMultiply} />
         </td>
         <td className="absolute w-5 h-5 top-0 right-0 -translate-x-4 translate-y-1 rounded-full flex justify-center items-center bg-white shadow-md cursor-pointer">
-            <FontAwesomeIcon icon={faHeart} color="#ff7272" />
+        {/* color="#ff7272" */}
+            <FontAwesomeIcon icon={faHeart}  />
         </td>
     </tr>
   )

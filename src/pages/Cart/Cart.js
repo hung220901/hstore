@@ -8,7 +8,6 @@ import CartItem from './CartItem';
 export default function Cart() { 
     const [shippingTaxForm, setShippingTaxForm] = useState(false);  
     const cartList = useSelector( state => state.carts)   
-    // const totalPrice = products.reduce((acc, cur)=>acc + parseFloat(cur.price * cur.qty),0) 
  
   return (
     <div className='text-[#777777] text-sm p-5'>
@@ -55,44 +54,46 @@ export default function Cart() {
                         <button className='py-3 px-6 bg-[#f4f4f4] font-bold text-[13px] hover:bg-[#ff7272] hover:text-white'>APPLY DISCOUNT</button>
                     </div>
                 </div>
-                <div className='flex-[1] border-2 border-solid border-[#e7e7e7] py-6 px-8'>
-                    <h3 className='font-bold text-[#222529] -tracking-[0.16px] leading-5 mb-5 text-[20px]'> <strong>SUMMARY</strong> </h3>
-                    <div className='flex justify-between  border-t-[1px] border-solid border-[#e7e7e7] py-2' onClick={()=>setShippingTaxForm(!shippingTaxForm)}>
-                        <h3 className='cursor-pointer'>Estimate Shipping and Tax</h3> 
-                        <FontAwesomeIcon icon={faAngleUp} rotation={shippingTaxForm? 180: 0}/>
-                    </div>
-                    { shippingTaxForm && 
-                        <div className='form text-[#777777]  py-5 px-2'>
-                            <label htmlFor="country" className='w-full px-3 py-2'>Country</label>
-                            <select name="country" className='w-full px-3 py-2 border-solid border-[1px] border-[#e7e7e7] outline-none bg-[#ffffff]' >
-                                <option value="" selected></option>
-                                <option value="vn">Viet Nam</option>
-                                <option value="us">Unites State</option>
-                            </select>
-                            <h3 className='w-full px-3 py-2'>State/Province</h3>
-                            <input type="text" className='w-full px-3 py-2 border-solid border-[1px] border-[#e7e7e7] outline-none bg-[#ffffff]'/>
-                            <h3 className='w-full px-3 py-2'>Zip/Postal Code</h3>
-                            <input type="text" className='w-full px-3 py-2 border-solid border-[1px] border-[#e7e7e7] outline-none bg-[#ffffff]'/>
-                        </div>}
-                    <div className='subtotal flex justify-between border-t-[1px] border-solid border-[#e7e7e7]'> 
-                        <h3 className='py-1'>Subtotal</h3>
-                        <span>$190.00</span>
-                    </div>
-                    <div className='Tax flex justify-between border-b-[1px] border-solid border-[#e7e7e7] '> 
-                        <h3 className='py-1'>Tax</h3>
-                        <span>$00</span>
-                    </div>
-                    <div className="orderTotal flex justify-between font-extrabold text-[#222529] text-xl py-2">
-                        <h3>Order Total:</h3>
-                        <span>$190.00</span>
-                    </div>
-                    <div className="checkout-btn text-white bg-black text-center px-4 py-2 text-[15px] font-bold cursor-pointer">GO TO CHECKOUT <FontAwesomeIcon icon={faArrowRight} size="1x" /> </div>
-                    {cartList.length > 1 &&
-                        <div className="text-[#ff7272] text-[14px] leading-6 text-center py-2 cursor-pointer">
-                            Check Out with Multiple Address
+                <div className='flex-[1]'>
+                    <div className=' border-2 border-solid border-[#e7e7e7] py-6 px-8'>
+                        <h3 className='font-bold text-[#222529] -tracking-[0.16px] leading-5 mb-5 text-[20px]'> <strong>SUMMARY</strong> </h3>
+                        <div className='flex justify-between  border-t-[1px] border-solid border-[#e7e7e7] py-2' onClick={()=>setShippingTaxForm(!shippingTaxForm)}>
+                            <h3 className='cursor-pointer'>Estimate Shipping and Tax</h3>
+                            <FontAwesomeIcon icon={faAngleUp} rotation={shippingTaxForm? 180: 0}/>
                         </div>
-                    }
-                </div> 
+                        { shippingTaxForm &&
+                            <div className='form text-[#777777]  py-5 px-2'>
+                                <label htmlFor="country" className='w-full px-3 py-2'>Country</label>
+                                <select name="country" className='w-full px-3 py-2 border-solid border-[1px] border-[#e7e7e7] outline-none bg-[#ffffff]' >
+                                    <option value="" selected></option>
+                                    <option value="vn">Viet Nam</option>
+                                    <option value="us">Unites State</option>
+                                </select>
+                                <h3 className='w-full px-3 py-2'>State/Province</h3>
+                                <input type="text" className='w-full px-3 py-2 border-solid border-[1px] border-[#e7e7e7] outline-none bg-[#ffffff]'/>
+                                <h3 className='w-full px-3 py-2'>Zip/Postal Code</h3>
+                                <input type="text" className='w-full px-3 py-2 border-solid border-[1px] border-[#e7e7e7] outline-none bg-[#ffffff]'/>
+                            </div>}
+                        <div className='subtotal flex justify-between border-t-[1px] border-solid border-[#e7e7e7]'>
+                            <h3 className='py-1'>Subtotal</h3>
+                            <span>${cartList.total}</span>
+                        </div>
+                        <div className='Tax flex justify-between border-b-[1px] border-solid border-[#e7e7e7] '>
+                            <h3 className='py-1'>Tax</h3>
+                            <span>$00</span>
+                        </div>
+                        <div className="orderTotal flex justify-between font-extrabold text-[#222529] text-xl py-2">
+                            <h3>Order Total:</h3>
+                            <span>${cartList.total}</span>
+                        </div>
+                        <div className="checkout-btn text-white bg-black text-center px-4 py-2 text-[15px] font-bold cursor-pointer">GO TO CHECKOUT <FontAwesomeIcon icon={faArrowRight} size="1x" /> </div>
+                        {cartList.items.length >= 1 &&
+                            <div className="text-[#ff7272] text-[14px] leading-6 text-center py-2 cursor-pointer hover:underline">
+                                Check Out with Multiple Address
+                            </div>
+                        }
+                    </div>
+                </div>
             </div>
             ) 
         } 
