@@ -1,14 +1,19 @@
-import { faAngleUp, faArrowRight, faBasketShopping, faHeart, faMultiply } from '@fortawesome/free-solid-svg-icons'
+import { faAngleUp, faArrowRight, faBasketShopping } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import React, { useState }  from 'react'
 import {  useSelector } from 'react-redux';
 import CartItem from './CartItem';
-
+import useSaveCartToDB from '../../services/cartServices'
 
 export default function Cart() { 
     const [shippingTaxForm, setShippingTaxForm] = useState(false);  
     const cartList = useSelector( state => state.carts)   
- 
+    const handleCK = useSaveCartToDB() 
+    const totalPrice = useSelector( state => state.carts.total)  
+    const handleCheckOut = () =>{
+        handleCK({items:cartList.items,totalPrice}) 
+    }
+
   return (
     <div className='text-[#777777] text-sm p-5'>
         <div className='py-8'>
@@ -86,7 +91,9 @@ export default function Cart() {
                             <h3>Order Total:</h3>
                             <span>${cartList.total}</span>
                         </div>
-                        <div className="checkout-btn text-white bg-black text-center px-4 py-2 text-[15px] font-bold cursor-pointer">GO TO CHECKOUT <FontAwesomeIcon icon={faArrowRight} size="1x" /> </div>
+                        <div className="checkout-btn text-white bg-black text-center px-4 py-2 text-[15px] font-bold cursor-pointer"
+                        onClick={handleCheckOut}
+                        >GO TO CHECKOUT <FontAwesomeIcon icon={faArrowRight} size="1x" /> </div>
                         {cartList.items.length >= 1 &&
                             <div className="text-[#ff7272] text-[14px] leading-6 text-center py-2 cursor-pointer hover:underline">
                                 Check Out with Multiple Address

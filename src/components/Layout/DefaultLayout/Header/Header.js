@@ -33,16 +33,24 @@ export default function Header() {
   const searchResult =products && products?.length >= 0 && products?.filter((prod)=>prod.name.toLowerCase().includes(searchValue)) 
   const headerRef = useRef(null) 
   const navigate = useNavigate() 
-  const handleSignOut = ()=>{
+
+  
+  const handleSignOut = (e)=>{
+    e.stopPropagation()
     localStorage.removeItem("token")
     dispatch(getCurrentUser(null))
     navigate('/login')
+  } 
+  const handleRedirect = (e)=>{
+    e.stopPropagation()
+    navigate('/')
   }
 
 
   function handleChangePage(e){
-    e.preventDefault(); 
-    navigate('/cart')
+    // e.preventDefault(); 
+    e.stopPropagation()
+    // navigate('/cart')
   }
 
 
@@ -129,11 +137,11 @@ export default function Header() {
                           <li className='px-3 py-2 hover:underline'><Link to='/categories'>CRAVAT</Link></li> 
                         </ul>
                       </li>
-                    </ul>
-                    <div className='h-auto bg-cover bg-right' >
-                      <div className='w-[210px] h-[230px]' style={{backgroundImage:'url("https://www.portotheme.com/magento2/porto/pub/media/wysiwyg/smartwave/porto/megamenu/menu-banner.jpg")'}}>
-                      </div>
-                    </div>
+                    </ul> 
+                    <div className='h-auto bg-cover bg-right' onClick={handleRedirect}> 
+                        <div className='w-[210px] h-[230px]' style={{backgroundImage:'url("https://www.portotheme.com/magento2/porto/pub/media/wysiwyg/smartwave/porto/megamenu/menu-banner.jpg")'}}>
+                        </div>  
+                    </div> 
                   </div>
                 </div>
               </li>
@@ -148,8 +156,8 @@ export default function Header() {
               </li>
             </ul>
         </div>
-        <div className=' w-[111px] h-[43px] bg-cover '> 
-          <img className='w-full h-full' src="https://www.portotheme.com/magento2/porto/pub/media/logo/stores/17/logo_ecomblack_lg.png" alt="" />
+        <div className=' w-[111px] h-[43px] bg-cover '>  
+          <Link to="/"><img className='w-full h-full' src="https://www.portotheme.com/magento2/porto/pub/media/logo/stores/17/logo_ecomblack_lg.png" alt="" /></Link>
         </div> 
         <div className="flex justify-end items-center gap-10 text-base">
           <div className='lg:hidden' 
@@ -311,7 +319,7 @@ export default function Header() {
             <div className="absolute text-base w-[350px] height-auto px-6 py-2 font-normal bg-white shadow-[0_7px_29px_0_rgba(100,100,111,0.2)] top-20 block z-10 right-10">
               <div className="flex justify-between items-center border-b-2 border-solid border-black mb-5">
                 <span>{cartItem?.length} ITEM</span>
-                <Link to="/cart" onClick={handleChangePage}>VIEW CART</Link>
+                <Link to="/cart"  onClick={handleChangePage}>VIEW CART</Link>
               </div>
               <div className="flex flex-col items-center">
                 {cartItem?.length > 0 ? 

@@ -2,6 +2,9 @@ import React, {useEffect, useState } from 'react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import  { faAngleDown, faAngleUp, faCheck} from '@fortawesome/free-solid-svg-icons'
 import * as request from '../../utils/requestCountry'
+import {useSelector} from 'react-redux'
+
+
 export default function Checkout() {
   const [showCart, setShowCart] = useState(false)
   const [countryList, setCountryList] = useState([])
@@ -9,6 +12,12 @@ export default function Checkout() {
   const [districtList, setDistrictList] = useState([])
   const [district, setDistrict] = useState('') 
   const [wardsList, setWardsList] = useState([]) 
+  const cartItem = useSelector(state=>state.carts.items)
+
+  const handleCheckOut = (e)=>{
+    e.preventDefault()
+  }
+
   useEffect(()=>{
     const fetchCountry = async()=>{
       const res = await request.get('/p/')
@@ -119,6 +128,14 @@ export default function Checkout() {
               <h2>Phone number <span className='text-red-500'>*</span></h2>
               <input type="number" name="" id="" className='px-3 py-2 border-solid border-[1px] border-[#e7e7e7] outline-none w-full' />
             </div>
+            <div className="order-note my-2">
+              <textarea className='border-solid border-[1px] border-[#e7e7e7] w-full outline-none' name="note" cols="30" rows="10"></textarea>
+            </div>
+            <button className="bg-black text-white font-bold px-5 py-[5px] uppercase my-2 disabled:opacity-50"
+              onClick={handleCheckOut}
+            >
+              Check out
+            </button>
           </div> 
           <div className={`cart ${showCart ? 'max-md:fixed' : 'hidden'} w-full h-full top-0 right-0 z-20 left-[20%] bg-white 
            md:!block lg:!block xl:!block md:w-1/3
@@ -131,22 +148,26 @@ export default function Checkout() {
                 <span> Items in Cart</span>
                 <FontAwesomeIcon icon={showCart ? faAngleUp:faAngleDown} />
               </div>
+              {/* LIST CART ITEM */}
               <div className={`list-prod-cart ${showCart ? 'block' :'hidden'} max-h-[400px] overflow-y-auto`}  >
-                <div className="prod-item flex gap-5 py-1">
-                  <div className="prod-img">
-                    <img src="./images/product1.jpeg" alt="" />
-                  </div>
-                  <div className="prod-info">
-                    <div className="prod-name">Porto White shirt</div>
-                    <div className="qty">Qty:1</div>
-                    <div className="price">89.00$</div>
-                    <div className="view-detail">View detail</div>
-                    <div className='hidden'>
-                      <div>Color: <span>Green</span></div>
-                      <div>Size: <span>S</span></div>
-                    </div>
-                  </div>
-                </div>  
+                { cartItem && cartItem.map(prod=>( 
+                    <div key={prod._id} className="prod-item flex gap-5 py-1">
+                      <div className="prod-img">
+                        <img className='w-[100px] h-[100px]' src={prod.image.url} alt="" />
+                      </div>
+                      <div className="prod-info">
+                        <div className="prod-name">{prod.name}</div>
+                        <div className="qty">Qty: {prod.quantity}</div>
+                        <div className="price">{prod.price}$</div>
+                        <div className="view-detail">View detail</div>
+                        <div className='hidden'>
+                          <div>Color: <span>Green</span></div>
+                          <div>Size: <span>S</span></div>
+                        </div>
+                      </div>
+                    </div>  
+                  ))
+                } 
               </div>
             </div>
           </div>

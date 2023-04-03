@@ -21,3 +21,22 @@ export const getUserByEmail = async(email) =>{
       console.log('something went wrong!');
     }
 }
+
+export const getAllUserWishlist = async(email) =>{
+    try {
+      const res = await request.get(`/user/wishlist?email=${email}`)
+        return res.data;
+    } catch (error) {
+      console.log('something went wrong!');
+    }
+}
+export const addProductToUserWishList = async(productId,email) =>{
+    try {
+      const res = await request.put(`/user/wishlist/${productId}?email=${email}`)
+        return res.users;
+    } catch (error) {
+      console.log('something went wrong!');
+    }
+}
+
+ 

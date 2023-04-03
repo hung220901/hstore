@@ -43,7 +43,7 @@ export default function ProductCard({product}) {
             </div>
             <div className="product-price">${product.price}</div>
             </div>
-            <div className="add-to-wishlist">
+            <div className="add-to-wishlist p-3">
             <FontAwesomeIcon icon={faHeart} />
             </div>
         </div> 

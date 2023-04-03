@@ -13,8 +13,8 @@ import ProductCard from '../../components/Product/ProductCard';
   export default function Home() {  
     SwiperCore.use([Autoplay]) 
     const product = useSelector(state => state.products.products)
-    const productMale = product.filter(prod=>prod.gender === true).slice(0,2)
-    const productFemale = product.filter(prod=>prod.gender === false).slice(0,2) 
+    const productMale =product.length >0 && product.filter(prod=>prod.gender === true).slice(0,2)
+    const productFemale =product.length >0 && product.filter(prod=>prod.gender === false).slice(0,2) 
 
     return (
       <>
@@ -214,7 +214,7 @@ import ProductCard from '../../components/Product/ProductCard';
                   </div>
               </div> 
             </div>   */}
-            {  productFemale.map((prod, index)=>(
+            {productFemale.length > 0 &&  productFemale.map((prod, index)=>(
                 <ProductCard key={index} product={prod} />
             ))
             }
@@ -332,7 +332,7 @@ import ProductCard from '../../components/Product/ProductCard';
                     </div>
                 </div> 
               </div>   */}
-            {  productMale.map((prod, index)=>(
+            { productMale.length > 0 && productMale.map((prod, index)=>(
                 <ProductCard key={index} product={prod} />
               ))
             }

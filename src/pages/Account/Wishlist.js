@@ -1,7 +1,22 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faAngleRight, faBagShopping } from '@fortawesome/free-solid-svg-icons'
-export default function Wishlist() {
+import { faAngleRight } from '@fortawesome/free-solid-svg-icons'
+import WishlistItem from './WishlistItem';
+import { useDispatch, useSelector } from 'react-redux';
+import * as req from '../../services/userServices'
+import {getAllWishListItem} from '../../redux/wishlistSlice'
+export default function Wishlist() { 
+  const dispatch = useDispatch()
+  const wishlist = useSelector(state=>state.wishlist.items) 
+  const email = useSelector(state => state.auth.users.email)  
+  useEffect(()=>{
+    const getAllUserWishlist = async()=>{
+       const res = await req.getAllUserWishlist(email)
+       console.log(res);
+       dispatch(getAllWishListItem(res.wishlist))
+    }
+    getAllUserWishlist()
+  },[email])
   return (
     <div className='px-5 py-10'>
         <h2 className='text-[#ff7272] text-xl leading-10'>My Wish List</h2>
@@ -24,100 +39,12 @@ export default function Wishlist() {
               </select>
             </div> 
             {/* Mobile */}
-            <div className='flex flex-wrap'>  
-              <div className='cursor-pointer border-solid border-[#777777] border-t-[1px] sm:border-none py-2 px-2 w-full 
-               sm:max-w-[50%] lg:max-w-[25%] md:px-4 md:py-4 
-              '>
-                  <div className="flex justify-center text-center sm:flex-wrap "> 
-                    <div className='prod-img  w-full h-auto max-w-[150px] sm:max-w-[230px] justify-center items-center
-                    hover:shadow-xl
-                    '><img src="./images/product2.jpeg" alt="" className='w-full h-full '/></div>
-                    <div className='flex-col w-full '>
-                      <div className="prod-name hover:text-[#ff7272] text-center  limit-text  ">Porto White Girl Shirt</div>
-                      <div className="price font-bold">$89.00</div>
-                    </div>
-                  </div>
-                  <div className=" flex justify-between gap-2 my-2  sm:flex-wrap sm:justify-evenly">
-                    <div className='flex w-full justify-start sm:justify-center gap-2'>
-                      <input type="number" name="" id="" defaultValue='1' className='w-[40px] h-auto border-solid border-black border-t-[1px] border-b-[1px] text-center outline-none hidden sm:block '/>
-                      <button className="add-to-cart bg-black text-white px-3 mx-2 hover:bg-[#ff7272] w-[150px] whitespace-nowrap"> <FontAwesomeIcon icon={faBagShopping} /> ADD TO CART</button>
-                    </div>
-                    <div className="action-prod text-[#0088CC] flex justify-end sm:justify-center gap-2 w-full ">
-                      <span className='hover:text-[#ff7272]'>Edit</span>
-                      <span className='hover:text-[#ff7272]'>Remove</span>
-                    </div>
-                  </div>
-              </div>   
-              <div className='cursor-pointer border-solid border-[#777777] border-t-[1px] sm:border-none py-2 px-2 w-full 
-               sm:max-w-[50%] lg:max-w-[25%] md:px-4 md:py-4 
-              '>
-                  <div className="flex justify-center text-center sm:flex-wrap "> 
-                    <div className='prod-img  w-full h-auto max-w-[150px] sm:max-w-[230px] justify-center items-center
-                    hover:shadow-xl
-                    '><img src="./images/product2.jpeg" alt="" className='w-full h-full '/></div>
-                    <div className='flex-col w-full '>
-                      <div className="prod-name hover:text-[#ff7272] text-center  limit-text  ">Porto White Girl Shirt</div>
-                      <div className="price font-bold">$89.00</div>
-                    </div>
-                  </div>
-                  <div className=" flex justify-between gap-2 my-2  sm:flex-wrap sm:justify-evenly">
-                    <div className='flex w-full justify-start sm:justify-center gap-2'>
-                      <input type="number" name="" id="" defaultValue='1' className='w-[40px] h-auto border-solid border-black border-t-[1px] border-b-[1px] text-center outline-none hidden sm:block '/>
-                      <button className="add-to-cart bg-black text-white px-3 mx-2 hover:bg-[#ff7272] w-[150px] whitespace-nowrap"> <FontAwesomeIcon icon={faBagShopping} /> ADD TO CART</button>
-                    </div>
-                    <div className="action-prod text-[#0088CC] flex justify-end sm:justify-center gap-2 w-full ">
-                      <span className='hover:text-[#ff7272]'>Edit</span>
-                      <span className='hover:text-[#ff7272]'>Remove</span>
-                    </div>
-                  </div>
-              </div>   
-              <div className='cursor-pointer border-solid border-[#777777] border-t-[1px] sm:border-none py-2 px-2 w-full 
-               sm:max-w-[50%] lg:max-w-[25%] md:px-4 md:py-4 
-              '>
-                  <div className="flex justify-center text-center sm:flex-wrap "> 
-                    <div className='prod-img  w-full h-auto max-w-[150px] sm:max-w-[230px] justify-center items-center
-                    hover:shadow-xl
-                    '><img src="./images/product2.jpeg" alt="" className='w-full h-full '/></div>
-                    <div className='flex-col w-full '>
-                      <div className="prod-name hover:text-[#ff7272] text-center  limit-text  ">Porto White Girl Shirt</div>
-                      <div className="price font-bold">$89.00</div>
-                    </div>
-                  </div>
-                  <div className=" flex justify-between gap-2 my-2  sm:flex-wrap sm:justify-evenly">
-                    <div className='flex w-full justify-start sm:justify-center gap-2'>
-                      <input type="number" name="" id="" defaultValue='1' className='w-[40px] h-auto border-solid border-black border-t-[1px] border-b-[1px] text-center outline-none hidden sm:block '/>
-                      <button className="add-to-cart bg-black text-white px-3 mx-2 hover:bg-[#ff7272] w-[150px] whitespace-nowrap"> <FontAwesomeIcon icon={faBagShopping} /> ADD TO CART</button>
-                    </div>
-                    <div className="action-prod text-[#0088CC] flex justify-end sm:justify-center gap-2 w-full ">
-                      <span className='hover:text-[#ff7272]'>Edit</span>
-                      <span className='hover:text-[#ff7272]'>Remove</span>
-                    </div>
-                  </div>
-              </div>   
-              <div className='cursor-pointer border-solid border-[#777777] border-t-[1px] sm:border-none py-2 px-2 w-full 
-               sm:max-w-[50%] lg:max-w-[25%] md:px-4 md:py-4 
-              '>
-                  <div className="flex justify-center text-center sm:flex-wrap "> 
-                    <div className='prod-img  w-full h-auto max-w-[150px] sm:max-w-[230px] justify-center items-center
-                    hover:shadow-xl
-                    '><img src="./images/product2.jpeg" alt="" className='w-full h-full '/></div>
-                    <div className='flex-col w-full '>
-                      <div className="prod-name hover:text-[#ff7272] text-center  limit-text  ">Porto White Girl Shirt</div>
-                      <div className="price font-bold">$89.00</div>
-                    </div>
-                  </div>
-                  <div className=" flex justify-between gap-2 my-2  sm:flex-wrap sm:justify-evenly">
-                    <div className='flex w-full justify-start sm:justify-center gap-2'>
-                      <input type="number" name="" id="" defaultValue='1' className='w-[40px] h-auto border-solid border-black border-t-[1px] border-b-[1px] text-center outline-none hidden sm:block '/>
-                      <button className="add-to-cart bg-black text-white px-3 mx-2 hover:bg-[#ff7272] w-[150px] whitespace-nowrap"> <FontAwesomeIcon icon={faBagShopping} /> ADD TO CART</button>
-                    </div>
-                    <div className="action-prod text-[#0088CC] flex justify-end sm:justify-center gap-2 w-full ">
-                      <span className='hover:text-[#ff7272]'>Edit</span>
-                      <span className='hover:text-[#ff7272]'>Remove</span>
-                    </div>
-                  </div>
-              </div>   
-            </div>  
+            <div className='flex flex-wrap'> 
+            { wishlist.length > 0 && wishlist.map((product,index)=>(
+                <WishlistItem key={index} product={product} /> 
+              )) 
+            }   
+            </div>    
             {/* END PRODUCT */}
           </div> 
         </div>

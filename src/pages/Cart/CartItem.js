@@ -1,20 +1,47 @@
-import React, { useState } from 'react'
+import React, {  useState } from 'react'
 import { faHeart, faMultiply } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import {updateQuantity, decreaseQuantity} from '../../redux/cartSlice'
+import {updateQuantity, decreaseQuantity,removeFromCart,increaseQuantity} from '../../redux/cartSlice'
 import { useDispatch } from 'react-redux'
 
 
 
 export default function CartItem({product}) {
-    const [quantity, setQuantity] = useState(1) 
+    const [quantity, setQuantity] = useState(product.quantity)  
     const dispatch = useDispatch() 
+ 
+    const handleOnChangeValue = (e,id)=>{ 
+        if(e.target.value === '0' ||e.target.value === ''){
+            setQuantity(1)  
+        }
+        else{
+            setQuantity(e.target.value)
+        }   
+        dispatch(updateQuantity({'_id':id,'quantity': parseInt(quantity)}))
+    } 
 
-    const handleDecrease = (id) =>{  
-        dispatch(decreaseQuantity(id))
+
+   const handleRemoveItem = ()=>{
+    dispatch(removeFromCart(product._id))
+   }
+   
+   const handleOnChangeInput = (e, id) =>{
+    if(e.target.value === '0' ||e.target.value === ''){
+        setQuantity(1)  
     }
-    const handleIncrease = (id, qty) =>{  
-        dispatch((updateQuantity({id,qty})))
+    else{
+        setQuantity(e.target.value)
+    } 
+    dispatch(updateQuantity({'_id':id,'quantity': parseInt(quantity)}))
+   }
+
+    const handleDecrease = (e,id) =>{  
+        e.stopPropagation()  
+        dispatch(decreaseQuantity(id))
+    } 
+    const handleIncrease = (e,id) =>{  
+        e.stopPropagation()  
+        dispatch((increaseQuantity(id)))
     } 
 
   return (
@@ -35,17 +62,17 @@ export default function CartItem({product}) {
                 <div 
                 className='border-solid border-[#e7e7e7] border-[1px] px-3 py-4
                 text-[#222529] cursor-pointer hover:text-[#ff7272]'
-                onClick={handleDecrease(product._id)}
+                onClick={e=>handleDecrease(e,product._id)}
                 >-</div>
-                <input type="number" className='outline-none w-10 border-solid border-[#e7e7e7] border-[1px] px-3 py-4 text-center text-[#222529] font-bold' defaultValue={ product.quantity.toString()} onChange={(e)=>dispatch(updateQuantity({'_id':product._id,'quantity': parseFloat(e.target.value)}))} /> 
+                <input type="number" className='outline-none w-10 border-solid border-[#e7e7e7] border-[1px] px-3 py-4 text-center text-[#222529] font-bold' value={quantity}  onChange={e =>handleOnChangeInput(e,product._id)} min="1"  onBlur={e=>handleOnChangeValue(e,product._id)}/> 
                 <div className='border-solid border-[#e7e7e7] border-[1px] px-3 py-4 
                 text-[#222529] cursor-pointer hover:text-[#ff7272]' 
-                onClick={handleIncrease(product._id)}
+                onClick={e=>handleIncrease(e,product._id)}
                 >+</div>
             </div>
         </td>
         <td className='text-right font-semibold text-[#222529] leading-4'><span>${(parseInt(product.price) * parseInt(product.quantity)).toFixed(2)}</span></td>
-        <td className="absolute w-5 h-5 top-0 right-0 translate-x-2 translate-y-1 rounded-full flex justify-center items-center bg-white shadow-md cursor-pointer">
+        <td className="absolute w-5 h-5 top-0 right-0 translate-x-2 translate-y-1 rounded-full flex justify-center items-center bg-white shadow-md cursor-pointer" onClick={handleRemoveItem}>
             <FontAwesomeIcon icon={faMultiply} />
         </td>
         <td className="absolute w-5 h-5 top-0 right-0 -translate-x-4 translate-y-1 rounded-full flex justify-center items-center bg-white shadow-md cursor-pointer">

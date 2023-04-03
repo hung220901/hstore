@@ -12,8 +12,7 @@ import { getProductsStart, getProductsSuccess } from '../../redux/productSlice'
 export default function ProductDetail() { 
   const params = useParams(); 
   const dispatch = useDispatch()
-  const product = useSelector(state => state.products.products) 
-  console.log(product);
+  const product = useSelector(state => state.products.products)  
   useEffect(()=>{
     const fetchOneProduct = async () =>{
       dispatch(getProductsStart()) 

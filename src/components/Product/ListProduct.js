@@ -9,6 +9,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faHeart, faStar} from '@fortawesome/free-regular-svg-icons';
 import { faShoppingBag} from '@fortawesome/free-solid-svg-icons';  
 import * as productServices from '../../services/productServices'
+import * as requestWishlist from '../../services/userServices' 
 import { useDispatch, useSelector } from 'react-redux';
 import {addToCart} from '../../redux/cartSlice'
 import { getProductsFailure, getProductsStart, getProductsSuccess } from '../../redux/productSlice';
@@ -17,7 +18,9 @@ export default function ListProduct() {
     const [showQuickView, setShowQuickView] = useState(false)  
     const [slugQV, setSlugQV] = useState('')  
     const product = useSelector(state =>state.products.products) 
-    const dispatch = useDispatch()
+    const wishlist = useSelector(state=>state.wishlist.items)
+    const email = useSelector(state =>state.auth.users.email) 
+    const dispatch = useDispatch() 
 
     const handleAddToCart = (e,prod) =>{
       e.preventDefault()
@@ -57,6 +60,20 @@ export default function ListProduct() {
       } 
     } 
   },[dispatch])
+
+  const handleAddToWishList = async(e,id) =>{
+    try {
+      e.stopPropagation()
+      e.preventDefault()
+      const res = await requestWishlist.addProductToUserWishList(id,email)
+      console.log(res); 
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+
+
   return (
     <>
       <h3 className='text-[#313131] block text-lg font-bold leading-5 -tracking-[0.18px] text-center uppercase w-full mt-10'>feature product</h3>
@@ -125,7 +142,7 @@ export default function ListProduct() {
                           </div>
                           <div className="product-price">{prod.price}</div>
                         </div>
-                        <div className="add-to-wishlist">
+                        <div className="add-to-wishlist p-3" onClick={e=>handleAddToWishList(e,prod._id)}>
                           <FontAwesomeIcon icon={faHeart} />
                         </div>
                     </div>
