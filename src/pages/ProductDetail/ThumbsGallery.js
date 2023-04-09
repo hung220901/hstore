@@ -1,8 +1,8 @@
-import React, { useState , memo} from 'react'
+import React, { useState } from 'react'
 import SwiperCore, { FreeMode, Navigation, Thumbs, Zoom } from 'swiper'
-import { Swiper, SwiperSlide } from 'swiper/react'
-import { faEnvelope, faShoppingBag, faStar } from '@fortawesome/free-solid-svg-icons'
-import { faHeart } from '@fortawesome/free-regular-svg-icons'
+import { Swiper, SwiperSlide } from 'swiper/react' 
+import { faHeart as regularHeart, faStar} from '@fortawesome/free-regular-svg-icons';
+import { faShoppingBag, faHeart as solidHeart,faEnvelope} from '@fortawesome/free-solid-svg-icons';  
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import {  faFacebookF, faGooglePlus, faLinkedin, faTwitter } from '@fortawesome/free-brands-svg-icons'
 
@@ -11,19 +11,34 @@ import "swiper/css/free-mode";
 import "swiper/css/navigation";
 import "swiper/css/thumbs";
 import './gallery.scss'  
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
+import {addToWishList, removeItemFromWishlist} from '../../redux/wishlistSlice'
+import { toast } from 'react-toastify';
 export default function ThumbsGallery() { 
-  const product = useSelector(state => state.products.products) 
+  const wishlist = useSelector(state => state.wishlist.items)
+  const product = useSelector(state => state.products.products)  
   const [thumbsSwiper, setThumbsSwiper] = useState(null); 
   SwiperCore.use([Zoom])
   const [quantity, setQuantity] = useState(1) 
+  const dispatch = useDispatch()
   const handleIncrease = () =>{
     setQuantity(parseInt(quantity)  + 1)  
   }
   const handleDecrease = () =>{
     setQuantity( parseInt(quantity) - 1)
   }
- 
+
+  const handleToggleWishlist = (prod)=>{
+    const existedProduct = wishlist.find(item => item._id === prod._id) 
+    if(existedProduct){
+      toast.success('Remove from wishlist successfully!')
+      dispatch(removeItemFromWishlist(prod._id))
+    }
+    else{
+      toast.success('Add to wishlist successfully!')
+      dispatch(addToWishList({name:prod.name,image:prod.image,price:prod.price,_id:prod._id }))
+    }
+  }
  
   return (
     <div className='flex flex-wrap md:flex-nowrap'>
@@ -101,8 +116,8 @@ export default function ThumbsGallery() {
                 <FontAwesomeIcon icon={faShoppingBag} />
                 add to cart
               </button>
-              <button className='h-10 w-12 border-solid border-[#e7e7e7] border-[1px] hover:text-[#666666]'>
-                <FontAwesomeIcon icon={faHeart}/>
+              <button className='h-10 w-12 border-solid border-[#e7e7e7] border-[1px] hover:text-[#666666]' onClick={()=>handleToggleWishlist(product)}>
+                <FontAwesomeIcon icon={wishlist.find(item=>item._id === product._id) ? solidHeart:regularHeart} color={wishlist.find(item=>item._id === product._id) ? 'red':'black'} />
               </button>
             </div>
           </div>

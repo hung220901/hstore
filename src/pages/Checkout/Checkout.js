@@ -2,7 +2,8 @@ import React, {useEffect, useState } from 'react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import  { faAngleDown, faAngleUp, faCheck} from '@fortawesome/free-solid-svg-icons'
 import * as request from '../../utils/requestCountry'
-import {useSelector} from 'react-redux'
+import {useSelector} from 'react-redux' 
+import StripeCheckout from 'react-stripe-checkout';
 
 
 export default function Checkout() {
@@ -12,12 +13,16 @@ export default function Checkout() {
   const [districtList, setDistrictList] = useState([])
   const [district, setDistrict] = useState('') 
   const [wardsList, setWardsList] = useState([]) 
-  const cartItem = useSelector(state=>state.carts.items)
-
+  const [stripeToken, setStripeToken] = useState(null)
+  const cartItem = useSelector(state=>state.carts)
+  const KEY = process.env.REACT_APP_STRIPE_KEY; 
   const handleCheckOut = (e)=>{
     e.preventDefault()
   }
-
+  const onToken = (token)=>{
+    setStripeToken(token)
+    console.log(token);
+  }
   useEffect(()=>{
     const fetchCountry = async()=>{
       const res = await request.get('/p/')
@@ -131,11 +136,23 @@ export default function Checkout() {
             <div className="order-note my-2">
               <textarea className='border-solid border-[1px] border-[#e7e7e7] w-full outline-none' name="note" cols="30" rows="10"></textarea>
             </div>
+
+            <StripeCheckout
+              name="Three Comma Co."  
+              description={`Your total is ${cartItem.total}`}
+              image="https://www.vidhub.co/assets/logos/vidhub-icon-2e5c629f64ced5598a56387d4e3d0c7c.png"   
+              stripeKey={KEY}
+              locale="en" 
+              shippingAddress
+              billingAddress   
+              token={onToken}    
+              >
             <button className="bg-black text-white font-bold px-5 py-[5px] uppercase my-2 disabled:opacity-50"
               onClick={handleCheckOut}
             >
               Check out
             </button>
+          </StripeCheckout>
           </div> 
           <div className={`cart ${showCart ? 'max-md:fixed' : 'hidden'} w-full h-full top-0 right-0 z-20 left-[20%] bg-white 
            md:!block lg:!block xl:!block md:w-1/3
@@ -150,7 +167,7 @@ export default function Checkout() {
               </div>
               {/* LIST CART ITEM */}
               <div className={`list-prod-cart ${showCart ? 'block' :'hidden'} max-h-[400px] overflow-y-auto`}  >
-                { cartItem && cartItem.map(prod=>( 
+                { cartItem && cartItem.items.map(prod=>( 
                     <div key={prod._id} className="prod-item flex gap-5 py-1">
                       <div className="prod-img">
                         <img className='w-[100px] h-[100px]' src={prod.image.url} alt="" />

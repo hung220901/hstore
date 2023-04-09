@@ -1,4 +1,26 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { createSlice ,createAsyncThunk } from '@reduxjs/toolkit';
+import * as request from '../utils/request' 
+import { useDispatch } from 'react-redux';
+
+export const saveCartToDb = createAsyncThunk('cart/saveCartToDb', async (cartItems, {getState}) => {  
+  const carts = getState().carts;
+  const email = getState().auth.users.email;
+  const token = localStorage.getItem("token")
+  const response = await request.post('/cart',{
+    headers:{
+      Authorization: `Bearer ${token}`,
+    },
+    data:{
+      items:carts.items,
+      email,
+      totalPrice:carts.total
+    }
+  })
+ 
+});
+
+
+
 
 const cartSlice = createSlice({
   name: 'carts',
@@ -7,6 +29,7 @@ const cartSlice = createSlice({
     total: 0,
     loading: false,
     error: null,
+    success:false,
   },
   reducers: {
     getCartsStart: (state) => {
@@ -58,7 +81,7 @@ const cartSlice = createSlice({
       const existingItem = state.items.find((item) => item._id === _id); 
       if (existingItem) {
         if(existingItem.quantity === 1){
-          state.items = state.items.find((item) => item._id !== _id);
+          state.items = state.items.filter((item) => item._id !== _id); 
         } 
         else{
           parseInt(existingItem.quantity--);
@@ -77,13 +100,14 @@ const cartSlice = createSlice({
     },
 
 
-    saveCartToDB:(state) =>{
-      state.loading = false;
-    },
-
   },
+  extraReducers: (builder)=>{
+    builder.addCase(saveCartToDb.fulfilled, (state, action) => { 
+      state.success = true;
+    });
+  }
 });
 
-export const { getCartsStart, getCartsSuccess, getCartsFailure,addToCart,removeFromCart,updateQuantity ,decreaseQuantity, saveCartToDB,increaseQuantity} = cartSlice.actions;
+export const { getCartsStart, getCartsSuccess, getCartsFailure,addToCart,removeFromCart,updateQuantity ,decreaseQuantity,increaseQuantity} = cartSlice.actions;
 
 export default cartSlice.reducer;

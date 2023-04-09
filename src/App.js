@@ -7,6 +7,8 @@ import ScrollToTop from './components/ScrollToTop/ScrollToTop';
 import { useDispatch } from 'react-redux';
 import * as request from './services/authServices'
 import {getCurrentUser} from './redux/authSlice'
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 function App() {
   const dispatch = useDispatch()
   const checkCurrentUser = useCallback(async()=>{
@@ -25,6 +27,7 @@ function App() {
   return ( 
     <Router>
       <ScrollToTop/>
+      <ToastContainer />
         <Routes>
           {
             publicRoutes.map((route,index)=>{

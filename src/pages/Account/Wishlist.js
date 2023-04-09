@@ -1,22 +1,35 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect }  from 'react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faAngleRight } from '@fortawesome/free-solid-svg-icons'
 import WishlistItem from './WishlistItem';
-import { useDispatch, useSelector } from 'react-redux';
-import * as req from '../../services/userServices'
-import {getAllWishListItem} from '../../redux/wishlistSlice'
-export default function Wishlist() { 
-  const dispatch = useDispatch()
-  const wishlist = useSelector(state=>state.wishlist.items) 
-  const email = useSelector(state => state.auth.users.email)  
+import {  useDispatch, useSelector } from 'react-redux';
+import {removeItemFromWishlist, saveWishlist,getAllWishListItem} from '../../redux/wishlistSlice'
+import {toast} from 'react-toastify' 
+import * as request from '../../services/userServices' 
+export default function Wishlist() {  
+  const dispatch = useDispatch() 
+  const wishlist = useSelector(state=>state.wishlist.items)  
+  const email = useSelector(state=>state.auth.users.email)  
+
   useEffect(()=>{
-    const getAllUserWishlist = async()=>{
-       const res = await req.getAllUserWishlist(email)
-       console.log(res);
-       dispatch(getAllWishListItem(res.wishlist))
+    const fetchUserWishlist = async()=>{
+      if(email){
+        const res = await request.getAllUserWishlist(email)
+        res && dispatch(getAllWishListItem(res.wishlist))
+      }
     }
-    getAllUserWishlist()
+   
+    !wishlist && fetchUserWishlist()
   },[email])
+ 
+ 
+     
+  const handleRemove = (id)=>{   
+    dispatch(saveWishlist(email))
+    dispatch(removeItemFromWishlist(id))
+  
+    toast.success('Đã xoá thành công!')
+  }
   return (
     <div className='px-5 py-10'>
         <h2 className='text-[#ff7272] text-xl leading-10'>My Wish List</h2>
@@ -25,7 +38,7 @@ export default function Wishlist() {
             <ul className='fa-ul whitespace-nowrap'> 
               <li className='pb-1 border-b-[1px] border-solid border-black'><FontAwesomeIcon icon={faAngleRight} listItem  />My Account</li>
               <li className='pb-1 border-b-[1px] border-solid border-black'><FontAwesomeIcon icon={faAngleRight} listItem  />My Order</li>
-              <li className='pb-1 border-b-[1px] border-solid border-black'><FontAwesomeIcon icon={faAngleRight} listItem  />My Wish List</li>
+              <li className='pb-1 border-b-[1px] border-solid border-black font-bold'><FontAwesomeIcon icon={faAngleRight} listItem  />My Wish List</li>
               <li className='pb-1 border-b-[1px] border-solid border-black'><FontAwesomeIcon icon={faAngleRight} listItem  />Account Information</li> 
             </ul>
           </div>
@@ -40,8 +53,8 @@ export default function Wishlist() {
             </div> 
             {/* Mobile */}
             <div className='flex flex-wrap'> 
-            { wishlist.length > 0 && wishlist.map((product,index)=>(
-                <WishlistItem key={index} product={product} /> 
+            { wishlist?.length > 0 && wishlist.map((product,index)=>(
+                <WishlistItem key={index} product={product} onRemove={handleRemove} /> 
               )) 
             }   
             </div>    

@@ -39,4 +39,26 @@ export const addProductToUserWishList = async(productId,email) =>{
     }
 }
 
+
+export const addProductArrayToUserWishList = async(wishlist,email) =>{
+  try { 
+      const res = await request.put(`/user/wishlist?email=${email}`,wishlist)
+      return res.data
+  } catch (error) {
+    console.log('something went wrong!');
+  }
+}
+
+
+
+
+export const removeProductFromUserWishList = async(productId,email) =>{
+    try {
+      const res = await request.del(`/user/wishlist/${productId}?email=${email}`)
+        return res.users;
+    } catch (error) {
+      console.log('something went wrong!');
+    }
+}
+
  

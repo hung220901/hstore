@@ -45,14 +45,7 @@ export default function Header() {
     e.stopPropagation()
     navigate('/')
   }
-
-
-  function handleChangePage(e){
-    // e.preventDefault(); 
-    e.stopPropagation()
-    // navigate('/cart')
-  }
-
+ 
 
 
 // Call API Search
@@ -319,7 +312,7 @@ export default function Header() {
             <div className="absolute text-base w-[350px] height-auto px-6 py-2 font-normal bg-white shadow-[0_7px_29px_0_rgba(100,100,111,0.2)] top-20 block z-10 right-10">
               <div className="flex justify-between items-center border-b-2 border-solid border-black mb-5">
                 <span>{cartItem?.length} ITEM</span>
-                <Link to="/cart"  onClick={handleChangePage}>VIEW CART</Link>
+                <Link to="/cart"  >VIEW CART</Link>
               </div>
               <div className="flex flex-col items-center">
                 {cartItem?.length > 0 ? 

@@ -1,18 +1,24 @@
 import { faAngleUp, faArrowRight, faBasketShopping } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import React, { useState }  from 'react'
-import {  useSelector } from 'react-redux';
-import CartItem from './CartItem';
-import useSaveCartToDB from '../../services/cartServices'
+import {  useDispatch, useSelector } from 'react-redux';
+import CartItem from './CartItem'; 
+import {saveCartToDb} from '../../redux/cartSlice'
+import { useNavigate } from 'react-router-dom';
+
 
 export default function Cart() { 
     const [shippingTaxForm, setShippingTaxForm] = useState(false);  
-    const cartList = useSelector( state => state.carts)   
-    const handleCK = useSaveCartToDB() 
+    const cartList = useSelector( state => state.carts)    
     const totalPrice = useSelector( state => state.carts.total)  
+    const dispatch = useDispatch()
+    const navigate = useNavigate()
+    
     const handleCheckOut = () =>{
-        handleCK({items:cartList.items,totalPrice}) 
+        // dispatch(saveCartToDb(cartList))
+        navigate('/checkout')
     }
+ 
 
   return (
     <div className='text-[#777777] text-sm p-5'>

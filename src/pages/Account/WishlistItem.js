@@ -1,7 +1,7 @@
 import React from 'react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBagShopping } from '@fortawesome/free-solid-svg-icons'
-export default function WishlistItem({product}) { 
+export default function WishlistItem({product,onRemove}) {  
   return ( 
     <div className='cursor-pointer border-solid border-[#777777] border-t-[1px] sm:border-none py-2 px-2 w-full 
      sm:max-w-[50%] lg:max-w-[25%] md:px-4 md:py-4 
@@ -17,12 +17,10 @@ export default function WishlistItem({product}) {
         </div>
         <div className=" flex justify-between gap-2 my-2  sm:flex-wrap sm:justify-evenly">
           <div className='flex w-full justify-start sm:justify-center gap-2'>
-            <input type="number" name="" id="" defaultValue='1' className='w-[40px] h-auto border-solid border-black border-t-[1px] border-b-[1px] text-center outline-none hidden sm:block '/>
             <button className="add-to-cart bg-black text-white px-3 mx-2 hover:bg-[#ff7272] w-[150px] whitespace-nowrap"> <FontAwesomeIcon icon={faBagShopping} /> ADD TO CART</button>
           </div>
-          <div className="action-prod text-[#0088CC] flex justify-end sm:justify-center gap-2 w-full ">
-            <span className='hover:text-[#ff7272]'>Edit</span>
-            <span className='hover:text-[#ff7272]'>Remove</span>
+          <div className="action-prod text-[#0088CC] flex justify-end sm:justify-center gap-2 w-full "> 
+            <span className='hover:text-[#ff7272]' onClick={()=>onRemove(product._id)} >Remove</span>
           </div>
         </div>
     </div>    

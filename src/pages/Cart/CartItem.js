@@ -1,38 +1,42 @@
-import React, {  useState } from 'react'
-import { faHeart, faMultiply } from '@fortawesome/free-solid-svg-icons'
+import React, {  useState } from 'react' 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import {updateQuantity, decreaseQuantity,removeFromCart,increaseQuantity} from '../../redux/cartSlice'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux' 
+import { faHeart as regularHeart, faStar} from '@fortawesome/free-regular-svg-icons';
+import { faShoppingBag, faHeart as solidHeart, faMultiply} from '@fortawesome/free-solid-svg-icons';  
+import {addToWishList,removeItemFromWishlist, saveWishlist} from '../../redux/wishlistSlice'
+import { toast } from 'react-toastify'; 
+import { useNavigate } from 'react-router-dom';
+export default function CartItem({product}) { 
+    const wishlist = useSelector(state=>state.wishlist.items)
+    const user = useSelector(state=>state.auth.users)
+    const dispatch = useDispatch()   
+    const navigate = useNavigate()
 
-
-
-export default function CartItem({product}) {
-    const [quantity, setQuantity] = useState(product.quantity)  
-    const dispatch = useDispatch() 
- 
     const handleOnChangeValue = (e,id)=>{ 
-        if(e.target.value === '0' ||e.target.value === ''){
-            setQuantity(1)  
+        const newQuantity = parseInt(e.target.value)
+
+        if(newQuantity >= 1){
+            dispatch(updateQuantity({'_id':id,'quantity': newQuantity}))
         }
         else{
-            setQuantity(e.target.value)
+            dispatch(updateQuantity({'_id':id,'quantity': 1}))
         }   
-        dispatch(updateQuantity({'_id':id,'quantity': parseInt(quantity)}))
     } 
-
-
+ 
    const handleRemoveItem = ()=>{
     dispatch(removeFromCart(product._id))
    }
    
    const handleOnChangeInput = (e, id) =>{
-    if(e.target.value === '0' ||e.target.value === ''){
-        setQuantity(1)  
-    }
-    else{
-        setQuantity(e.target.value)
-    } 
-    dispatch(updateQuantity({'_id':id,'quantity': parseInt(quantity)}))
+        const newQuantity = parseInt(e.target.value)
+
+        if(newQuantity >= 1){
+            dispatch(updateQuantity({'_id':id,'quantity': newQuantity}))
+        }
+        else{
+            dispatch(updateQuantity({'_id':id,'quantity': 1}))
+        }   
    }
 
     const handleDecrease = (e,id) =>{  
@@ -43,6 +47,25 @@ export default function CartItem({product}) {
         e.stopPropagation()  
         dispatch((increaseQuantity(id)))
     } 
+
+
+const handleToggleWishlist = (prod)=>{
+    if(user){ 
+        const existedProduct = wishlist.find(item => item._id === prod._id) 
+        if(existedProduct){
+            toast.success('Remove product from wishlist successfully!')
+            dispatch(removeItemFromWishlist(prod._id))
+        }
+        else{
+            toast.success('Add product to wishlist successfully!')
+            dispatch(addToWishList({...prod}))
+        }
+        dispatch(saveWishlist(user.email))
+    }
+    else{
+        navigate('/login')
+    }
+}
 
   return (
     <tr className='relative border-b-[1px] border-solid border-[#e7e7e7]'>
@@ -64,20 +87,19 @@ export default function CartItem({product}) {
                 text-[#222529] cursor-pointer hover:text-[#ff7272]'
                 onClick={e=>handleDecrease(e,product._id)}
                 >-</div>
-                <input type="number" className='outline-none w-10 border-solid border-[#e7e7e7] border-[1px] px-3 py-4 text-center text-[#222529] font-bold' value={quantity}  onChange={e =>handleOnChangeInput(e,product._id)} min="1"  onBlur={e=>handleOnChangeValue(e,product._id)}/> 
+                <input type="number" className='outline-none w-10 border-solid border-[#e7e7e7] border-[1px] px-3 py-4 text-center text-[#222529] font-bold' value={product.quantity}  onChange={e =>handleOnChangeInput(e,product._id)} min="1"  onBlur={e=>handleOnChangeValue(e,product._id)}/> 
                 <div className='border-solid border-[#e7e7e7] border-[1px] px-3 py-4 
                 text-[#222529] cursor-pointer hover:text-[#ff7272]' 
                 onClick={e=>handleIncrease(e,product._id)}
                 >+</div>
             </div>
-        </td>
+        </td> 
         <td className='text-right font-semibold text-[#222529] leading-4'><span>${(parseInt(product.price) * parseInt(product.quantity)).toFixed(2)}</span></td>
         <td className="absolute w-5 h-5 top-0 right-0 translate-x-2 translate-y-1 rounded-full flex justify-center items-center bg-white shadow-md cursor-pointer" onClick={handleRemoveItem}>
             <FontAwesomeIcon icon={faMultiply} />
         </td>
-        <td className="absolute w-5 h-5 top-0 right-0 -translate-x-4 translate-y-1 rounded-full flex justify-center items-center bg-white shadow-md cursor-pointer">
-        {/* color="#ff7272" */}
-            <FontAwesomeIcon icon={faHeart}  />
+        <td className="absolute w-5 h-5 top-0 right-0 -translate-x-4 translate-y-1 rounded-full flex justify-center items-center bg-white shadow-md cursor-pointer" onClick={()=>handleToggleWishlist(product)}> 
+            <FontAwesomeIcon icon={solidHeart} color={wishlist.find(item=>item._id === product._id) ? '#ff7272':'black'}  />
         </td>
     </tr>
   )

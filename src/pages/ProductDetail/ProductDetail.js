@@ -22,7 +22,7 @@ export default function ProductDetail() {
       }
     }
     fetchOneProduct()
-  },[])
+  },[params.slug])
 
 
   return (

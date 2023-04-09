@@ -1,6 +1,7 @@
 import React from 'react'
-import { faAngleRight, faArrowRight, faSliders, faHomeAlt, faArrowUpShortWide, faArrowDownShortWide, faShoppingBag, faMinus, faPlus } from '@fortawesome/free-solid-svg-icons'  
-import { faHeart, faStar  } from '@fortawesome/free-regular-svg-icons'  
+import { faAngleRight, faSliders, faArrowUpShortWide, faArrowDownShortWide,  faMinus, faPlus } from '@fortawesome/free-solid-svg-icons'  
+//  faHomeAlt, faArrowRight,faShoppingBag, solid
+// import { faHeart, faStar  } from '@fortawesome/free-regular-svg-icons'  
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome' 
 import { useState } from 'react' 
 import '../Categories/categories.scss'   
