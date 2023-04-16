@@ -9,9 +9,10 @@ export const register = async(data) =>{
     }
 }
 export const login = async(data) =>{
-    try {
-      const res = await request.post('/auth/login',data)
-        return res.data;
+    try { 
+      const res = await request.post('/auth/login',data) 
+      return res.data;
+      
     } catch (error) {
       console.log('something went wrong!');
     }

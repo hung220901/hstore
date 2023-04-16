@@ -6,13 +6,13 @@ import {faMagnifyingGlass,faBagShopping, faX, faBars, faAngleDown, faAngleUp, fa
 import {useDebounce} from '../../../../hook' 
 import * as catReq from '../../../../services/categoryServices'
 import * as prodReq from '../../../../services/productServices'
+import * as cartReq from '../../../../services/cartServices'
 import Loading from '../../../Loading/Loading'
 import { useDispatch, useSelector } from 'react-redux'
 import {getCategoriesSuccess} from '../../../../redux/categorySlice'
 import {getProductsSuccess} from '../../../../redux/productSlice'
-import { removeFromCart } from '../../../../redux/cartSlice'
+import {getCartsSuccess, removeFromCart } from '../../../../redux/cartSlice'
 import { getCurrentUser } from '../../../../redux/authSlice'
-
 
 export default function Header() {
   const [show, setShow] = useState({
@@ -29,6 +29,7 @@ export default function Header() {
   const cartItem =  useSelector(state=>state.carts.items)  
   const cartTotalPrice = useSelector(state=>state.carts.total)  
   const categories = useSelector((state) =>state.categories.categories) 
+  const email = useSelector(state=>state.auth.users?.email)
   const [loading, setLoading] = useState(false)
   const searchResult =products && products?.length >= 0 && products?.filter((prod)=>prod.name.toLowerCase().includes(searchValue)) 
   const headerRef = useRef(null) 
@@ -61,10 +62,16 @@ export default function Header() {
     searchValue && fetchApi()
   },[debounced])
 
+  // API CART
+  useEffect(()=>{
+    const fetchCartByEmail = async()=>{ 
+      const res = await cartReq.getAllCartByEmail(email)
+      dispatch(getCartsSuccess(res.data))  
+    }
+    email && fetchCartByEmail()
+  },[email])
 
-
-
-  
+  // API CATEGORY
   useEffect(()=>{  
     const fetchCategoryApi = async()=>{
       const resCate = await catReq.getAllCategory()  
@@ -320,15 +327,15 @@ export default function Header() {
                   <div key={i} className="flex justify-center items-center px-2 py-2">
                       <div className="flex justify-end flex-col mr-3">
                         <div className="block overflow-ellipsis w-40 overflow-hidden whitespace-nowrap break-words">
-                            {item.name}
+                            {item.product.name}
                         </div>
-                        <span>Price: ${item.price}</span>
+                        <span>Price: ${item.product.price}</span>
                         <span>Quantity: {item.quantity}</span>
                       </div>
                       <div className="relative">
-                        <img className='min-w-[70px] h-[100px]' src={item.image.url} alt="" />
+                        <img className='min-w-[70px] h-[100px]' src={item.product.image.url} alt="" />
                         <div className='absolute flex justify-center items-center top-0 right-0 w-5 h-5 rounded-full bg-white shadow translate-x-1/2 -translate-y-1/2 text-[8px]'
-                        onClick={(e)=>handleRemoveItem(e,item._id)}
+                        onClick={(e)=>handleRemoveItem(e,item.product._id)}
                         >
                           <FontAwesomeIcon icon={faX} size='xl'/>
                         </div>

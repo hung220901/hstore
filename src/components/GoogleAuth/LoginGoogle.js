@@ -6,6 +6,7 @@ import * as request from '../../services/authServices'
 import { useDispatch } from 'react-redux';
 import {getCurrentUser} from '../../redux/authSlice'
 import {getUserByEmail} from '../../services/userServices'
+import {toast} from 'react-toastify'
  export default function LoginGoogle() {
   const navigate = useNavigate()
   const dispatch = useDispatch()
@@ -21,24 +22,29 @@ import {getUserByEmail} from '../../services/userServices'
           // register
           // Check tk da co trong db  
           const existedAccount = await getUserByEmail(responseGoogle.data.email); 
-          if(existedAccount.length){
-            // login 
-            const res = await request.login({
-              'name':responseGoogle.data.name,
-              'email':responseGoogle.data.email,
-              'avatar':{'url':responseGoogle.data.picture},
-              'password':responseGoogle.data.sub, 
-            })  
-            localStorage.setItem('token',res.token) 
-            dispatch(getCurrentUser({userName: res.userName,role: res.role,avatar:{url:responseGoogle.data.picture}}))
-            navigate('/') 
+          if(existedAccount.length){ 
+            if(existedAccount[0].provider != 'google'){
+              toast.error('Email existed! Please use another method login')
+            } 
+            else{
+              const res = await request.login({  
+                'email':responseGoogle.data.email, 
+                'avatar':{'url':responseGoogle.data.picture}, 
+                'googleId':responseGoogle.data.sub,
+                'provider':'google'
+              })      
+              localStorage.setItem('token',res.token) 
+              dispatch(getCurrentUser({userName: res.userName,role: res.role,avatar:{url:responseGoogle.data.picture}}))
+              navigate('/') 
+            }
           }
           else{
             const register = await request.register({
               'name':responseGoogle.data.name,
               'email':responseGoogle.data.email,
               'avatar':{'url':responseGoogle.data.picture},
-              'password':responseGoogle.data.sub, 
+              'googleId':responseGoogle.data.sub,
+              
             })  
             localStorage.setItem('token',register.data.token) 
             dispatch(getCurrentUser({userName: register.data.userName,role: register.data.role,avatar:{url:responseGoogle.data.picture}}))

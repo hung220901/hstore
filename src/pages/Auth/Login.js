@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import { useDispatch } from 'react-redux';
 import {Link, useNavigate} from 'react-router-dom'; 
 import LGoogle from '../../components/GoogleAuth/LoginGoogle'
+import LFacebook from '../../components/GoogleAuth/LoginFB' 
 import * as request from '../../services/authServices'
 import {getCurrentUser} from '../../redux/authSlice'
 export default function Login() {
@@ -15,8 +16,7 @@ export default function Login() {
             const res = await request.login({
                 email,
                 password,
-            })
-            console.log(res);
+            }) 
             localStorage.setItem("token",res.token)
             dispatch(getCurrentUser({userName: res.userName,role: res.role}))
             navigate('/')
@@ -48,6 +48,7 @@ export default function Login() {
                 </form>
                 <div className='py-5'>  
                     <LGoogle />
+                    <LFacebook />
                 </div> 
             </div>
         </div>

@@ -37,7 +37,8 @@ const cartSlice = createSlice({
     },
     getCartsSuccess: (state, action) => {
       state.loading = false;
-      state.items = action.payload;
+      state.items = action.payload.items; 
+      state.total = action.payload.totalPrice;
     },
     getCartsFailure: (state, action) => {
       state.loading = false;
@@ -45,58 +46,58 @@ const cartSlice = createSlice({
     }, 
     addToCart:(state, action)=>{
       const newItem = action.payload;
-      const existingItem = state.items.find((item)=> item._id === newItem._id)
+      const existingItem = state.items.find((item)=> item.product._id === newItem._id)
       if (existingItem) {
         existingItem.quantity++;
-        existingItem.subTotal = parseInt(existingItem.quantity) * parseInt(existingItem.price)
+        existingItem.product.subTotal = parseInt(existingItem.quantity) * parseInt(existingItem.product.price)
       } else {
-        state.items.push({...newItem, quantity: 1,subTotal: parseInt(newItem.price)});
+        state.items.push({product:newItem, quantity: 1,subTotal: parseInt(newItem.price)});
       }
 
       state.total += parseInt(newItem.price);
     },
     removeFromCart: (state, action) =>{
       const itemId = action.payload;
-      const existingItem = state.items.find((item) => item._id === itemId);
+      const existingItem = state.items.find((item) => item.product._id === itemId);
 
       if (existingItem) {
         if (existingItem.quantity === 1) {
-          state.items = state.items.filter((item) => item._id !== itemId);
+          state.items = state.items.filter((item) => item.product._id !== itemId);
         } else {
           existingItem.quantity--;
         } 
-        state.total -= parseInt(existingItem.price);
+        state.total -= parseInt(existingItem.product.price);
       }
     },
     updateQuantity: (state, action) =>{
       const { _id, quantity } = action.payload; 
-      const existingItem = state.items.find((item) => item._id === _id);   
+      const existingItem = state.items.find((item) => item.product._id === _id);   
       if (existingItem) {
         existingItem.quantity = parseInt(quantity);
-        // existingItem.subTotal = parseInt(existingItem.quantity) * parseInt(existingItem.price)
+        // existingItem.subTotal = parseInt(existingItem.quantity) * parseInt(existingItem.product.price)
       }
     }, 
     decreaseQuantity: (state, action) =>{
       const _id = action.payload; 
-      const existingItem = state.items.find((item) => item._id === _id); 
+      const existingItem = state.items.find((item) => item.product._id === _id); 
       if (existingItem) {
         if(existingItem.quantity === 1){
-          state.items = state.items.filter((item) => item._id !== _id); 
+          state.items = state.items.filter((item) => item.product._id !== _id); 
         } 
         else{
           parseInt(existingItem.quantity--);
         }
-        state.total -= parseInt(existingItem.price);
+        state.total -= parseInt(existingItem.product.price);
       }
     },
     increaseQuantity: (state, action) =>{
       const _id = action.payload; 
-      const existingItem = state.items.find((item) => item._id === _id); 
+      const existingItem = state.items.find((item) => item.product._id === _id); 
       if (existingItem) {
         existingItem.quantity++;
-        existingItem.subTotal = parseInt(existingItem.quantity) * parseInt(existingItem.price)
+        existingItem.subTotal = parseInt(existingItem.quantity) * parseInt(existingItem.product.price)
       }
-      state.total += parseInt(existingItem.price); 
+      state.total += parseInt(existingItem.product.price); 
     },
 
 
