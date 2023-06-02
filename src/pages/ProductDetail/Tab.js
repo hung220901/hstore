@@ -2,8 +2,11 @@ import { faCircleCheck, faStar } from '@fortawesome/free-regular-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import React from 'react' 
 import { useState } from 'react'
-export default function Tab() { 
-    
+import ListReview from '../../components/Review/ListReview'
+import Rating from '../../components/Filter/Rating'
+import { useSelector } from 'react-redux'
+export default function Tab({product}) { 
+    const  review = useSelector(state=>state.reviews.items)
     const [active , setActive ] =useState(1)
     const handleChange = (i)=>{
          setActive(i)
@@ -33,24 +36,14 @@ export default function Tab() {
                 <p>Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
             </div>
             <div className={`reviews ${active === 2 ? 'block' :'hidden'}`}>
-                <h3 className='uppercase'>You're reviewing: <span>women casual bag spring</span> </h3>
-                <div className="rating">
-                    <h3>Your Rating <span className='text-red-500'>*</span></h3>
-                    <div className="flex">
-                        <FontAwesomeIcon icon={faStar} size='2xl'/>
-                        <FontAwesomeIcon icon={faStar} size='2xl'/>
-                        <FontAwesomeIcon icon={faStar} size='2xl'/>
-                        <FontAwesomeIcon icon={faStar} size='2xl'/>
-                        <FontAwesomeIcon icon={faStar} size='2xl'/>
-                    </div>
-                </div> 
-                <h3>Nickname <span className='text-red-500'>*</span></h3>
-                <input type="text" className='bg-white border-[#000000] border-solid border-[1px] text-[#777777] px-3 py-2 text-sm' />
-                <h3>Summary <span className='text-red-500'>*</span></h3>
-                <input type="text" className='bg-white border-[#000000] border-solid border-[1px] text-[#777777] px-3 py-2 text-sm' />
-                <h3>Review <span className='text-red-500'>*</span></h3>
-                <textarea type="text" className='block bg-white border-[#000000] border-solid border-[1px] text-[#777777] px-3 py-2 text-sm ' /> 
-                <button type="submit" className='bg-[#0088cc] text-white text-sm font-bold leading-5 tracking-[0.14px] px-7 py-3 text-center my-4'>SUBMIT REVIEW</button>
+                { review && 
+                    (
+                        <>
+                            <h3 className='uppercase text-lg'>All review about <span className='font-bold'>{product.name}</span> </h3>
+                            <ListReview product={product} />
+                        </>
+                    )
+                } 
             </div>
             <div className={`custom-tab ${active === 3 ? 'block' :'hidden'}`}>
                 <table className="table w-full text-left">

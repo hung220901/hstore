@@ -12,10 +12,10 @@ export default function Cart() {
     const cartList = useSelector( state => state.carts)    
     const totalPrice = useSelector( state => state.carts.total)  
     const dispatch = useDispatch()
-    const navigate = useNavigate()
-    
+    const navigate = useNavigate() 
     const handleCheckOut = () =>{
-        // dispatch(saveCartToDb(cartList))
+        dispatch(saveCartToDb(cartList))
+        localStorage.setItem('cartItems', JSON.stringify(cartList))
         navigate('/checkout')
     }
  

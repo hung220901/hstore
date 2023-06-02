@@ -4,9 +4,12 @@ import  { faAngleDown, faAngleUp, faCheck} from '@fortawesome/free-solid-svg-ico
 import * as request from '../../utils/requestCountry'
 import * as req from '../../utils/request'
 import {useSelector} from 'react-redux' 
-import StripeCheckout from 'react-stripe-checkout';
-import {useNavigate} from 'react-router-dom'
-import {toast} from 'react-toastify'
+import StripeCheckout from 'react-stripe-checkout'; 
+import {toast} from 'react-toastify' 
+import { customAlphabet } from 'nanoid';
+
+
+
 export default function Checkout() {
   const [showCart, setShowCart] = useState(false)
   const [countryList, setCountryList] = useState([])
@@ -17,11 +20,13 @@ export default function Checkout() {
   const [ward, setWard] = useState('') 
   const [address,setAddress] = useState({})
   const [stripeToken, setStripeToken] = useState(null) 
+  const [order, setOrder ] = useState({})
   const cartItem = useSelector(state=>state.carts)
   const email = useSelector(state=>state.auth.users.email)
-  const KEY = process.env.REACT_APP_STRIPE_KEY;   
-  const navigate = useNavigate()
- 
+  const KEY = process.env.REACT_APP_STRIPE_KEY;     
+  const nanoid = customAlphabet('0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz',8) 
+
+
   // Handle change shipping address
   const handleChangeCountry = (e) =>{ 
     setCountry(e.target.value)  
@@ -36,23 +41,55 @@ export default function Checkout() {
     setWard(e.target.value) 
   }
 
+  const handleVNPayPayment = async(total)=>{
+    try {  
+      if(Object.keys(address).length ===0){ 
+        alert('Vui lòng nhập đia chỉ');
+      }
+      else{
+        const res = await req.post('/checkout/create_payment_vnpay_url',{
+          orderId: nanoid(),
+          email,
+          shippingAddress:{...address,zipCode:"123"},
+          items:cartItem.items,
+          total:cartItem.total,
+          amount:total*1000,
+          bankCode:"",
+          language:"vn" 
+        }) 
+        window.location.replace(res.link)  
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  }
  
-  const onToken = (token)=>{
+  const onToken = (token)=>{ 
     setStripeToken(token) 
-    const newOrder = {
-      email,
+    setOrder({
+      orderId: nanoid(),
+      email:token.email,
       items:cartItem.items,
       total:cartItem.total,
-      shippingAddress:address,
-      paymentMethod:token.card.brand,
-      zipCode: token.card.address_zip 
-    }
-    console.log(newOrder); 
+      shippingAddress:{...address,zipCode:token.card.address_zip},
+      paymentMethod:token.card.brand, 
+    }) 
   }
-// Call API FOR SAVE ORDER TO DB
-  useEffect(()=>{
-
-  },[]) 
+  // Call API FOR SAVE ORDER TO DB
+  const handleCheckOut = async()=>{
+    try {
+      const token = localStorage.getItem("token")
+      const res = await req.post('/order',{
+      headers:{
+        Authorization: `Bearer ${token}`,
+      },
+      order})   
+      toast.success('Payment successfully!')
+    } catch (error) {
+      toast.error(error)
+    }
+  }
+ 
 // Call API STRIPE PAYMENT 
   useEffect(()=>{
     const payRequest = async ()=>{
@@ -68,6 +105,11 @@ export default function Checkout() {
     }
     stripeToken && payRequest()
   },[stripeToken, cartItem.total]) 
+
+
+
+
+
 
 // API PROVINCE ** Lấy danh sách chưa được chọn
   
@@ -104,15 +146,15 @@ export default function Checkout() {
     const fetchCountrySelected = async()=>{
       if(country){
         const res = await request.get(`/p/${country}`)
-        setAddress({...address,country:res.data.name})
+        setAddress({...address,city:res.data.name})
       }
       if(district){
         const res = await request.get(`/d/${district}`)
-        setAddress({...address,district:res.data.name})
+        setAddress({...address,state:res.data.name})
       }
       if(ward){
         const res = await request.get(`/w/${ward}`)
-        setAddress({...address,ward:res.data.name})
+        setAddress({...address,street:res.data.name})
       } 
     }
     fetchCountrySelected() 
@@ -206,21 +248,27 @@ export default function Checkout() {
             <div className="order-note my-2">
               <textarea className='border-solid border-[1px] border-[#e7e7e7] w-full outline-none' placeholder='Leave a message...' name="note" cols="30" rows="10"></textarea>
             </div> 
-            <StripeCheckout
-              name={`Order #${`XSD223SD`}`}  
-              description={`Your total is $${cartItem.total} `} 
-              stripeKey={KEY}
-              locale="en"  
-              token={onToken}   
-              panelLabel="Pay with Visa"
-              zipCode={true}
-              email={email}
-              >
-            <button className="bg-black text-white font-bold px-5 py-[5px] uppercase my-2 disabled:opacity-50" 
-            >
-              Payment & Order
-            </button>
-          </StripeCheckout>
+            <div className='flex justify-between'>
+              <StripeCheckout
+                name={`Order #${`XSD223SD`}`}
+                description={`Your total is $${cartItem.total} `}
+                stripeKey={KEY}
+                locale="en"
+                token={onToken}
+                panelLabel="Pay with Visa"
+                zipCode={true}
+                email={email}
+                closed={handleCheckOut}
+                >
+                <button className="bg-black text-white font-bold px-5 py-[5px] uppercase my-2 disabled:opacity-50">
+                  Payment & Order
+                </button>
+              </StripeCheckout>
+              {/* handleVNPayPayment */}
+              <button className="bg-black text-white font-bold px-5 py-[5px] uppercase my-2 disabled:opacity-50" onClick={()=>handleVNPayPayment(cartItem.total)}>
+                Payment with VNPAY
+              </button>
+            </div>
           </div> 
           
           <div className={`cart ${showCart ? 'max-md:fixed' : 'hidden'} w-full h-full top-0 right-0 z-20 left-[20%] bg-white 

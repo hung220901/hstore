@@ -8,13 +8,50 @@ import 'swiper/css/scrollbar';
 import './home.scss' 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'; 
 import {  faHeadset, faCreditCard,faShare, faTruckFast} from '@fortawesome/free-solid-svg-icons';  
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import ProductCard from '../../components/Product/ProductCard';
+import { toast } from 'react-toastify';
+import { saveWishlist , addToWishList, removeItemFromWishlist} from '../../redux/wishlistSlice';
   export default function Home() {  
     SwiperCore.use([Autoplay]) 
+    const user = useSelector(state =>state.auth.users) 
+    const wishlist = useSelector(state=>state.wishlist.items)
     const product = useSelector(state => state.products.products)
-    const productMale =product.length >0 && product.filter(prod=>prod.gender === true).slice(0,2)
-    const productFemale =product.length >0 && product.filter(prod=>prod.gender === false).slice(0,2) 
+    const dispatch = useDispatch()
+
+    const productMale = product && product.length >0 && product.filter(prod=>prod.gender === true).slice(0,2)
+    const productFemale = product && product.length >0 && product.filter(prod=>prod.gender === false).slice(0,2) 
+
+    const isFavorite = (productId) => {
+      return wishlist.find(product => product._id === productId) !== undefined;
+    }; 
+
+  const handleToggleFavorite = async(e,prod) =>{
+    try {
+      e.stopPropagation()
+      e.preventDefault() 
+
+      if(!user){
+        console.log('chua dang nhap');
+      }
+      else{
+        const existedProduct = wishlist.find(item => item._id === prod._id) 
+        if(existedProduct){
+          toast.success('Remove product from wishlist successfully!')
+          dispatch(removeItemFromWishlist(prod._id))
+        }
+        else{
+          toast.success('Add product to wishlist successfully!')
+          dispatch(addToWishList({...prod }))
+        }   
+        dispatch(saveWishlist(user.email)) 
+      } 
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+
 
     return (
       <>
@@ -27,8 +64,7 @@ import ProductCard from '../../components/Product/ProductCard';
               loop={true}
               className="banner-slider "
             >
-              <SwiperSlide> 
-              {/* md:bg-[url("https://www.portotheme.com/magento2/porto/pub/media/wysiwyg/smartwave/porto/homepage/06/shop6_home_slide1.jpg")] */}
+              <SwiperSlide>  
                 <div className='relative w-full bg-[#f4f4f4] min-h-[80vh] md:min-h-0 '>
                   <div className='hidden md:block'>
                     <img src="https://www.portotheme.com/magento2/porto/pub/media/wysiwyg/smartwave/porto/homepage/06/shop6_home_slide1.jpg" alt="" /> 
@@ -77,7 +113,7 @@ import ProductCard from '../../components/Product/ProductCard';
       {/* PROGRAMS SALE */}
         <div className='flex flex-wrap w-full h-full'>
           <div className="relative basis-full lg:basis-1/4 md:basis-1/2 -z-10 w-[318px] h-[200px]">
-            <img className='object-cover w-full h-full' src="./images/home_banner1.jpg" alt="" />
+            <img className='object-cover w-full h-full' src="https://res.cloudinary.com/dibmfkpyq/image/upload/v1682243263/home_banner1_jz8zkt.jpg" alt="" />
             <div className="absolute top-2.5 right-2.5 z-10 text-right">
               <h3 className='text-[1.75em] leading-[1] font-extrabold'>TRENDING</h3>
               <h3 className='text-[1.75em] leading-[1] font-extrabold'>Hat Sales</h3>
@@ -88,7 +124,7 @@ import ProductCard from '../../components/Product/ProductCard';
             </div>
           </div>
           <div className="relative basis-full lg:basis-1/4 md:basis-1/2 -z-10 w-[318px] h-[200px]">
-            <img className='object-cover w-full h-full' src="./images/home_banner2.jpg" alt="" />
+            <img className='object-cover w-full h-full' src="https://res.cloudinary.com/dibmfkpyq/image/upload/v1682243261/home_banner2_bvmpbv.jpg" alt="" />
             <div className="absolute top-2.5 right-2.5 z-10 text-right">
               <h3 className='text-[0.9375em] leading-[1] font-semibold tracking-[0.01em] text-[#ff7272] my-[5px] '>FLASH SALE</h3>
               <h3 className='text-[0.9375em] leading-[1.2] font-semibold tracking-[0.01em] text-[#a2a2a2] my-[5px] color-gray'>TOP BRANDS</h3>
@@ -100,7 +136,7 @@ import ProductCard from '../../components/Product/ProductCard';
             </div>
           </div>
           <div className="relative basis-full lg:basis-1/4 md:basis-1/2 -z-10 w-[318px] h-[200px]">
-            <img className='object-cover w-full h-full' src="./images/home_banner3.jpg" alt="" />
+            <img className='object-cover w-full h-full' src="https://res.cloudinary.com/dibmfkpyq/image/upload/v1682243261/home_banner3_vmylbw.jpg" alt="" />
             <div className="absolute top-[8%] left-2.5 z-10 text-left">
               <div className='text-[1.875em] leading-[1] font-normal tracking-[0.005em] text-black whitespace-nowrap font-segoe text-left'>Exclusive Shoes</div>
               <h3 className='text-[1.75em] leading-[1] font-extrabold my-2'>50% OFF</h3>
@@ -110,7 +146,7 @@ import ProductCard from '../../components/Product/ProductCard';
             </div>
           </div>
           <div className="relative basis-full lg:basis-1/4 md:basis-1/2 -z-10 w-[318px] h-[200px] border-solid border-[#ff7272]">
-            <img className='object-cover w-full h-full' src="./images/home_banner4.jpg" alt="" />
+            <img className='object-cover w-full h-full' src="https://res.cloudinary.com/dibmfkpyq/image/upload/v1682243262/home_banner4_s6nmww.jpg" alt="" />
             <div className="absolute top-20 gap-2 flex items-center px-1">
               <div>
                 <div className="text-[1.5em]  leading-[1] font-extrabold">DEAL PROMOS</div>
@@ -128,99 +164,14 @@ import ProductCard from '../../components/Product/ProductCard';
 
       {/* WOMEN COLLECTION */}
       <div className="flex flex-wrap h-full w-full">
-        <div className=" flex justify-center items-center md:basis-1/2 ">
-            {/* <div className=" px-10 py-5 ">
-              <div className='relative group'>
-                <img className='w-full h-full' src="./images/product2.jpeg" alt="" />   
-                <button className="absolute top-1 right-1 
-                  rounded-full bg-white w-8 h-8 outline-none border-none hover:bg-[#ff7272] hover:text-white 
-                  m-2 invisible group-hover:visible
-                  transition-all ease-in duration-500
-                  opacity-50
-                  group-hover:opacity-100">
-                    <FontAwesomeIcon icon={faShoppingBag} />
-                </button>
-                <div className="bg-[#ff7272]
-                    text-white absolute 
-                    bottom-0  left-0  right-0 
-                    text-center group 
-                    opacity-90
-                    w-full h-auto indent-0
-                    transition-all duration-[0.25em]  ease-in 
-                    invisible group-hover:visible group-hover:delay-100
-                    group-hover:py-2 cursor-pointer">
-                  QUICK REVIEW
-                </div>
-              </div> 
-              <div className="cart-bottom flex justify-between pt-1">
-                  <div className="item-left">
-                    <div className="product-name">
-                      Girl Black
-                    </div>
-                    <div className="text-gray-300">
-                      <FontAwesomeIcon icon={faStar}  />
-                      <FontAwesomeIcon icon={faStar}  />
-                      <FontAwesomeIcon icon={faStar}  />
-                      <FontAwesomeIcon icon={faStar}  />
-                      <FontAwesomeIcon icon={faStar}  />
-                    </div>
-                    <div className="product-price">$49.00</div>
-                  </div>
-                  <div className="add-to-wishlist">
-                    <FontAwesomeIcon icon={faHeart} />
-                  </div>
-              </div> 
-            </div>  
-            <div className="px-5 py-10">
-              <div className='relative group'>
-                  <img className='w-full h-full'  src="./images/product3.jpeg" alt="" />   
-                  <button className="absolute top-1 right-1 
-                  rounded-full bg-white w-8 h-8 outline-none border-none hover:bg-[#ff7272] hover:text-white 
-                  m-2 invisible group-hover:visible transition-all ease-in duration-500
-                  opacity-50
-                  group-hover:opacity-100
-                  ">
-                      <FontAwesomeIcon  icon={faShoppingBag} />
-                  </button>
-                  <div className="bg-[#ff7272]
-                    text-white absolute 
-                    bottom-0  left-0  right-0 
-                    text-center group 
-                    opacity-90
-                    w-full h-auto indent-0
-                    transition-all duration-[0.25em]  ease-in 
-                    invisible group-hover:visible group-hover:delay-100
-                    group-hover:py-2 cursor-pointer
-                    ">
-                    QUICK REVIEW
-                  </div> 
-                </div> 
-                <div className="cart-bottom flex justify-between pt-1">
-                  <div className="item-left">
-                    <div className="product-name">
-                      Girl Black
-                    </div>
-                    <div className="text-gray-300">
-                      <FontAwesomeIcon icon={faStar}  />
-                      <FontAwesomeIcon icon={faStar}  />
-                      <FontAwesomeIcon icon={faStar}  />
-                      <FontAwesomeIcon icon={faStar}  />
-                      <FontAwesomeIcon icon={faStar}  />
-                    </div>
-                    <div className="product-price">$49.00</div>
-                  </div>
-                  <div className="add-to-wishlist">
-                    <FontAwesomeIcon icon={faHeart} />
-                  </div>
-              </div> 
-            </div>   */}
-            {productFemale.length > 0 &&  productFemale.map((prod, index)=>(
-                <ProductCard key={index} product={prod} />
+        <div className=" flex justify-center items-center md:basis-1/2 "> 
+            {productFemale?.length > 0 &&  productFemale.map((prod, index)=>(
+                <ProductCard key={index} product={prod}  onAddWishlist={handleToggleFavorite} favorite={isFavorite(prod._id)} />
             ))
             }
         </div>        
         <div className="relative md:basis-1/2">
-          <img className='object-cover w-full h-full' src="./images/women.jpg" alt="" />
+          <img className='object-cover w-full h-full' src="https://res.cloudinary.com/dibmfkpyq/image/upload/v1682243373/women_go8pr9.jpg" alt="" />
           <div className='absolute top-1/4 left-[10%] text-left'>
             <h3 className="text-[#222529] font-bold mb-4 text-5xl leading-[60px] -tracking-[0.5px]">WOMEN'S <div>COLLECTION</div></h3>
             <div className="text-[#777777] mb-6">Check out this week's hottest style</div>
@@ -235,7 +186,7 @@ import ProductCard from '../../components/Product/ProductCard';
       {/* MEN COLLECTION */}
       <div className="flex flex-wrap h-full w-full">
           <div className="relative md:basis-1/2 ">
-            <img className='object-cover w-full h-full' src="./images/men.jpg" alt="" />
+            <img className='object-cover w-full h-full' src="https://res.cloudinary.com/dibmfkpyq/image/upload/v1682243374/men_hz7tup.jpg" alt="" />
             <div className='absolute top-1/4 right-[10%] text-right'>
               <h3 className="text-[#222529] font-bold mb-4 text-5xl leading-[60px] -tracking-[0.5px]">MEN'S <div>COLLECTION</div></h3>
               <div className="text-[#777777] mb-6">Check out this week's hottest style</div>
@@ -245,95 +196,8 @@ import ProductCard from '../../components/Product/ProductCard';
             </div>
           </div> 
           <div className="md:basis-1/2 flex justify-center items-center ">
-              {/* <div className="px-5 py-10 ">
-                <div className='relative group'>
-                  <img className='w-full h-full' src="./images/product_men1.jpeg" alt="" />   
-                  <button className="absolute top-1 right-1 
-                    rounded-full bg-white w-8 h-8 outline-none border-none hover:bg-[#ff7272] hover:text-white 
-                    m-2 invisible group-hover:visible
-                    transition-all ease-in duration-200
-                    opacity-50
-                    group-hover:opacity-100
-                    ">
-                      <FontAwesomeIcon icon={faShoppingBag} />
-                  </button>
-                  <div className="bg-[#ff7272]
-                     text-white absolute 
-                      bottom-0  left-0  right-0 
-                      text-center group 
-                      opacity-90
-                      w-full h-auto indent-0
-                      transition-all duration-[0.25em]  ease-in 
-                      invisible group-hover:visible group-hover:delay-100
-                      group-hover:py-2 cursor-pointer">
-                    QUICK REVIEW
-                  </div>
-                </div> 
-                <div className="cart-bottom flex justify-between pt-1">
-                    <div className="item-left">
-                      <div className="product-name">
-                        Girl Black
-                      </div>
-                      <div className="text-gray-300">
-                        <FontAwesomeIcon icon={faStar}  />
-                        <FontAwesomeIcon icon={faStar}  />
-                        <FontAwesomeIcon icon={faStar}  />
-                        <FontAwesomeIcon icon={faStar}  />
-                        <FontAwesomeIcon icon={faStar}  />
-                      </div>
-                      <div className="product-price">$49.00</div>
-                    </div>
-                    <div className="add-to-wishlist">
-                      <FontAwesomeIcon icon={faHeart} />
-                    </div>
-                </div> 
-              </div>  
-              <div className="px-5 py-10">
-                <div className='relative group'>
-                    <img className='w-full h-full'  src="./images/product_men2.jpeg" alt="" />   
-                    <button className="absolute top-1 right-1 
-                    rounded-full bg-white w-8 h-8 outline-none border-none hover:bg-[#ff7272] hover:text-white 
-                    m-2 invisible group-hover:visible
-                    transition-all ease-in duration-200
-                    opacity-50
-                    group-hover:opacity-100
-                    ">
-                        <FontAwesomeIcon  icon={faShoppingBag} />
-                    </button>
-                    <div className="bg-[#ff7272]
-                     text-white absolute 
-                      bottom-0  left-0  right-0 
-                      text-center group 
-                      opacity-90
-                      w-full h-auto indent-0
-                      transition-all duration-[0.25em]  ease-in 
-                      invisible group-hover:visible group-hover:delay-100
-                      group-hover:py-2 cursor-pointer
-                      ">
-                      QUICK REVIEW
-                    </div> 
-                  </div> 
-                  <div className="cart-bottom flex justify-between pt-1">
-                    <div className="item-left">
-                      <div className="product-name">
-                        Girl Black
-                      </div>
-                      <div className="text-gray-300">
-                        <FontAwesomeIcon icon={faStar}  />
-                        <FontAwesomeIcon icon={faStar}  />
-                        <FontAwesomeIcon icon={faStar}  />
-                        <FontAwesomeIcon icon={faStar}  />
-                        <FontAwesomeIcon icon={faStar}  />
-                      </div>
-                      <div className="product-price">$49.00</div>
-                    </div>
-                    <div className="add-to-wishlist">
-                      <FontAwesomeIcon icon={faHeart} />
-                    </div>
-                </div> 
-              </div>   */}
-            { productMale.length > 0 && productMale.map((prod, index)=>(
-                <ProductCard key={index} product={prod} />
+            { productMale?.length > 0 && productMale.map((prod, index)=>(
+                <ProductCard key={index} product={prod} onAddWishlist={handleToggleFavorite} favorite={isFavorite(prod._id)} />
               ))
             }
           </div>

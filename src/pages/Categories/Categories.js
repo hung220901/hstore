@@ -1,23 +1,50 @@
-import { faAngleRight, faArrowRight, faSliders, faHomeAlt, faArrowUpShortWide, faArrowDownShortWide, faShoppingBag, faMinus, faPlus } from '@fortawesome/free-solid-svg-icons'  
-import { faHeart, faStar  } from '@fortawesome/free-regular-svg-icons'  
+import { faAngleRight, faArrowRight, faSliders, faHomeAlt, faArrowUpShortWide, faArrowDownShortWide, faShoppingBag, faMinus, faPlus } from '@fortawesome/free-solid-svg-icons'   
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import React, { useEffect }  from 'react' 
 import { useState } from 'react' 
 import './categories.scss'   
-
-import * as request from '../../services/productServices'
+import ProductCard from '../../components/Product/ProductCard'
+import * as requestProduct from '../../services/productServices'
+import * as request from '../../utils/request'
 import { useDispatch, useSelector } from 'react-redux'
 import { getProductsFailure, getProductsStart, getProductsSuccess } from '../../redux/productSlice';
+import { getAllBrand  } from '../../redux/brandSlice';
+import { getCategoriesSuccess  } from '../../redux/categorySlice'; 
+import Pagination from '../../components/Pagination/Pagination'
 
 export default function Categories() {
   const [ascending, setAscending] = useState(true);
   const dispatch = useDispatch()
+  const brand = useSelector((state)=> state.brands.items)
+  const category = useSelector((state)=> state.categories.categories)
   const product = useSelector((state)=> state.products.products)
   const [show, setShow] = useState({
     price:false,
     color:false,
     size:false,
   });  
+  const [filter, setFilter] = useState({price:1000}) 
+  const [currentPage,setCurrentPage] = useState(1)
+  const [limit] = useState(3)
+  const indexOfLastItem = currentPage * limit;
+  const indexOfFirstItem = indexOfLastItem - limit;
+  const totalPage = Math.ceil(product.length / limit)
+  const currentItem = product.slice(indexOfFirstItem,indexOfLastItem)
+
+  const paginate = pageNumber =>setCurrentPage(pageNumber)
+
+  function pre() {
+    if(currentPage > 1){
+      setCurrentPage(Math.max(1 ,currentPage - 1));
+    }else{
+      setCurrentPage(1);
+    }
+  } 
+  function next (){
+    if(currentPage < totalPage){
+      setCurrentPage(Math.min(limit - 1,currentPage + 1))
+    }
+  }
 
 
   // CALL API
@@ -25,21 +52,35 @@ export default function Categories() {
     const fetchALlProduct = async ()=>{
       try {
         dispatch(getProductsStart())
-        const res = await request.getAllProduct();
+        const res = await requestProduct.getAllProduct();
         dispatch(getProductsSuccess(res))
       } catch (error) {
         dispatch(getProductsFailure(error))
       }
     }
     fetchALlProduct()
-  },[])
+  },[dispatch])
 
+  useEffect(()=>{
+    const fetchAllBrand = async()=>{
+      const res = await request.get('/brand') 
+      dispatch(getAllBrand(res.brand))
+    }
+    fetchAllBrand()
+  },[dispatch])
 
+  useEffect(()=>{
+    const fetchAllCategories = async()=>{
+      const res = await request.get('/category')  
+      dispatch(getCategoriesSuccess(res.categories))
+    }
+    fetchAllCategories()
+  },[dispatch])
 
   return (
     <div className='px-5 py-5'>
       <div className='w-full h-auto relative cursor-pointer'> 
-        <img src="./images/banner_categories.jpg" alt="" className='lg:m-auto lg:w-full'/>
+        <img src="https://res.cloudinary.com/dibmfkpyq/image/upload/v1685118894/banner_categories_l5yj8b.jpg" alt="" className='lg:m-auto lg:w-full'/>
         <div className='absolute left-[10%] top-[10%]'> 
            <div className='font-segoe font-bold text-[1.5em] md:text-[2.5em] lg:text-[3em]'>New Hot Cosmetics</div>
            <div className='relative pl-[0.265em] text-[1.75em] font-bold sm:text-[2em] md:text-[2.5em] md:pl-[0.365em] lg:text-[3.5em] lg:pl-[0.565em] '><span className='-translate-y-1/2 text-[0.265em] -rotate-90 absolute -left-[1em] top-1/2 md:text-[0.365em] lg:text-[0.565em]'>UP TO</span> 50% OFF </div>
@@ -81,12 +122,19 @@ export default function Categories() {
         {/* SIDEBAR */}
         <div className="sidebar hidden lg:block basis-1/4 border-solid border-[#e7e7e7] border-[1px] h-fit">
           <div className=" px-1 py-2 border-solid border-[#e7e7e7] border-b-[1px] categories">
+            <h2>BRANDS</h2>
+            <div className="categories-item text-[#777777] flex flex-wrap gap-4 ">
+              {brand.length > 0 && brand.map((b,i)=>(
+                <div className={filter.brand === b.name ? `capitalize cursor-pointer text-black`:`capitalize cursor-pointer`} key={i} onClick={()=>setFilter({...filter,brand:b.name})}> {b.name}</div> 
+              ))}
+            </div>
+          </div> 
+          <div className=" px-1 py-2 border-solid border-[#e7e7e7] border-b-[1px] categories">
             <h2>CATEGORIES</h2>
-            <div className="categories-item text-[#777777] ">
-              <div>Brushes</div>
-              <div>Eyes</div>
-              <div>Face</div>
-              <div>Fashion</div>
+            <div className="categories-item text-[#777777]  flex flex-wrap gap-4 ">
+              {category.length > 0 && category.map((b,i)=>(
+                <div className={filter.category === b.name ? `capitalize cursor-pointer text-black`:`capitalize cursor-pointer`} key={i} onClick={()=>setFilter({...filter,category:b.name})}> {b.name}</div> 
+              ))} 
             </div>
           </div> 
           <div className="px-1 py-2 price border-solid border-[#e7e7e7] border-b-[1px]">
@@ -99,16 +147,11 @@ export default function Categories() {
               }
             </div>
             {show.price && 
-              <div className="show-price py-2">
-                <div className="slider h-[5px] rounded-[5px] bg-[#ddd] relative">
-                  <div className="progress h-[5px] left-1/4 right-1/4 absolute rounded-[5px] bg-[#301B24]"></div>
-                </div>
-                <div className='field'> 
-                  <input type="range" defaultValue={0} min={0} max={1000}  step={1}/> 
-                  <input type="range" defaultValue={5000} min={500} max={1000}  step={1}/> 
-                </div> 
-                <div className='text-[#777777]'><span >$39.00  </span> - <span>$1,699.00</span></div>
-              </div> 
+              <div className="show-price py-2 w-full">  
+                  <input className='w-full' type="range" value={filter.price} min={0} max={1000}  onChange={(e)=>setFilter({...filter,price:e.target.value})}/>   
+                  <div className='text-[#777777] text-center'><span >${filter.price}  </span></div>
+              </div>  
+
             }
           </div>
           <div className="px-1 py-2 color border-solid border-[#e7e7e7] border-b-[1px]">
@@ -153,44 +196,10 @@ export default function Categories() {
         <div className='  px-2 w-full'>
           <div className="list-product flex flex-wrap  ">
             { 
-              product && product?.map((prod, index)=>(
-                <div key={index} className="product-item m-2  p-1">
-                  <div className='relative group'>
-                    <img className='w-[200px] h-auto' src={prod.image.url} alt="" />
-                    <button className="absolute top-1 right-1
-                      rounded-full bg-white w-8 h-8 outline-none border-none hover:bg-[#301b24] hover:text-white
-                      m-2 invisible group-hover:visible
-                      transition-all ease-in duration-200
-                      opacity-50
-                      group-hover:opacity-100
-                      ">
-                        <FontAwesomeIcon icon={faShoppingBag} />
-                    </button>
-                    <div className="bg-[#301b24]
-                        text-white absolute
-                        bottom-0  left-0  right-0
-                        text-center group
-                        opacity-90
-                        w-full h-auto indent-0
-                        transition-all duration-[0.25em]  ease-in
-                        invisible group-hover:visible group-hover:delay-100
-                        group-hover:py-2 cursor-pointer">
-                      QUICK REVIEW
-                    </div>
-                  </div>
-                  <div className="flex justify-between">
-                    <div className="prod-name">{prod.name}</div>
-                    <div className="wishlist"> <FontAwesomeIcon icon={faHeart}/></div>
-                  </div>
-                  <div className="rating">
-                    <FontAwesomeIcon icon={faStar}/>
-                    <FontAwesomeIcon icon={faStar}/>
-                    <FontAwesomeIcon icon={faStar}/>
-                    <FontAwesomeIcon icon={faStar}/>
-                    <FontAwesomeIcon icon={faStar}/>
-                  </div>
-                  <div className="prod-price">
-                    {prod.price}
+              currentItem && currentItem?.map((prod, index)=>(
+                <div key={index} className="product-item m-2  p-1"> 
+                  <div className='flex gap-5'>
+                    <ProductCard product={prod}/> 
                   </div>
                 </div>  
               ))
@@ -206,12 +215,7 @@ export default function Categories() {
                 <option value="36">36</option>
               </select>
             </div>
-            <div className="pagination flex gap-5 items-center cursor-pointer">
-              <div className="pagination-item border-solid border-[#e7e7e7] border-[1px] px-2 py-1">1</div>
-              <div className="pagination-item border-solid border-black border-[1px] px-2 py-1">2</div>
-              <div className="pagination-item border-solid border-black border-[1px] px-2 py-1">3</div>
-              <div className="pagination-item border-solid border-black border-[1px] px-2 py-1">Next</div>
-            </div>
+            <Pagination limit={limit} total={4} paginate={paginate}  current={currentPage} pre={pre} next={next}/>
           </div> 
         </div>
       </div>

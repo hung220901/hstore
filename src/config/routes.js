@@ -12,10 +12,17 @@ const route = {
     checkout: '/checkout',
     profile: '/profile',
     order: '/order',
-    orderTracking: '/tracking',
+    paymentVNPay:'/payment/result',
+    orderTracking: '/order-tracking',
     searchCatalog:'/catalogsearch/result',
     // Admin
     dashBoard:'/admin/dashboard',
     productManager:'/admin/product',
+    categoryManager:'/admin/category',
+    userManager:'/admin/user',
+    orderManager:'/admin/order',
+    reviewManager:'/admin/review',
+    brandManager:'/admin/brand',
+    imageManager:'/admin/images',
 }
 export default route;

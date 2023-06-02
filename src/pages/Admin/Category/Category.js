@@ -1,9 +1,27 @@
 import { faPen, faPlus, faTrash } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import React from 'react'
+import React, { useEffect } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
 import { Link } from 'react-router-dom'
+import  * as categoryServices from '../../../services/categoryServices'
+import {getCategoriesSuccess,getCategoriesFailure} from '../../../redux/categorySlice'
+export default function Category() {
+  const dispatch = useDispatch() 
+  const category = useSelector(state=>state.categories.categories.categories) 
 
-export default function Product() {
+  useEffect(()=>{
+    const fetchApi = async ()=>{
+      try { 
+        const result = await categoryServices.getAllCategory();   
+        dispatch(getCategoriesSuccess(result)) 
+      } catch (error) { 
+        dispatch(getCategoriesFailure(error))
+      } 
+    } 
+    !category && fetchApi()
+  },[dispatch])
+
+
   return (
     <div className="mt-[85px] px-[1.5rem] py-[2rem] min-h-[calc(100vh - 90px)] ml-[70px] -mb-[5%]">
     <div className="mb-[2%]">
@@ -15,26 +33,25 @@ export default function Product() {
       <thead className='hidden lg:table-header-group w-full'> 
         <tr className='mb-[15px]  '>
           <th className='px-[15px] py-3 p-[1%] border-solid border-[1px] border-[#ddd] text-center text-base bg-black text-white'>STT</th>
-          <th className='px-[15px] py-3 p-[1%] border-solid border-[1px] border-[#ddd] text-center text-base bg-black text-white'>Title</th>
-          <th className='px-[15px] py-3 p-[1%] border-solid border-[1px] border-[#ddd] text-center text-base bg-black text-white'>Content</th> 
+          <th className='px-[15px] py-3 p-[1%] border-solid border-[1px] border-[#ddd] text-center text-base bg-black text-white'>Category Name</th>
+ 
           <th className='px-[15px] py-3 p-[1%] border-solid border-[1px] border-[#ddd] text-center text-base bg-black text-white'>Slug</th>
+ 
           <th className='px-[15px] py-3 p-[1%] border-solid border-[1px] border-[#ddd] text-center text-base bg-black text-white'>Action</th>
         </tr>
       </thead>
       <tbody className='[&>*:nth-child(even)]:bg-[rgb(168_212_231)] block w-full lg:table-row-group '>  
-        <tr className='mb-[15px] block w-full lg:table-row'>
+      {category?.length > 0 && category.map((cat,i)=>(
+        <tr key={i} className='mb-[15px] block w-full lg:table-row'>
           <td className='pl-[50%] text-left relative block lg:w-[100px] lg:table-cell px-[15px] py-3 p-[1%] border-solid border-[1px] border-[#ddd] lg:text-center text-base
           before:content-[attr(data-label)] before:absolute before:left-0 before:w-1/2 before:pl-[15px] before:text-sm before:font-bold before:text-left lg:before:content-none lg:pl-3 
-          ' data-label="STT">1 </td>
+          ' data-label="STT">{++i} </td>
           <td className='pl-[50%] text-left relative block lg:table-cell px-[15px] py-3 p-[1%] border-solid border-[1px] border-[#ddd] lg:text-center text-base
           before:content-[attr(data-label)] before:absolute before:left-0 before:w-1/2 before:pl-[15px] before:text-sm before:font-bold before:text-left lg:before:content-none lg:pl-3
-          ' data-label="Title"><p className='limit-text'>dsds</p></td>
+          ' data-label="Category Name"><p className='limit-text'>{cat.name}</p></td> 
           <td className='pl-[50%] text-left relative block lg:table-cell px-[15px] py-3 p-[1%] border-solid border-[1px] border-[#ddd] lg:text-center text-base
           before:content-[attr(data-label)] before:absolute before:left-0 before:w-1/2 before:pl-[15px] before:text-sm before:font-bold before:text-left lg:before:content-none lg:pl-3
-          ' data-label="Content"><p className='limit-text'>sdsd</p></td> 
-          <td className='pl-[50%] text-left relative block lg:table-cell px-[15px] py-3 p-[1%] border-solid border-[1px] border-[#ddd] lg:text-center text-base
-          before:content-[attr(data-label)] before:absolute before:left-0 before:w-1/2 before:pl-[15px] before:text-sm before:font-bold before:text-left lg:before:content-none lg:pl-3
-          ' data-label="Slug"><p className='limit-text'>ssss</p></td>
+          ' data-label="Slug"><p className='limit-text'>{cat.slug}</p></td> 
           <td className='pl-[50%] text-left relative lg:table-cell px-[15px] py-3 p-[1%] border-solid border-[1px] border-[#ddd] lg:text-center text-base
           before:content-[attr(data-label)] before:absolute before:left-0 before:w-1/2 before:pl-[15px] before:text-sm before:font-bold before:text-left lg:before:content-none lg:pl-3 block  lg:w-[100px]
           ' data-label="Action" >
@@ -48,6 +65,7 @@ export default function Product() {
           </div>
           </td>
         </tr>    
+      ))}
 
       </tbody>
     </table>

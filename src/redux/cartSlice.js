@@ -1,11 +1,29 @@
 import { createSlice ,createAsyncThunk } from '@reduxjs/toolkit';
-import * as request from '../utils/request' 
-import { useDispatch } from 'react-redux';
+import * as request from '../utils/request'  
 
 export const saveCartToDb = createAsyncThunk('cart/saveCartToDb', async (cartItems, {getState}) => {  
   const carts = getState().carts;
   const email = getState().auth.users.email;
-  const token = localStorage.getItem("token")
+  const token = localStorage.getItem("token") 
+  // Kiểm tra xem giỏ hàng tồn tại chưa 
+  // Nếu có rồi thì update / chưa thì create new
+  const existingCartId = getState().carts.id
+  if(existingCartId){
+    const response = await request.put(`/cart/${email}?id=${existingCartId}`,{
+      headers:{
+        Authorization: `Bearer ${token}`,
+      },
+      data:{
+        items:carts.items,
+        email,
+        totalPrice:carts.total
+      }
+    }) 
+    localStorage.setItem('cartInfo',JSON.stringify({id:response.data._id,email}))
+    return response.data
+  } 
+
+  // Thực hiện lưu cart vào db
   const response = await request.post('/cart',{
     headers:{
       Authorization: `Bearer ${token}`,
@@ -15,18 +33,33 @@ export const saveCartToDb = createAsyncThunk('cart/saveCartToDb', async (cartIte
       email,
       totalPrice:carts.total
     }
-  })
- 
+  }) 
+  localStorage.setItem('cartInfo',JSON.stringify({id:response.data._id,email}))
+  return response.data
 });
 
+export const clearCartInDb = createAsyncThunk('cart/clearCartInDb', async (cartItems, { getState }) => {
+  const email = getState().auth.users.email ||JSON.parse(localStorage.getItem('cartInfo')).email; 
+  const cartId = getState().carts.id || JSON.parse(localStorage.getItem('cartInfo')).id;
+  const token = localStorage.getItem("token"); 
+  if(cartId) {
+    const res =  await request.del(`/cart/${email}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      }
+    }); 
+  }
 
+  localStorage.removeItem('cartItems');
+});
 
 
 const cartSlice = createSlice({
   name: 'carts',
-  initialState: {
-    items: [],
-    total: 0,
+  initialState: {  
+    items: localStorage.getItem('cartItems') ? JSON.parse(localStorage.getItem('cartItems')).items : [],
+    total: localStorage.getItem('cartItems') ? JSON.parse(localStorage.getItem('cartItems')).total : 0,
+    id:  localStorage.getItem('cartInfo') ? JSON.parse(localStorage.getItem('cartInfo')).id : null,
     loading: false,
     error: null,
     success:false,
@@ -37,8 +70,10 @@ const cartSlice = createSlice({
     },
     getCartsSuccess: (state, action) => {
       state.loading = false;
-      state.items = action.payload.items; 
-      state.total = action.payload.totalPrice;
+      if(action.payload){
+        state.items = action.payload.items; 
+        state.total = action.payload.totalPrice || action.payload.total; 
+      }
     },
     getCartsFailure: (state, action) => {
       state.loading = false;
@@ -99,16 +134,30 @@ const cartSlice = createSlice({
       }
       state.total += parseInt(existingItem.product.price); 
     },
+    clearCart:(state)=>{
+      state.items = [];
+      state.total = 0;
+      state.id = null;
+      state.success = false;
+    }
 
 
   },
   extraReducers: (builder)=>{
-    builder.addCase(saveCartToDb.fulfilled, (state, action) => { 
-      state.success = true;
-    });
+    builder
+      .addCase(saveCartToDb.fulfilled, (state, action) => { 
+        state.success = true; 
+        state.id = action.payload._id
+      })
+      .addCase(clearCartInDb.fulfilled, (state) => {
+        state.items = [];
+        state.total = 0;
+        state.id = null;
+        state.success = false;
+      });
   }
 });
 
-export const { getCartsStart, getCartsSuccess, getCartsFailure,addToCart,removeFromCart,updateQuantity ,decreaseQuantity,increaseQuantity} = cartSlice.actions;
+export const { getCartsStart, getCartsSuccess, getCartsFailure,addToCart,removeFromCart,updateQuantity ,decreaseQuantity,increaseQuantity,clearCart} = cartSlice.actions;
 
 export default cartSlice.reducer;

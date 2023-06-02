@@ -61,13 +61,13 @@ import {toast} from 'react-toastify'
     }, 
   }); 
   
-   return (
-     <div className='w-full'> 
+   return ( 
+
       <GoogleLoginButton    
         text='Login with Google' 
         onClick={()=>login()} 
         className='!flex justify-center'
-      />
-     </div>
+      > 
+      </GoogleLoginButton> 
    )
  } 

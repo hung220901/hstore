@@ -80,7 +80,7 @@ export default function Footer() {
           </div>
           <div className="flex justify-between items-center py-[10px] mt-5 border-solid border-[#313438] border-t-[1px] flex-wrap">
             <span>© Porto Magneto 2021. All Rights Reserved</span>
-            <img src="./payment_logo.png" alt="" />
+            {/* <img src="./payment_logo.png" alt="" /> */}
           </div>
         </div>
       </div>

@@ -6,8 +6,7 @@ export const saveWishlist = createAsyncThunk(
   async (email,{getState}) => {
     try{   
       const wishlistnew = getState().wishlist.items
-      const response = await request.addProductArrayToUserWishList(wishlistnew,email);    
-      console.log(response);
+      const response = await request.addProductArrayToUserWishList(wishlistnew,email);     
       return response.wishlist
     }
     catch(err){

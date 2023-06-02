@@ -14,8 +14,8 @@ function App() {
   const checkCurrentUser = useCallback(async()=>{
     try {
       const token = localStorage.getItem("token")
-      const res = await request.checkCurrentUser(token)
-      dispatch(getCurrentUser(res.data.user))
+      const res = await request.checkCurrentUser(token)  
+      dispatch(getCurrentUser(res?.data?.user))
     } catch (error) {
       console.log(error);
     }
@@ -26,8 +26,8 @@ function App() {
 
   return ( 
     <Router>
-      <ScrollToTop/>
-      <ToastContainer />
+      <ScrollToTop/> 
+      <ToastContainer /> 
         <Routes>
           {
             publicRoutes.map((route,index)=>{
@@ -42,7 +42,7 @@ function App() {
               const Page = route.component
               return <Route key={index} path={route.path} element={<Layout><Page/></Layout>} />
             })
-          }
+          } 
         </Routes>
     </Router>
   );

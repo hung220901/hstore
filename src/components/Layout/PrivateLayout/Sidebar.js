@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { NavLink} from 'react-router-dom'; 
 import {library} from '@fortawesome/fontawesome-svg-core'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faHouse ,faBars ,faSearch, faBasketShopping, faList, faUserGroup, faCompass  } from '@fortawesome/free-solid-svg-icons';   
+import { faHouse ,faBars ,faSearch, faBasketShopping, faList, faUserGroup, faCompass,faComment,faTag,faImage  } from '@fortawesome/free-solid-svg-icons';   
 export default function Sidebar() {
     const [expand, setExpand] = useState(false) 
     const navArr = [
@@ -17,22 +17,38 @@ export default function Sidebar() {
             'url':'/admin/product'
         },
         {
+            'name':'Orders',
+            'icon':'compass',
+            'url':'/admin/order'
+        },
+        {
             'name':'Category',
             'icon':'list',
             'url':'/admin/category'
+        },
+        {
+            'name':'Brand',
+            'icon':'tag',
+            'url':'/admin/brand'
+        },
+        {
+            'name':'Image',
+            'icon':'image',
+            'url':'/admin/images'
+        },
+        {
+            'name':'Review',
+            'icon':'comment',
+            'url':'/admin/review'
         },
         {
             'name':'Customers',
             'icon':'user-group',
             'url':'/admin/user'
         },
-        {
-            'name':'Orders',
-            'icon':'compass',
-            'url':'/admin/orders'
-        },
+
     ] 
-    library.add(faHouse, faBasketShopping, faList, faUserGroup, faCompass)
+    library.add(faHouse, faBasketShopping, faList, faUserGroup, faCompass, faComment,faTag,faImage)
     const show = (e) =>{
         e.preventDefault()
         setExpand(!expand)

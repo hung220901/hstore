@@ -1,12 +1,13 @@
 import React, { useState } from 'react'
+import ReactDOM from 'react-dom'
 import {Link} from 'react-router-dom'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faMultiply, faShoppingBag} from '@fortawesome/free-solid-svg-icons';  
-import { faHeart, faStar} from '@fortawesome/free-regular-svg-icons';
 import { useSelector } from 'react-redux';
-export default function QuickView(props) {
+import Rating from '../Filter/Rating';
+export default function QuickView({ slug, onClose, show}) {
   const [quantity, setQuantity] = useState(1) 
-  const product = useSelector(state =>state.products.products.filter((prod)=>prod.slug === props.slug))  
+  const product = useSelector(state =>state.products.products.filter((prod)=>prod.slug === slug))  
 
   
 
@@ -24,33 +25,28 @@ export default function QuickView(props) {
 
   const handleOverlay = e =>{
     if(e.target === e.currentTarget){
-      props.setShow(!props.show)
+      onClose()
     }
   } 
   const handleContentClick =  e =>{
     e.stopPropagation();
   }
 
-  return (
-    <div className={`  fixed bg-[rgba(68,70,69,0.8)]  z-40 left-0 top-0  w-full  h-full  overflow-hidden`} 
+  return show  
+    ? ReactDOM.createPortal(
+    <div className={` fixed bg-[rgba(68,70,69,0.8)]  !z-[99] left-0 top-0 right-0 bottom-0  w-full  h-full  overflow-hidden`} 
     onClick={handleOverlay}>
-      <div className="fixed left-[15%] top-[10%] bottom-[10%] right-[15%] bg-white shadow-lg z-10" onClick={handleContentClick}> 
+      <div className="fixed left-[15%] top-[10%] bottom-[10%] right-[15%] bg-white shadow-lg z-[99]" onClick={handleContentClick}> 
         <div className='flex justify-end items-center '>
-          <FontAwesomeIcon icon={faMultiply} className='cursor-pointer mt-1 mr-1' size='lg' onClick={()=> props.setShow(!props.show)}/>
+          <FontAwesomeIcon icon={faMultiply} className='cursor-pointer mt-1 mr-1' size='lg' onClick={()=> onClose() }/>
         </div>
         <div className="box flex justify-evenly flex-wrap overflow-auto max-h-[95%] lg:flex-wrap">
           <div className=' px-5 w-full h-full md:w-[300px] md:h-[250px] lg:w-full lg:h-full lg:flex-1'>
             <img src={product[0].image.url} alt="" className='w-full h-full object-cover' />
           </div>
           <div className=" flex-col items-start px-5 text-[#777]  lg:flex-1">
-            <h3 className='text-[1.875rem] font-bold leading-[1.2] -tracking-[0.01em] text-[#222529]'>{product[0].name}</h3>
-            <div className="text-gray-300 py-4">
-              <FontAwesomeIcon icon={faStar}  />
-              <FontAwesomeIcon icon={faStar}  />
-              <FontAwesomeIcon icon={faStar}  />
-              <FontAwesomeIcon icon={faStar}  />
-              <FontAwesomeIcon icon={faStar}  />
-            </div>
+            <h3 className='text-[1.875rem] font-bold leading-[1.2] -tracking-[0.01em] text-[#222529]'>{product[0].name}</h3> 
+            <Rating data={product[0].averageRating}/>
             <hr className='border-[#e7e7e7] w-28' />
             <div className="text-bold py-4 text-[1.125rem] font-bold leading-[1.2] -tracking-[0.01em] text-[#222529]">
               {product[0].price}
@@ -86,5 +82,7 @@ export default function QuickView(props) {
         </div>
       </div>
     </div>
-  )
+  ,document.body)
+  :
+  null
 }

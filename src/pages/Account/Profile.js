@@ -1,6 +1,7 @@
 import React from 'react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faAngleRight } from '@fortawesome/free-solid-svg-icons'
+import { Link } from 'react-router-dom';
 export default function Profile() {
   return (
     <div className='px-5 py-10'>
@@ -8,10 +9,9 @@ export default function Profile() {
         <div className="content flex flex-wrap md:flex-nowrap gap-5">
           <div className="sidebar w-full md:w-1/4 cursor-pointer">
             <ul className='fa-ul '> 
-              <li className='pb-1 border-b-[1px] border-solid border-black'><FontAwesomeIcon icon={faAngleRight} listItem  />My Account</li>
-              <li className='pb-1 border-b-[1px] border-solid border-black'><FontAwesomeIcon icon={faAngleRight} listItem  />My Order</li>
-              <li className='pb-1 border-b-[2px] border-solid border-black font-extrabold'><FontAwesomeIcon icon={faAngleRight} listItem  />My Wish List</li>
-              <li className='pb-1 border-b-[1px] border-solid border-black'><FontAwesomeIcon icon={faAngleRight} listItem  />Account Information</li> 
+              <li className='pb-1 border-b-[2px] border-solid border-black font-extrabold'><Link to="/profile"><FontAwesomeIcon icon={faAngleRight} listItem  />My Account</Link> </li>
+              <li className='pb-1 border-b-[1px] border-solid border-black'><Link to="/order"><FontAwesomeIcon icon={faAngleRight} listItem  />My Order</Link> </li>
+              <li className='pb-1 border-b-[1px] border-solid border-black '><Link to="/wishlist"><FontAwesomeIcon icon={faAngleRight} listItem  />My Wish List</Link> </li> 
             </ul>
           </div>
           <div className='list-info w-full md:w-3/4  sm:flex sm:flex-wrap gap-2'>

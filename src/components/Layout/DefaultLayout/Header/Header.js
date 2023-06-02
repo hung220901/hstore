@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState }  from 'react'
+import React, { useEffect, useRef, useState,memo,lazy,Suspense }  from 'react'
 import {Link, useNavigate} from 'react-router-dom' 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import {faUser, faHeart} from '@fortawesome/free-regular-svg-icons'
@@ -11,10 +11,9 @@ import Loading from '../../../Loading/Loading'
 import { useDispatch, useSelector } from 'react-redux'
 import {getCategoriesSuccess} from '../../../../redux/categorySlice'
 import {getProductsSuccess} from '../../../../redux/productSlice'
-import {getCartsSuccess, removeFromCart } from '../../../../redux/cartSlice'
-import { getCurrentUser } from '../../../../redux/authSlice'
-
-export default function Header() {
+import {getCartsSuccess, removeFromCart, saveCartToDb } from '../../../../redux/cartSlice'
+import { getCurrentUser } from '../../../../redux/authSlice' 
+function Header() {
   const [show, setShow] = useState({
     search:false,
     cart:false,
@@ -26,7 +25,7 @@ export default function Header() {
   const [searchValue, setSearchValue] = useState('') 
   const debounced = useDebounce(searchValue, 1500) 
   const products = useSelector((state) =>state.products.products) 
-  const cartItem =  useSelector(state=>state.carts.items)  
+  const cartList =  useSelector(state=>state.carts)   
   const cartTotalPrice = useSelector(state=>state.carts.total)  
   const categories = useSelector((state) =>state.categories.categories) 
   const email = useSelector(state=>state.auth.users?.email)
@@ -34,6 +33,13 @@ export default function Header() {
   const searchResult =products && products?.length >= 0 && products?.filter((prod)=>prod.name.toLowerCase().includes(searchValue)) 
   const headerRef = useRef(null) 
   const navigate = useNavigate() 
+  const LazyImage = lazy(() => import('../../../Image/LazyImage'));
+ 
+  const handleCheckOut = () =>{
+    dispatch(saveCartToDb(cartList))
+    localStorage.setItem('cartItems', JSON.stringify(cartList))
+    navigate('/checkout')
+}
 
   
   const handleSignOut = (e)=>{
@@ -50,7 +56,7 @@ export default function Header() {
 
 
 // Call API Search
-  useEffect(()=>{
+  useEffect(()=>{ 
     if(!debounced.trim()){
       setSearchValue('')
       return;
@@ -59,27 +65,34 @@ export default function Header() {
       const res = await prodReq.getAllProduct() 
       dispatch(getProductsSuccess(res)) 
     }
-    searchValue && fetchApi()
-  },[debounced])
+    searchValue && fetchApi() 
+  },[debounced,dispatch,searchValue])
 
   // API CART
   useEffect(()=>{
+    const cartItems = JSON.parse(localStorage.getItem('cartItems'))
     const fetchCartByEmail = async()=>{ 
       const res = await cartReq.getAllCartByEmail(email)
-      dispatch(getCartsSuccess(res.data))  
+      res && dispatch(getCartsSuccess(res.data))  
     }
-    email && fetchCartByEmail()
-  },[email])
+    if(email && !cartItems){
+      fetchCartByEmail()   
+    }
+    else if(email && cartItems){
+      dispatch(getCartsSuccess(cartItems))
+    }  
+  },[email,dispatch])
 
   // API CATEGORY
   useEffect(()=>{  
     const fetchCategoryApi = async()=>{
       const resCate = await catReq.getAllCategory()  
-      dispatch(getCategoriesSuccess(resCate.categories))
+      dispatch(getCategoriesSuccess(resCate?.categories))
       setLoading(true)
     }
     fetchCategoryApi()   
-  },[])
+     
+  },[dispatch])
 
 
 
@@ -90,17 +103,17 @@ export default function Header() {
     dispatch(removeFromCart(id))
   }
  
-// Handle Scroll Sticky
-  useEffect(()=>{
-    window.addEventListener('scroll',function(){  
-      if(document.documentElement.scrollTop > 90){ 
-        headerRef.current?.classList.add('bg-white')  
-      }
-      else{
-        headerRef.current?.classList.remove('bg-white') 
-      }
-    }) 
-  },[])
+// Handle Scroll Sticky 
+useEffect(()=>{
+  window.addEventListener('scroll',function(){  
+    if(document.documentElement.scrollTop > 90){ 
+      headerRef.current?.classList.add('bg-white')  
+    }
+    else{
+      headerRef.current?.classList.remove('bg-white') 
+    }
+  }) 
+},[])
 
   return (
     <header className={` flex items-center justify-between bg-none font-black px-5 top-0 right-0 left-0 z-30 ${window.location.pathname === '/' ? 'fixed' :'sticky'} transition-all duration-300`} ref={headerRef}>
@@ -157,7 +170,11 @@ export default function Header() {
             </ul>
         </div>
         <div className=' w-[111px] h-[43px] bg-cover '>  
-          <Link to="/"><img className='w-full h-full' src="https://www.portotheme.com/magento2/porto/pub/media/logo/stores/17/logo_ecomblack_lg.png" alt="" /></Link>
+          <Link to="/"> 
+              <div className='w-full h-full'>
+                <img src="https://res.cloudinary.com/dibmfkpyq/image/upload/v1683623119/logo_project_hstore_black_ynxgmj.png" alt="logo" />
+              </div>
+          </Link>
         </div> 
         <div className="flex justify-end items-center gap-10 text-base">
           <div className='lg:hidden' 
@@ -241,7 +258,7 @@ export default function Header() {
                     {
                       user.avatar.url ?
                       ( 
-                        <img src={user.avatar.url} alt="" className='w-full h-full rounded-full' />
+                        <img src={user.avatar.url} alt="" className='w-full h-full rounded-full' referrerPolicy="no-referrer"/>
                       ) 
                       :
                       (
@@ -276,8 +293,8 @@ export default function Header() {
           >
             <FontAwesomeIcon icon={faMagnifyingGlass} size='xl'/>
           </div>
-          <div className={`text-sm hidden bg-gray-300 border-solid border-gray-300 border-8 absolute rounded-3xl w-[400px] h-auto z-10 top-24 right-10 ${show.search ? '!flex':'' }`}>
             {/* Search */}
+          <div className={`text-sm hidden bg-gray-300 border-solid border-gray-300 border-8 absolute rounded-3xl w-[400px] h-auto z-10 top-24 right-10 ${show.search ? '!flex':'' }`}>
             <input 
               className='rounded-lg outline-none border-none w-full py-1 px-4 relative h-12'
               type="text" 
@@ -310,7 +327,7 @@ export default function Header() {
           >
             <FontAwesomeIcon icon={faBagShopping} size='xl'/>
             <span className='absolute bg-[#ff5b5b] w-4 h-4 rounded-full z-10 translate-x-[-8px] text-white'>
-              <span className='text-s absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2'>{cartItem?.length}</span>
+              <span className='text-s absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2'>{cartList.items?.length}</span>
             </span> 
           </div>
 
@@ -318,12 +335,12 @@ export default function Header() {
           { show.cart &&
             <div className="absolute text-base w-[350px] height-auto px-6 py-2 font-normal bg-white shadow-[0_7px_29px_0_rgba(100,100,111,0.2)] top-20 block z-10 right-10">
               <div className="flex justify-between items-center border-b-2 border-solid border-black mb-5">
-                <span>{cartItem?.length} ITEM</span>
+                <span>{ !cartList.items ? 0 : cartList.items?.length} ITEM</span>
                 <Link to="/cart"  >VIEW CART</Link>
               </div>
               <div className="flex flex-col items-center">
-                {cartItem?.length > 0 ? 
-                  cartItem?.map((item,i)=>(
+                {cartList.items?.length > 0 ? 
+                  cartList.items?.map((item,i)=>(
                   <div key={i} className="flex justify-center items-center px-2 py-2">
                       <div className="flex justify-end flex-col mr-3">
                         <div className="block overflow-ellipsis w-40 overflow-hidden whitespace-nowrap break-words">
@@ -354,12 +371,13 @@ export default function Header() {
                 <span>${cartTotalPrice}</span>  
               </div>
               <div className="w-full bg-black text-white text-center font-bold py-2">
-                <Link to="/checkout">GO TO CHECKOUT</Link>
+                <button onClick={handleCheckOut}>GO TO CHECKOUT</button>
               </div>
             </div>              
           } 
 
         </div>
-    </header>
+    </header> 
   )
 }
+export default memo(Header);

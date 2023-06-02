@@ -13,9 +13,16 @@ import Checkout from '../pages/Checkout/Checkout'
 import Profile from '../pages/Account/Profile'
 import Order from '../pages/Account/Order'
 import OrderTracking from '../pages/Account/OrderTracking'
-import DashBoard from '../components/Admin/Dashboard'
-import Product from '../components/Admin/Product'
+import DashBoard from '../pages/Admin/Dashboard/Dashboard'
+import Product from '../pages/Admin/Product/Product'
 import Search from '../pages/Search/Search'
+import PaymentResult from '../pages/Order/PaymentResult'
+import Category from '../pages/Admin/Category/Category'
+import User from '../pages/Admin/User/User'
+import OrderAdmin from '../pages/Admin/Order/Order'
+import ReviewAdmin from '../pages/Admin/Review/Review'
+import Brand from '../pages/Admin/Brand/Brand'
+import Image from '../pages/Admin/Image/Image'
 
 
 const publicRoutes = [
@@ -72,6 +79,10 @@ const publicRoutes = [
         component: Order
     },
     {
+        path:routesConfig.paymentVNPay,
+        component:PaymentResult
+    },
+    {
         path: routesConfig.orderTracking,
         component: OrderTracking
     },
@@ -88,6 +99,30 @@ const privateRoutes = [
     {
         path: routesConfig.productManager,
         component: Product
+    },
+    {
+        path: routesConfig.categoryManager,
+        component: Category
+    },
+    {
+        path: routesConfig.userManager,
+        component: User
+    },
+    {
+        path: routesConfig.orderManager,
+        component: OrderAdmin
+    },
+    {
+        path: routesConfig.brandManager,
+        component: Brand
+    },
+    {
+        path: routesConfig.reviewManager,
+        component: ReviewAdmin
+    },
+    {
+        path: routesConfig.imageManager,
+        component: Image
     },
 ]
 

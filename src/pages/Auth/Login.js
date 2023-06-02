@@ -4,7 +4,7 @@ import {Link, useNavigate} from 'react-router-dom';
 import LGoogle from '../../components/GoogleAuth/LoginGoogle'
 import LFacebook from '../../components/GoogleAuth/LoginFB' 
 import * as request from '../../services/authServices'
-import {getCurrentUser} from '../../redux/authSlice'
+import {getCurrentUser} from '../../redux/authSlice' 
 export default function Login() {
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
@@ -47,8 +47,9 @@ export default function Login() {
                     <p className='text-red-500 text-sm'>*Required Field</p>
                 </form>
                 <div className='py-5'>  
-                    <LGoogle />
+                    <LGoogle /> 
                     <LFacebook />
+           
                 </div> 
             </div>
         </div>
