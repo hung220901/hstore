@@ -32,9 +32,48 @@ function Header() {
   const [loading, setLoading] = useState(false)
   const searchResult =products && products?.length >= 0 && products?.filter((prod)=>prod.name.toLowerCase().includes(searchValue)) 
   const headerRef = useRef(null) 
-  const navigate = useNavigate() 
+  const searchRef = useRef(null);
+  const cartRef = useRef(null);
+  const navigate = useNavigate()  
   const LazyImage = lazy(() => import('../../../Image/LazyImage'));
  
+
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (searchRef.current && !searchRef.current.contains(event.target)) {
+        setShow({...show, search:false});
+      }
+      if (cartRef.current && !cartRef.current.contains(event.target)) {
+        setShow({...show, cart:false});
+      }
+    };
+
+    const handleMouseDown = () => {
+      document.addEventListener('mouseup', handleClickOutside);
+    };
+
+    const handleMouseUp = () => {
+      document.removeEventListener('mouseup', handleClickOutside);
+    };
+
+    // Thêm sự kiện mouseup khi thanh tìm kiếm được mở
+    if (show.search || show.cart) {
+      handleMouseDown();
+    } else {
+      handleMouseUp();
+    }
+
+    return () => {
+      // Loại bỏ sự kiện mouseup khi component unmount
+      document.removeEventListener('mouseup', handleClickOutside);
+    };
+  }, [show]);
+
+
+
+
+
   const handleCheckOut = () =>{
     dispatch(saveCartToDb(cartList))
     localStorage.setItem('cartItems', JSON.stringify(cartList))
@@ -115,6 +154,17 @@ useEffect(()=>{
   }) 
 },[])
 
+const handleOverlay = e =>{
+  if(e.target === e.currentTarget){
+    setShow({
+      search:false,
+      cart:false,
+      menu:false,
+      categoryMenu:false,
+    })
+  }
+} 
+
   return (
     <header className={` flex items-center justify-between bg-none font-black px-5 top-0 right-0 left-0 z-30 ${window.location.pathname === '/' ? 'fixed' :'sticky'} transition-all duration-300`} ref={headerRef}>
       {!loading && <Loading/>}  
@@ -184,70 +234,72 @@ useEffect(()=>{
           </div>  
           {
             show.menu &&
-            <div className='fixed top-0 left-0 w-1/2 h-full bg-white shadow-lg z-10 lg:hidden 
-            '>
-              <ul> 
-                <li className='w-full h-full border-solid border-[1px] border-[#e7e7e7] flex justify-between'>
-                  <div className='py-3 px-3'>
-                    MENU 
-                  </div>
-                  <div className='border-solid border-l-[1px] border-[#e7e7e7] w-[50px] flex items-center justify-center cursor-pointer' 
-                  onClick={()=>setShow({menu:false, search:show.search, cart:show.cart})}
+            <div className='fixed top-0 left-0 w-full h-full z-[9] lg-hidden bg-[rgba(68,70,69,0.8)]' onClick={handleOverlay}>
+              <div className='fixed top-0 left-0 w-1/2 h-full bg-white shadow-lg z-10 lg:hidden
+              '>
+                <ul>
+                  <li className='w-full h-full border-solid border-[1px] border-[#e7e7e7] flex justify-between'>
+                    <div className='py-3 px-3'>
+                      MENU
+                    </div>
+                    <div className='border-solid border-l-[1px] border-[#e7e7e7] w-[50px] flex items-center justify-center cursor-pointer'
+                    onClick={()=>setShow({menu:false, search:show.search, cart:show.cart})}
+                    >
+                      X
+                    </div>
+                  </li>
+                  <li className='w-full py-3 px-3 h-full border-solid border-[1px] border-[#e7e7e7]'>
+                    <Link to="/">HOME</Link>
+                  </li>
+                  <li className='w-full py-3 px-3 h-full border-solid border-[1px] border-[#e7e7e7] flex justify-between items-center'
+                  onClick={()=> setShow({categoryMenu:!show.categoryMenu,menu:true, search:false, cart:false})}
                   >
-                    X
-                  </div>
-                </li>
-                <li className='w-full py-3 px-3 h-full border-solid border-[1px] border-[#e7e7e7]'>
-                  <Link to="/">HOME</Link>
-                </li>
-                <li className='w-full py-3 px-3 h-full border-solid border-[1px] border-[#e7e7e7] flex justify-between items-center'
-                onClick={()=> setShow({categoryMenu:!show.categoryMenu,menu:true, search:false, cart:false})}
-                >
-                  <Link to="/">CATEGORY</Link>
-                  {show.categoryMenu ? (
-                    <FontAwesomeIcon icon={faAngleUp} /> 
-                  ):(
-                    <FontAwesomeIcon icon={faAngleDown} /> 
-                  )}
-                </li>
-                { show.categoryMenu &&
-                <li className='pl-5'>
-                  <ul className='w-full text-[#777] text-xs tracking-[0.33px]'>
-                      <li className='w-full h-full'> 
-                        <ul>
-                          <li className='px-3 py-2 text-[#222529] pointer-events-none font-bold'><FontAwesomeIcon icon={faAngleRight} /> CLOTHES</li>
-                          <li className='pl-5 px-3 py-2 hover:underline'><FontAwesomeIcon icon={faAngleRight} /><Link to='/categories'> SHIRT</Link></li>
-                          <li className='pl-5 px-3 py-2 hover:underline'><FontAwesomeIcon icon={faAngleRight} /><Link to='/categories'> T-SHIRT</Link></li>
-                          <li className='pl-5 px-3 py-2 hover:underline'><FontAwesomeIcon icon={faAngleRight} /><Link to='/categories'> DRESS</Link></li>
-                          <li className='pl-5 px-3 py-2 hover:underline'><FontAwesomeIcon icon={faAngleRight} /><Link to='/categories'> SHOES</Link></li>
-                          <li className='pl-5 px-3 py-2 hover:underline'><FontAwesomeIcon icon={faAngleRight} /><Link to='/categories'> JEAN</Link></li>
-                          <li className='pl-5 px-3 py-2 hover:underline'><FontAwesomeIcon icon={faAngleRight} /><Link to='/categories'> COAT</Link></li>
-                        </ul>
-                      </li>
-                      <li className='w-full h-full'>
-                        <ul>
-                          <li className='px-3 py-2 text-[#222529] pointer-events-none font-bold'><FontAwesomeIcon icon={faAngleRight} /> ACCESSORIES</li>
-                          <li className='pl-5 px-3 py-2 hover:underline'><FontAwesomeIcon icon={faAngleRight} /><Link to='/categories'> HANDBAG</Link></li>
-                          <li className='pl-5 px-3 py-2 hover:underline'><FontAwesomeIcon icon={faAngleRight} /><Link to='/categories'> WATCH</Link></li>
-                          <li className='pl-5 px-3 py-2 hover:underline'><FontAwesomeIcon icon={faAngleRight} /><Link to='/categories'> BELT</Link></li>
-                          <li className='pl-5 px-3 py-2 hover:underline'><FontAwesomeIcon icon={faAngleRight} /><Link to='/categories'> HAT</Link></li>
-                          <li className='pl-5 px-3 py-2 hover:underline'><FontAwesomeIcon icon={faAngleRight} /><Link to='/categories'> EYES GLASS</Link></li>
-                          <li className='pl-5 px-3 py-2 hover:underline'><FontAwesomeIcon icon={faAngleRight} /><Link to='/categories'> CRAVAT</Link></li>
-                        </ul>
-                      </li>
-                  </ul>
-                </li>
-                }
-                <li className='w-full py-3 px-3 h-full border-solid border-[1px] border-[#e7e7e7]'>
-                  <Link to="/categories">PRODUCTS</Link>
-                </li>
-                <li className='w-full py-3 px-3 h-full border-solid border-[1px] border-[#e7e7e7]'>
-                  <Link to="/about-us">ABOUT</Link>
-                </li>
-                <li className='w-full py-3 px-3 h-full border-solid border-[1px] border-[#e7e7e7]'>
-                  <Link to="/contact">CONTACT</Link>
-                </li>
-              </ul>
+                    <Link to="/">CATEGORY</Link>
+                    {show.categoryMenu ? (
+                      <FontAwesomeIcon icon={faAngleUp} />
+                    ):(
+                      <FontAwesomeIcon icon={faAngleDown} />
+                    )}
+                  </li>
+                  { show.categoryMenu &&
+                  <li className='pl-5'>
+                    <ul className='w-full text-[#777] text-xs tracking-[0.33px]'>
+                        <li className='w-full h-full'>
+                          <ul>
+                            <li className='px-3 py-2 text-[#222529] pointer-events-none font-bold'><FontAwesomeIcon icon={faAngleRight} /> CLOTHES</li>
+                            <li className='pl-5 px-3 py-2 hover:underline'><FontAwesomeIcon icon={faAngleRight} /><Link to='/categories'> SHIRT</Link></li>
+                            <li className='pl-5 px-3 py-2 hover:underline'><FontAwesomeIcon icon={faAngleRight} /><Link to='/categories'> T-SHIRT</Link></li>
+                            <li className='pl-5 px-3 py-2 hover:underline'><FontAwesomeIcon icon={faAngleRight} /><Link to='/categories'> DRESS</Link></li>
+                            <li className='pl-5 px-3 py-2 hover:underline'><FontAwesomeIcon icon={faAngleRight} /><Link to='/categories'> SHOES</Link></li>
+                            <li className='pl-5 px-3 py-2 hover:underline'><FontAwesomeIcon icon={faAngleRight} /><Link to='/categories'> JEAN</Link></li>
+                            <li className='pl-5 px-3 py-2 hover:underline'><FontAwesomeIcon icon={faAngleRight} /><Link to='/categories'> COAT</Link></li>
+                          </ul>
+                        </li>
+                        <li className='w-full h-full'>
+                          <ul>
+                            <li className='px-3 py-2 text-[#222529] pointer-events-none font-bold'><FontAwesomeIcon icon={faAngleRight} /> ACCESSORIES</li>
+                            <li className='pl-5 px-3 py-2 hover:underline'><FontAwesomeIcon icon={faAngleRight} /><Link to='/categories'> HANDBAG</Link></li>
+                            <li className='pl-5 px-3 py-2 hover:underline'><FontAwesomeIcon icon={faAngleRight} /><Link to='/categories'> WATCH</Link></li>
+                            <li className='pl-5 px-3 py-2 hover:underline'><FontAwesomeIcon icon={faAngleRight} /><Link to='/categories'> BELT</Link></li>
+                            <li className='pl-5 px-3 py-2 hover:underline'><FontAwesomeIcon icon={faAngleRight} /><Link to='/categories'> HAT</Link></li>
+                            <li className='pl-5 px-3 py-2 hover:underline'><FontAwesomeIcon icon={faAngleRight} /><Link to='/categories'> EYES GLASS</Link></li>
+                            <li className='pl-5 px-3 py-2 hover:underline'><FontAwesomeIcon icon={faAngleRight} /><Link to='/categories'> CRAVAT</Link></li>
+                          </ul>
+                        </li>
+                    </ul>
+                  </li>
+                  }
+                  <li className='w-full py-3 px-3 h-full border-solid border-[1px] border-[#e7e7e7]'>
+                    <Link to="/categories">PRODUCTS</Link>
+                  </li>
+                  <li className='w-full py-3 px-3 h-full border-solid border-[1px] border-[#e7e7e7]'>
+                    <Link to="/about-us">ABOUT</Link>
+                  </li>
+                  <li className='w-full py-3 px-3 h-full border-solid border-[1px] border-[#e7e7e7]'>
+                    <Link to="/contact">CONTACT</Link>
+                  </li>
+                </ul>
+              </div>
             </div>
           }
           <div className='py-3 px-2 group relative cursor-pointer'>  
@@ -294,7 +346,7 @@ useEffect(()=>{
             <FontAwesomeIcon icon={faMagnifyingGlass} size='xl'/>
           </div>
             {/* Search */}
-          <div className={`text-sm hidden bg-gray-300 border-solid border-gray-300 border-8 absolute rounded-3xl w-[400px] h-auto z-10 top-24 right-10 ${show.search ? '!flex':'' }`}>
+          <div className={`text-sm hidden bg-gray-300 border-solid border-gray-300 border-8 absolute rounded-3xl w-[400px] h-auto z-10 top-24 right-10 ${show.search ? '!flex':'' }`} ref={searchRef}>
             <input 
               className='rounded-lg outline-none border-none w-full py-1 px-4 relative h-12'
               type="text" 
@@ -333,7 +385,7 @@ useEffect(()=>{
 
           {/* CART */}
           { show.cart &&
-            <div className="absolute text-base w-[350px] height-auto px-6 py-2 font-normal bg-white shadow-[0_7px_29px_0_rgba(100,100,111,0.2)] top-20 block z-10 right-10">
+            <div className="absolute text-base w-[350px] height-auto px-6 py-2 font-normal bg-white shadow-[0_7px_29px_0_rgba(100,100,111,0.2)] top-20 block z-10 right-10" ref={cartRef}>
               <div className="flex justify-between items-center border-b-2 border-solid border-black mb-5">
                 <span>{ !cartList.items ? 0 : cartList.items?.length} ITEM</span>
                 <Link to="/cart"  >VIEW CART</Link>

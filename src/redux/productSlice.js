@@ -4,6 +4,8 @@ const productSlice = createSlice({
   name: 'product',
   initialState: {
     products: [],
+    filter:{},
+    filteredProduct:[],
     loading: false,
     error: null,
     quantity:1,
@@ -32,9 +34,22 @@ const productSlice = createSlice({
       const {quantity} = action.payload; 
       state.quantity = parseInt(quantity)
     }, 
+
+    // Filter
+    setFilter:(state, action)=>{
+      state.filter = action.payload; 
+    },
+    setFilteredProduct:(state,action) =>{
+       state.filteredProduct = action.payload
+    },
+    clearFilter:(state)=>{
+      state.filter = {};
+      state.filteredProduct = []
+    }
+
   },
 });
 
-export const { getProductsStart, getProductsSuccess, getProductsFailure,increment, decrement,updateQuantity} = productSlice.actions;
+export const { getProductsStart, getProductsSuccess, getProductsFailure,increment, decrement,updateQuantity, setFilter, setFilteredProduct, clearFilter} = productSlice.actions;
 
 export default productSlice.reducer;

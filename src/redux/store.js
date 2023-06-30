@@ -6,7 +6,8 @@ import authSlice from './authSlice'
 import wishlistSlice from './wishlistSlice'
 import orderSlice from './orderSlice';
 import reviewSlice from './reviewSlice';
-import brandSlice from './brandSlice'
+import brandSlice from './brandSlice'  
+
 
 const rootReducer = combineReducers({
     products: productSlice,
@@ -16,7 +17,7 @@ const rootReducer = combineReducers({
     wishlist:wishlistSlice,
     orders:orderSlice,
     reviews:reviewSlice,
-    brands:brandSlice,
+    brands:brandSlice, 
   });
   
   const store = configureStore({

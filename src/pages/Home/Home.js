@@ -1,30 +1,35 @@
-import React  from 'react'
-import { Swiper, SwiperSlide } from 'swiper/react';
+import React from 'react'
 import ListProduct from '../../components/Product/ListProduct';
+import { Swiper, SwiperSlide } from 'swiper/react';
 import SwiperCore, { Pagination, Scrollbar, A11y , Autoplay} from 'swiper';
 import 'swiper/css'; 
 import 'swiper/css/pagination';
 import 'swiper/css/scrollbar';
-import './home.scss' 
+import styles from  './home.module.css' 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'; 
 import {  faHeadset, faCreditCard,faShare, faTruckFast} from '@fortawesome/free-solid-svg-icons';  
 import { useDispatch, useSelector } from 'react-redux';
 import ProductCard from '../../components/Product/ProductCard';
 import { toast } from 'react-toastify';
 import { saveWishlist , addToWishList, removeItemFromWishlist} from '../../redux/wishlistSlice';
-  export default function Home() {  
-    SwiperCore.use([Autoplay]) 
-    const user = useSelector(state =>state.auth.users) 
-    const wishlist = useSelector(state=>state.wishlist.items)
-    const product = useSelector(state => state.products.products)
-    const dispatch = useDispatch()
+import { Link } from 'react-router-dom';
 
-    const productMale = product && product.length >0 && product.filter(prod=>prod.gender === true).slice(0,2)
-    const productFemale = product && product.length >0 && product.filter(prod=>prod.gender === false).slice(0,2) 
+export default function Home() {  
+  SwiperCore.use([Autoplay]) 
+  const user = useSelector(state =>state.auth.users) 
+  const wishlist = useSelector(state=>state.wishlist.items)
+  const product = useSelector(state => state.products.products)
+  const dispatch = useDispatch() 
+  const productMale = product && product.length >0 && product.filter(prod=>prod.gender === true).slice(0,2)
+  const productFemale = product && product.length >0 && product.filter(prod=>prod.gender === false).slice(0,2) 
 
-    const isFavorite = (productId) => {
-      return wishlist.find(product => product._id === productId) !== undefined;
-    }; 
+  const isFavorite = (productId) => {
+    return wishlist.find(product => product._id === productId) !== undefined;
+  }; 
+
+
+
+
 
   const handleToggleFavorite = async(e,prod) =>{
     try {
@@ -52,6 +57,8 @@ import { saveWishlist , addToWishList, removeItemFromWishlist} from '../../redux
   }
 
 
+  
+
 
     return (
       <>
@@ -62,7 +69,7 @@ import { saveWishlist , addToWishList, removeItemFromWishlist} from '../../redux
               modules={[  Pagination, Scrollbar, A11y]} 
               pagination={{ clickable: true }}
               loop={true}
-              className="banner-slider "
+              className={styles.bannerSlider}
             >
               <SwiperSlide>  
                 <div className='relative w-full bg-[#f4f4f4] min-h-[80vh] md:min-h-0 '>
@@ -164,18 +171,20 @@ import { saveWishlist , addToWishList, removeItemFromWishlist} from '../../redux
 
       {/* WOMEN COLLECTION */}
       <div className="flex flex-wrap h-full w-full">
-        <div className=" flex justify-center items-center md:basis-1/2 "> 
+        <div className=" flex justify-center w-full items-center md:basis-1/2 flex-wrap sm:flex-nowrap "> 
             {productFemale?.length > 0 &&  productFemale.map((prod, index)=>(
+              <Link to={`/product-detail/${prod.slug}`}>  
                 <ProductCard key={index} product={prod}  onAddWishlist={handleToggleFavorite} favorite={isFavorite(prod._id)} />
+              </Link>
             ))
             }
         </div>        
         <div className="relative md:basis-1/2">
-          <img className='object-cover w-full h-full' src="https://res.cloudinary.com/dibmfkpyq/image/upload/v1682243373/women_go8pr9.jpg" alt="" />
-          <div className='absolute top-1/4 left-[10%] text-left'>
-            <h3 className="text-[#222529] font-bold mb-4 text-5xl leading-[60px] -tracking-[0.5px]">WOMEN'S <div>COLLECTION</div></h3>
-            <div className="text-[#777777] mb-6">Check out this week's hottest style</div>
-            <button className='bg-transparent border-2 border-solid border-black text-black font-bold px-5 py-[5px] z-10 hover:bg-black hover:text-white '>
+          <img className='object-cover w-full h-full min-w-[205px] min-h-[235px]' src="https://res.cloudinary.com/dibmfkpyq/image/upload/v1682243373/women_go8pr9.jpg" alt="" />
+          <div className='absolute top-[1px] sm:top-1/4 left-[10%] text-left w-full'>
+            <h3 className="text-[#222529] font-bold mb-4  text-3xl sm:text-5xl leading-[60px] -tracking-[0.5px]">WOMEN'S <br/> COLLECTION</h3>
+            <div className="text-[#777777] mb-4 sm:mb-6  text-xs sm:text-lg">Check out this week's hottest style</div>
+            <button className='bg-transparent border-2 border-solid border-black text-black font-bold px-5 py-[5px] z-10 hover:bg-black hover:text-white whitespace-nowrap '>
               SHOP NOW
             </button>
           </div>
@@ -185,21 +194,22 @@ import { saveWishlist , addToWishList, removeItemFromWishlist} from '../../redux
 
       {/* MEN COLLECTION */}
       <div className="flex flex-wrap h-full w-full">
-          <div className="relative md:basis-1/2 ">
-            <img className='object-cover w-full h-full' src="https://res.cloudinary.com/dibmfkpyq/image/upload/v1682243374/men_hz7tup.jpg" alt="" />
-            <div className='absolute top-1/4 right-[10%] text-right'>
-              <h3 className="text-[#222529] font-bold mb-4 text-5xl leading-[60px] -tracking-[0.5px]">MEN'S <div>COLLECTION</div></h3>
-              <div className="text-[#777777] mb-6">Check out this week's hottest style</div>
-              <button className='bg-transparent border-2 border-solid border-black text-black font-bold px-5 py-[5px] z-10 hover:bg-black hover:text-white '>
+          <div className="relative md:basis-1/2">
+            <img className='object-cover w-full h-full min-w-[205px] min-h-[235px]' src="https://res.cloudinary.com/dibmfkpyq/image/upload/v1682243374/men_hz7tup.jpg" alt="" />
+            <div className='absolute top-[1px] sm:top-1/4 right-[10%] text-right w-full'>
+              <h3 className="text-[#222529] font-bold mb-4 text-3xl sm:text-5xl leading-[60px] -tracking-[0.5px]">MEN'S <br/>COLLECTION </h3>
+              <div className="text-[#777777] mb-4 sm:mb-6  text-xs sm:text-lg">Check out this week's hottest style</div>
+              <button className='bg-transparent border-2 border-solid border-black text-black font-bold px-5 py-[5px] z-10 hover:bg-black hover:text-white whitespace-nowrap'>
                 SHOP NOW
               </button>
             </div>
           </div> 
-          <div className="md:basis-1/2 flex justify-center items-center ">
+          <div className="md:basis-1/2 flex justify-center items-center w-full flex-wrap sm:flex-nowrap">
             { productMale?.length > 0 && productMale.map((prod, index)=>(
-                <ProductCard key={index} product={prod} onAddWishlist={handleToggleFavorite} favorite={isFavorite(prod._id)} />
-              ))
-            }
+                <Link to={`/product-detail/${prod.slug}`}>  
+                  <ProductCard key={index} product={prod} onAddWishlist={handleToggleFavorite} favorite={isFavorite(prod._id)} /> 
+                </Link>
+            ))}
           </div>
       </div>
       {/* END MEN COLLECTION */}

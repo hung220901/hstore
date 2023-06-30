@@ -4,7 +4,7 @@ import { faAngleRight, faSliders, faArrowUpShortWide, faArrowDownShortWide,  faM
 // import { faHeart, faStar  } from '@fortawesome/free-regular-svg-icons'  
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome' 
 import { useState } from 'react' 
-import '../Categories/categories.scss'   
+import '../Categories/categories.css'   
 import { useLocation } from 'react-router-dom'
 export default function Search() {
     const [ascending, setAscending] = useState(true);

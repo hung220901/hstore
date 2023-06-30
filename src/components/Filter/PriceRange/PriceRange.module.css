@@ -1,0 +1,54 @@
+.groupPriceRange{
+    background-color: #cbc2b9;
+    width: 250px; 
+    height: 10px;
+    border-radius: 5px;
+    box-shadow: inset 0 1px 2px #9d968f;
+    position: relative;
+}
+.rangeInput input{
+    -webkit-appearance: none;
+    position: absolute;
+    width: 100%;
+    height: 5px;
+    margin: 0;
+    background-color: transparent;
+    transform: translateY(2px);
+    pointer-events: none;
+}
+.rangeInput input::-webkit-slider-thumb{
+    -webkit-appearance: none;
+    width: 17px;
+    height: 17px;
+    background-color: #000000;
+    pointer-events: auto;
+}
+.progress{
+    position: absolute;
+    height: 100%;
+    left: 0;
+    right: 0; 
+    background: gray;
+    border-radius: 5px;
+}
+
+ 
+
+.rangeText div{  
+    position: absolute;
+    background-color: #6f9163;
+    color: white;
+    font-size: 14px;
+    padding: 5px;
+    left: 5px;
+    width: fit-content;
+    text-align: center;
+    border-radius: 3px; 
+    top: 15px;
+    /* transform: translateX(-10%); */
+}
+.textMax{
+    left: unset!important;
+    right: 0; 
+    /* transform: translateX(10%)!important; */
+}

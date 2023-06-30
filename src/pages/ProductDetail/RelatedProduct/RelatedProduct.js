@@ -1,84 +1,108 @@
-import React, { useEffect, useMemo, useState } from 'react' 
+import React, {  useMemo } from 'react'  
 import { Swiper, SwiperSlide } from 'swiper/react';
-import  { Pagination, Scrollbar, A11y } from 'swiper';
-import { faHeart, faStar } from '@fortawesome/free-regular-svg-icons'
-import { faShoppingBag } from '@fortawesome/free-solid-svg-icons'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import './related-product.scss'
-import { useSelector } from 'react-redux';
-export default function RelatedProduct({product}) {
+import SwiperCore, { Pagination, Scrollbar, A11y} from 'swiper';
+import styles from './relatedProduct.module.css'  
+import { useDispatch, useSelector } from 'react-redux';
+import * as ReactDOMServer from "react-dom/server";
+import { toast } from 'react-toastify';
+import {getAllWishListItem, saveWishlist} from '../../../redux/wishlistSlice'
+import {addToWishList,removeItemFromWishlist} from '../../../redux/wishlistSlice'
+import { Link } from 'react-router-dom';
+import ProductCard from '../../../components/Product/ProductCard';
+SwiperCore.use([Pagination, A11y, Scrollbar]);
+export default function RelatedProduct({product}) { 
   const products = useSelector(state => state.products.products)      
+  const wishlist = useSelector(state=>state.wishlist.items)
+  const user = useSelector(state =>state.auth.users) 
+  const dispatch = useDispatch()
   const relatedProd = useMemo(() => {
-    return products.filter(prod => prod.gender === product.gender && prod.slug !== product.slug) 
-  }, [product, products])
+    return products.filter(prod => prod.gender === product.gender) 
+    //  && prod.slug !== product.slug
+  }, [product, products])  
+  const example = [
+    {
+      image:{
+        url:'https://source.unsplash.com/random/'
+      },
+      name:'hi',
+      price:'500'
+    },
+    {
+      image:{
+        url:'https://source.unsplash.com/random/'
+      },
+      name:'hi',
+      price:'500'
+    },
+    {
+      image:{
+        url:'https://source.unsplash.com/random/'
+      },
+      name:'hi',
+      price:'500'
+    }
+  ]
+  const isFavorite = (productId) => {
+    return wishlist.find(product => product._id === productId) !== undefined;
+  }; 
+  const handleToggleFavorite = async(e,prod) =>{
+    try {
+      e.stopPropagation()
+      e.preventDefault() 
+
+      if(!user){
+        console.log('chua dang nhap');
+      }
+      else{
+        const existedProduct = wishlist.find(item => item._id === prod._id) 
+        if(existedProduct){
+          toast.success('Remove product from wishlist successfully!')
+          dispatch(removeItemFromWishlist(prod._id))
+        }
+        else{
+          toast.success('Add product to wishlist successfully!')
+          dispatch(addToWishList({...prod }))
+        }   
+        dispatch(saveWishlist(user.email)) 
+      } 
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+
+
 
 
   return (
     <>
       <div className='flex justify-between items-center border-solid border-[#777777] border-b-[1px]'>
-        <h3 className=' py-2 text-[#313131]'>WE FOUND OTHER PRODUCTS YOU MIGHT LIKE!</h3>
-        <div className='swiper-pagination-relatedProduct !w-auto'></div>
+        <h3 className='flex-[10] py-2 text-[#313131] '>WE FOUND OTHER PRODUCTS YOU MIGHT LIKE!</h3>
+        <div className={styles.swiperRelatedProductPagination}></div>
       </div>
       <Swiper
-        slidesPerView={5} 
+        slidesPerView={4} 
+        observeParents={true}
+        observer={true}
         speed={1000} 
-        modules={[ Scrollbar, A11y, Pagination]}  
-        pagination={{ 
-          clickable: true,
-          el:'.swiper-pagination-relatedProduct'
-        }} 
+        modules={[  Pagination, Scrollbar, A11y]} 
+        pagination={{  
+          clickable: true , 
+          el: `.${styles.swiperRelatedProductPagination}`,
+          renderBullet: function (index, className) {
+            return ReactDOMServer.renderToStaticMarkup(<span className={className}></span>);
+          },
+        }}
         loop={true}
-        className="related-product"
+        className={styles.paginationRTP}
       > 
-      { relatedProd && relatedProd.map((prod,i)=>(
-
+      { relatedProd && relatedProd.map((prod,i)=>( 
         <SwiperSlide key={i}>
-          <div className="px-5 py-10 ">
-            <div className='relative group'>
-              <img className='w-full h-full' src={prod.image.url} alt="" />   
-              <button className="absolute top-1 right-1 
-                rounded-full bg-white w-8 h-8 outline-none border-none hover:bg-[#ff7272] hover:text-white 
-                m-2 invisible group-hover:visible
-                transition-all ease-in duration-200
-                opacity-50
-                group-hover:opacity-100
-                ">
-                  <FontAwesomeIcon icon={faShoppingBag} />
-              </button>
-              <div className="bg-[#ff7272]
-                  text-white absolute 
-                  bottom-0  left-0  right-0 
-                  text-center group 
-                  opacity-90
-                  w-full h-auto indent-0
-                  transition-all duration-[0.25em]  ease-in 
-                  invisible group-hover:visible group-hover:delay-100
-                  group-hover:py-2 cursor-pointer">
-                QUICK REVIEW
-              </div>
-            </div> 
-            <div className="cart-bottom flex justify-between pt-1">
-                <div className="item-left">
-                  <div className="product-name">
-                    {prod.name}
-                  </div>
-                  <div className="text-gray-300">
-                    <FontAwesomeIcon icon={faStar}  />
-                    <FontAwesomeIcon icon={faStar}  />
-                    <FontAwesomeIcon icon={faStar}  />
-                    <FontAwesomeIcon icon={faStar}  />
-                    <FontAwesomeIcon icon={faStar}  />
-                  </div>
-                  <div className="product-price">${prod.price}</div>
-                </div>
-                <div className="add-to-wishlist">
-                  <FontAwesomeIcon icon={faHeart} />
-                </div>
-            </div> 
-          </div>  
+          <Link to={`/product-detail/${prod.slug}`}> 
+            <ProductCard product={prod} onAddWishlist={handleToggleFavorite} favorite={isFavorite(prod._id)} />
+          </Link>
         </SwiperSlide>  
-      ))}
- 
+      ))} 
       </Swiper>
     </>
   )

@@ -38,15 +38,17 @@ export default function ProductCard({product, onAddWishlist, favorite}) {
 
   return (
     <>
-        <div className="px-5 py-10">
-            <div className='relative group'>
-                <img className='w-[200px] h-auto' src={product.image.url} alt="" />   
+        <div className="px-5 py-5 w-full h-auto  ">
+            <div className='relative group hover:shadow-2xl'>
+                <div className='w-full  grid place-items-center '>
+                    <img className='w-[240px] h-[300px] object-cover ' src={product.image.url} alt="" />
+                </div>   
                 <button className="absolute top-1 right-1
                     rounded-full bg-white w-8 h-8 outline-none border-none hover:bg-[#ff7272] hover:text-white
                     m-2 invisible group-hover:visible
                     transition-all ease-in duration-200
                     opacity-50
-                    group-hover:opacity-100
+                    group-hover:opacity-100 group-hover:shadow-md
                     " 
                     onClick={(e) => handleAddToCart(e,product)}
                 >
@@ -68,16 +70,16 @@ export default function ProductCard({product, onAddWishlist, favorite}) {
             </div> 
             <div className="cart-bottom flex justify-between pt-1">
                 <div className="item-left">
-                <div className="product-name">
+                <div className="product-name hover:text-[#ff7272]">
                     {product.name}
                 </div>
                 <div className="text-gray-300">
                     <Rating data={product.averageRating} size='1x'/>
                 </div>
-                <div className="product-price">${product.price}</div>
+                <div className="product-price text-[#444444] text-lg font-extrabold">${product.price}</div>
                 </div>
                 <div className="add-to-wishlist p-3" onClick={handleToggleWishlist}>
-                <FontAwesomeIcon icon={favorite ? solidHeart : regularHeart} color={favorite ? 'red':'black'} />
+                <FontAwesomeIcon icon={favorite ? solidHeart : regularHeart} color={favorite ? 'red':'gray'} />
                 </div>
             </div> 
         </div>  

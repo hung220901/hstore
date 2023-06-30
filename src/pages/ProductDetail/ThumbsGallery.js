@@ -5,12 +5,12 @@ import { faHeart as regularHeart, faStar} from '@fortawesome/free-regular-svg-ic
 import { faShoppingBag, faHeart as solidHeart,faEnvelope} from '@fortawesome/free-solid-svg-icons';  
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import {  faFacebookF, faGooglePlus, faLinkedin, faTwitter } from '@fortawesome/free-brands-svg-icons'
-
+import ReactImageMagnify from '@blacklab/react-image-magnify'; 
+import styles from './gallery.module.css'  
 import "swiper/css";
 import "swiper/css/free-mode";
 import "swiper/css/navigation";
 import "swiper/css/thumbs";
-import './gallery.scss'  
 import { useDispatch, useSelector } from 'react-redux'
 import {addToWishList, removeItemFromWishlist} from '../../redux/wishlistSlice'
 import { toast } from 'react-toastify';
@@ -18,8 +18,8 @@ import { decrement, increment, updateQuantity } from '../../redux/productSlice';
 import { addToCart } from '../../redux/cartSlice';
 export default function ThumbsGallery({product}) { 
   const wishlist = useSelector(state => state.wishlist.items)
-  const productS = useSelector(state => state.products)  
-  const [thumbsSwiper, setThumbsSwiper] = useState(null); 
+  const productS = useSelector(state => state.products.products)  
+  const [thumbsSwiper, setThumbsSwiper] = useState(null);  
   SwiperCore.use([Zoom])  
   const dispatch = useDispatch() 
 
@@ -63,43 +63,78 @@ export default function ThumbsGallery({product}) {
       <div className='flex flex-col w-full mr-10 md:w-[50%]'>
         <Swiper 
           style={{
-            "--swiper-navigation-color": "#fff",
-            "--swiper-pagination-color": "#fff",
+            "--swiper-navigation-color": "#000",
+            "--swiper-pagination-color": "#000",
+            width:'100%',
+            height:'auto',
+            maxHeight:'450px',
+            maxWidth:'420px'
           }}
           spaceBetween={10}
           navigation={true} 
           thumbs={{ swiper: thumbsSwiper && !thumbsSwiper.destroyed ? thumbsSwiper : null }}
           modules={[FreeMode, Navigation, Thumbs]}
           zoom={{maxRatio:2, minRatio:1 }}
-          className="mySwiper2"
+          className={styles.mySwiper2}
+          centeredSlides={true}
         >
           {product?.thumbnail?.map((prod,i)=>(        
-              <SwiperSlide  key={i} className="swiper-slide-1">
-              <div className="swiper-zoom-container"> 
-                  <img src={prod.url||product.image.url} alt=''/>
-              </div>
+              <SwiperSlide  key={i} className="swiper-slide-1" >
+                <ReactImageMagnify
+                  imageProps={{
+                    alt: 'example small image',
+                    src: prod.url||prod.image.url, 
+                    // width: "100%",
+                    // height: "25vh",
+                    
+                  
+                  }}
+                  magnifiedImageProps={{
+                    width: 300*4,
+                    height: 200*4,
+                    src: prod.url||prod.image.url,
+                  }}
+                  // magnifyContainerProps={{
+                  //   width: 400, 
+                  //   height: 400, 
+                  //   scale:2
+                  // }}
+                  onActivationChanged={function noRefCheck(){}}
+                  onDetectedEnvironmentChanged={function noRefCheck(){}}
+                  onPositionChanged={function noRefCheck(){}}
+                  portalProps={{
+                    horizontalOffset: 20,     
+                    verticalOffset:10,
+                    id : "portal-test-id"
+                  }} 
+                  
+                > 
+                  <img className='w-full h-full ' src={prod.url||product.image.url} alt=''/> 
+                </ReactImageMagnify>
               </SwiperSlide>
           ))}        
-        </Swiper>
+        </Swiper>  
         <Swiper
           onSwiper={setThumbsSwiper}
           spaceBetween={10}
           slidesPerView={4}
           freeMode={true}
+          style={{width:'100%',height:"200px"}}
           watchSlidesProgress={true}
           modules={[FreeMode, Navigation, Thumbs]} 
-          className="mySwiper3" 
+          className={styles.mySwiper3}
         >
           {product?.thumbnail?.map((prod,i)=>(        
               <SwiperSlide key={i}>
-              <div className="swiper-zoom-container"> 
-                  <img src={prod.url||product.image.url} alt=''/>
+              <div className="swiper-zoom-container p-2  w-[150px] h-[150px]"> 
+                  <img className='w-full h-full object-cover' src={prod.url||product.image.url} alt=''/>
               </div>
               </SwiperSlide>
           ))}         
-        </Swiper>
+        </Swiper> 
       </div>
-      <div className="flex flex-col w-[100%] md:w-[50%] items-start">
+      <div className="flex flex-col w-[100%] md:w-[50%] items-start">  
+          <div id="portal-test-id"></div>
           <h3 className='text-[#222529] inline text-3xl font-bold -tracking-[0.3px] leading-9 uppercase'>{product.name}</h3>
           <div className="inline-block text-[#999999] text-[13px] leading-6 my-5">
             <div className='inline mr-2'>

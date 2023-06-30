@@ -1,4 +1,9 @@
-import './GlobalStyles.scss'  
+import './globalStyles.css'; 
+
 export default function GlobalStyles({ children }) {
-  return children;
+  return (
+    <div >
+      {children}
+    </div>
+  );
 }

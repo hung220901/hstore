@@ -14,7 +14,7 @@ import * as req from '../../services/userServices'
 import {getAllWishListItem, saveWishlist} from '../../redux/wishlistSlice'
 import {addToWishList,removeItemFromWishlist} from '../../redux/wishlistSlice'
 import { toast} from 'react-toastify'
-import ProductCard from './ProductCard';
+import ProductCard from './ProductCard'; 
 export default function ListProduct() {
     const [showQuickView, setShowQuickView] = useState(false)  
     const [slugQV, setSlugQV] = useState('')  
@@ -114,11 +114,14 @@ export default function ListProduct() {
           modules={[ Scrollbar, A11y]}  
           breakpoints={{
             120:{
-              slidesPerView: 1,
+              slidesPerView: 1, 
             },
             320:{
-              slidesPerView: 2,
+              slidesPerView: 1, 
             }, 
+            450:{
+              slidesPerView: 2,
+            },
             640:{
               slidesPerView:3,
             },
@@ -126,7 +129,7 @@ export default function ListProduct() {
               slidesPerView:4,
             }
           }}
-          loop={true} 
+          loop={true}  
         >
           {product && product.length > 0 && product?.map((prod,index)=>(
             <SwiperSlide key={index}  >

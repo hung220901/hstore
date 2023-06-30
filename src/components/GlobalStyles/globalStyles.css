@@ -3,10 +3,14 @@
 @tailwind utilities;
 
 @layer base{
-  @import url('https://fonts.googleapis.com/css2?family=Poppins&display=swap');
-  body {
-    font-family: 'Poppins',sans-serif;
+  @import url('https://fonts.googleapis.com/css2?family=Poppins&display=swap');  
+  @import url('https://www.portotheme.com/magento2/porto/pub/media/wysiwyg/smartwave/porto/aboutus/4/top-bg.jpg');  
+  .globalStyles{
+    font-family: 'Poppins',sans-serif; 
+    overflow-x: hidden; 
   }
+
+ 
   input::-webkit-outer-spin-button,
   input::-webkit-inner-spin-button {
     -webkit-appearance: none;

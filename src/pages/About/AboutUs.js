@@ -3,11 +3,12 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import React from 'react'
 import { Autoplay} from 'swiper';
 import { Swiper, SwiperSlide } from 'swiper/react'
-
+// import backgroundImage from 'https://www.portotheme.com/magento2/porto/pub/media/wysiwyg/smartwave/porto/aboutus/4/top-bg.jpg';
 export default function AboutUs() {
   return (
     <>
-        <div className="bg-[url('https://www.portotheme.com/magento2/porto/pub/media/wysiwyg/smartwave/porto/aboutus/4/top-bg.jpg')] bg-right-top w-full h-[250px] leading-6 p-16 text-[#1e3636] ">
+        <div className=" relative w-full h-[250px] leading-6 p-16 text-[#1e3636]">
+            <img className='absolute left-0 right-0 top-0 bottom-0 h-full -z-20  ' src="https://www.portotheme.com/magento2/porto/pub/media/wysiwyg/smartwave/porto/aboutus/4/top-bg.jpg" alt="" />
             <span className='text-xl font-bold'>ABOUT US</span>
             <h2 className='text-4xl font-black pb-5'>OUR COMPANY</h2>
             <div className="font-bold text-sm bg-black text-white inline-block cursor-pointer px-6 py-4">CONTACT</div>

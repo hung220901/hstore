@@ -2,8 +2,8 @@ import { faCircleCheck, faStar } from '@fortawesome/free-regular-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import React from 'react' 
 import { useState } from 'react'
-import ListReview from '../../components/Review/ListReview'
-import Rating from '../../components/Filter/Rating'
+import ListReview from '../../components/Review/ListReview' 
+import styles from './gallery.module.css'  
 import { useSelector } from 'react-redux'
 export default function Tab({product}) { 
     const  review = useSelector(state=>state.reviews.items)
@@ -14,15 +14,12 @@ export default function Tab({product}) {
   return (
     <div className='my-5'>
         <div  className="flex border-solid border-b-[1px] border-[#e7e7e7]">
-            <div className={`p-4 uppercase font-bold cursor-pointer ${active===1 ? 'tab-active':''} `}  onClick={()=> handleChange(1)}>
+            <div className={`p-4 uppercase font-bold cursor-pointer ${active===1 ? styles.tabActive:''} `}  onClick={()=> handleChange(1)}>
                 details
             </div>
-            <div className={`p-4 uppercase font-bold cursor-pointer ${active===2 ? 'tab-active':''} `} onClick={()=> handleChange(2)}>
+            <div className={`p-4 uppercase font-bold cursor-pointer ${active===2 ? styles.tabActive:''} `} onClick={()=> handleChange(2)}>
                 reviews
-            </div>
-            <div className={`p-4 uppercase font-bold cursor-pointer ${active===3 ? 'tab-active':''} `} onClick={()=> handleChange(3)}>
-                custom tab
-            </div>
+            </div> 
         </div> 
         <div className="my-5 text-sm font-normal tracking-[0.07px] text-[#777777] leading-[27px]">
             <div className={`detail ${active === 1 ? 'block' :'hidden'}`}>
@@ -44,48 +41,7 @@ export default function Tab({product}) {
                         </>
                     )
                 } 
-            </div>
-            <div className={`custom-tab ${active === 3 ? 'block' :'hidden'}`}>
-                <table className="table w-full text-left">
-                    <tbody>
-                        <tr>
-                            <th className='text-[#777777] inline text-sm font-bold leading-4  px-[7px] py-[11px] '>Clothing - Single Size Conversion (Continued)</th>
-                        </tr> 
-                        <tr className="border-solid border-t-[1px] border-[#e7e7e7] text-[#777777]">
-                            <th  className='px-[7px] py-[11px]'>UK</th>
-                            <th  className='px-[7px] py-[11px]'>18</th>
-                            <th  className='px-[7px] py-[11px]'>20</th>
-                            <th  className='px-[7px] py-[11px]'>22</th>
-                            <th  className='px-[7px] py-[11px]'>24</th>
-                            <th  className='px-[7px] py-[11px]'>26</th>
-                        </tr>
-                        <tr className="border-solid border-t-[1px] border-[#e7e7e7] text-[#777777]">
-                            <th  className='px-[7px] py-[11px]'>European</th>
-                            <th  className='px-[7px] py-[11px]'>46</th>
-                            <th  className='px-[7px] py-[11px]'>48</th>
-                            <th  className='px-[7px] py-[11px]'>50</th>
-                            <th  className='px-[7px] py-[11px]'>52</th>
-                            <th  className='px-[7px] py-[11px]'>54</th>
-                        </tr>
-                        <tr className="border-solid border-t-[1px] border-[#e7e7e7] text-[#777777]">
-                            <th  className='px-[7px] py-[11px]'>US</th>
-                            <th  className='px-[7px] py-[11px]'>14</th>
-                            <th  className='px-[7px] py-[11px]'>16</th>
-                            <th  className='px-[7px] py-[11px]'>18</th>
-                            <th  className='px-[7px] py-[11px]'>20</th>
-                            <th  className='px-[7px] py-[11px]'>22</th>
-                        </tr>
-                        <tr className="border-solid border-t-[1px] border-[#e7e7e7] text-[#777777]">
-                            <th  className='px-[7px] py-[11px]'>Australia</th>
-                            <th  className='px-[7px] py-[11px]'>8</th>
-                            <th  className='px-[7px] py-[11px]'>10</th>
-                            <th  className='px-[7px] py-[11px]'>12</th>
-                            <th  className='px-[7px] py-[11px]'>14</th>
-                            <th  className='px-[7px] py-[11px]'>16</th>
-                        </tr> 
-                    </tbody> 
-                </table>
-            </div>
+            </div> 
         </div>  
     </div>
   )
