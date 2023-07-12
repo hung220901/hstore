@@ -330,6 +330,8 @@ export default function Categories() {
             // Co sp  
               Object.keys(filter).length !== 0 ? 
                 // neu co filter thi lay filter , khong thi lay All
+                Object.keys(filteredProd).length !== 0 ?
+                // nếu filter có thì lấy ra khong thì để k có sp nào
                   filteredProd?.map((prod, index)=>(
                     <div key={index} className="product-item m-2  p-1">  
                       <Link to={`/product-detail/${prod.slug}`}> 
@@ -337,6 +339,8 @@ export default function Categories() {
                       </Link>
                     </div>  
                   )).slice(indexOfFirstItem,indexOfLastItem) 
+                  :
+                  <h1 className='flex justify-center items-center h-48 w-full'>Dont have any product!</h1>
                 :  
                 products?.map((prod, index)=>(
                   <div key={index} className="product-item m-2  p-1">  

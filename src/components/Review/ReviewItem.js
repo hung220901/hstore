@@ -13,7 +13,7 @@ export default function ReviewItem({review}) {
         <img src={review.userId?.avatar?.url === undefined ? 'https://source.unsplash.com/random': review.userId.avatar.url   } className='w-full h-full rounded-full' alt="" />
       </div>
       <div>
-        <div className='font-semibold'>{review.userId.name}</div>
+        <div className='font-semibold'>{review.userId?.name}</div>
         <div>
           <Rating data={parseInt(review.rating)} />
         </div>

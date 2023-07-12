@@ -5,8 +5,13 @@ export const saveWishlist = createAsyncThunk(
   'wishlist/saveWishlistToDB',
   async (email,{getState}) => {
     try{   
+      const token = localStorage.getItem("token")
       const wishlistnew = getState().wishlist.items
-      const response = await request.addProductArrayToUserWishList(wishlistnew,email);     
+      const response = await request.addProductArrayToUserWishList(wishlistnew,email,{
+        headers:{
+          Authorization: `Bearer ${token}`
+        }
+      });     
       return response.wishlist
     }
     catch(err){

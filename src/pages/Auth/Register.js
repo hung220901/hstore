@@ -24,7 +24,7 @@ export default function Register() {
             } 
             const res = await request.register(newUserData) 
             const {token, userName } = res.data;
-            localStorage.setItem("token", token);
+            localStorage.setItem("token",res.accessToken)
             navigate('/')
         } catch (error) {
             console.log(error);

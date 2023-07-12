@@ -32,7 +32,7 @@ import {toast} from 'react-toastify'
                 'avatar':{'url':responseGoogle.data.picture}, 
                 'googleId':responseGoogle.data.sub,
                 'provider':'google'
-              })      
+              })       
               localStorage.setItem('token',res.token) 
               dispatch(getCurrentUser({userName: res.userName,role: res.role,avatar:{url:responseGoogle.data.picture}}))
               navigate('/') 
@@ -45,7 +45,7 @@ import {toast} from 'react-toastify'
               'avatar':{'url':responseGoogle.data.picture},
               'googleId':responseGoogle.data.sub,
               
-            })  
+            })    
             localStorage.setItem('token',register.data.token) 
             dispatch(getCurrentUser({userName: register.data.userName,role: register.data.role,avatar:{url:responseGoogle.data.picture}}))
             navigate('/') 

@@ -11,10 +11,11 @@ export default function CreateProduct({onClose , mount}) {
     <div className='fixed bg-[rgba(68,70,69,0.8)]  !z-[99] left-0 top-0 right-0 bottom-0  w-full  h-full  overflow-hidden' onClick={handleOverlay}>
       <div className={`fixed left-[15%] top-[10%] bottom-[10%] right-[15%] bg-white shadow-lg z-[99]  overflow-y-auto 
           ${mount ? "transition-opacity duration-500 ease-linear" : "opacity-0"} rounded-lg`}>
-        <div className='float-right mx-2 my-2 px-2 py-2  ' onClick={onClose}>
+        <div className='absolute top-2 right-2 w-10 h-10 flex items-center justify-center  hover:bg-slate-300 rounded-full ' onClick={onClose}>
           <FontAwesomeIcon icon={faMultiply} />
         </div>
-        <div className=" py-5 max-w-lg mx-auto flex flex-wrap gap-2"> 
+        <h1 className='w-full text-center m-5 uppercase font-bold'>Create Product</h1>
+        <div className=" py-5 max-w-lg mx-auto flex flex-wrap gap-2">  
           <div className="mb-4">
             <label for="name" className="block text-gray-700 text-sm font-bold mb-2">Name:</label>
             <input type="text" id="name" name="name" required className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"/>

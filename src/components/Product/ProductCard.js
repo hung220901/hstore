@@ -41,7 +41,7 @@ export default function ProductCard({product, onAddWishlist, favorite}) {
         <div className="px-5 py-5 w-full h-auto  ">
             <div className='relative group hover:shadow-2xl'>
                 <div className='w-full  grid place-items-center '>
-                    <img className='w-[240px] h-[300px] object-cover ' src={product.image.url} alt="" />
+                    <img className='w-[240px] h-[300px] object-cover rounded-md ' src={product.image.url} alt="" />
                 </div>   
                 <button className="absolute top-1 right-1
                     rounded-full bg-white w-8 h-8 outline-none border-none hover:bg-[#ff7272] hover:text-white

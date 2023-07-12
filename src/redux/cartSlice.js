@@ -9,14 +9,16 @@ export const saveCartToDb = createAsyncThunk('cart/saveCartToDb', async (cartIte
   // Nếu có rồi thì update / chưa thì create new
   const existingCartId = getState().carts.id
   if(existingCartId){
-    const response = await request.put(`/cart/${email}?id=${existingCartId}`,{
-      headers:{
-        Authorization: `Bearer ${token}`,
-      },
+    const response = await request.put(`/cart/${email}?id=${existingCartId}`,{ 
       data:{
         items:carts.items,
         email,
         totalPrice:carts.total
+      }
+    }, 
+    {
+      header:{
+        Authorization : `Bearer ${token}`
       }
     }) 
     localStorage.setItem('cartInfo',JSON.stringify({id:response.data._id,email}))
@@ -24,16 +26,18 @@ export const saveCartToDb = createAsyncThunk('cart/saveCartToDb', async (cartIte
   } 
 
   // Thực hiện lưu cart vào db
-  const response = await request.post('/cart',{
-    headers:{
-      Authorization: `Bearer ${token}`,
-    },
-    data:{
+  const response = await request.post('/cart', 
+    {
       items:carts.items,
       email,
       totalPrice:carts.total
+    },
+    {
+      header:{
+        Authorization : `Bearer ${token}`
+      }
     }
-  }) 
+  ) 
   localStorage.setItem('cartInfo',JSON.stringify({id:response.data._id,email}))
   return response.data
 });
@@ -48,8 +52,7 @@ export const clearCartInDb = createAsyncThunk('cart/clearCartInDb', async (cartI
         Authorization: `Bearer ${token}`,
       }
     }); 
-  }
-
+  } 
   localStorage.removeItem('cartItems');
 });
 
@@ -102,14 +105,27 @@ const cartSlice = createSlice({
           existingItem.quantity--;
         } 
         state.total -= parseInt(existingItem.product.price);
+      } 
+      if(state.items.length > 0){
+        localStorage.setItem('cartItems', JSON.stringify({items:[...state.items],total:state.total}))
       }
+      else{
+        localStorage.removeItem('cartItems') 
+      }
+      saveCartToDb()
     },
-    updateQuantity: (state, action) =>{
+    updateQuantity: (state, action) =>{  
       const { _id, quantity } = action.payload; 
-      const existingItem = state.items.find((item) => item.product._id === _id);   
+      const existingItem = state.items.find((item) => item.product._id === _id);    
       if (existingItem) {
-        existingItem.quantity = parseInt(quantity);
-        // existingItem.subTotal = parseInt(existingItem.quantity) * parseInt(existingItem.product.price)
+        const oldQuantity = existingItem.quantity;
+        const newQuantity = parseInt(quantity);
+        const price = parseInt(existingItem.product.price);
+        const quantityDiff = newQuantity - oldQuantity;
+        const subtotalDiff = quantityDiff * price; 
+        existingItem.quantity = newQuantity;
+        existingItem.subTotal += subtotalDiff;
+        state.total += subtotalDiff;
       }
     }, 
     decreaseQuantity: (state, action) =>{

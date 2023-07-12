@@ -22,7 +22,7 @@ export default function LoginFB() {
 
         if(existedAccount.length){  
 
-          if(existedAccount[0].provider != 'facebook'){ 
+          if(existedAccount[0].provider !== 'facebook'){ 
             toast.error('Email existed! Please use another method login')
           } 
           else{ 
@@ -31,8 +31,8 @@ export default function LoginFB() {
                 'avatar':{'url':response.data.picture.data.url},
                 'facebookId':response.data.id,
                 'provider':'facebook'
-            })  
-            localStorage.setItem('token',res.token) 
+            })   
+            localStorage.setItem("token",res.token) 
             dispatch(getCurrentUser({userName: res.userName,role: res.role,avatar:{url:response.data.picture.data.url}}))
             navigate('/')   
           }

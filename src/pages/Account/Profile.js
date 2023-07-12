@@ -2,7 +2,9 @@ import React from 'react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faAngleRight } from '@fortawesome/free-solid-svg-icons'
 import { Link } from 'react-router-dom';
+import {useSelector} from 'react-redux'
 export default function Profile() {
+  const user = useSelector(state=>state.auth.users)
   return (
     <div className='px-5 py-10'>
         <h2 className='text-[#ff7272] text-xl leading-10'>My Wish List</h2>
@@ -24,10 +26,10 @@ export default function Profile() {
               {/* CONTENT */}
               <div className='content px-4 py-5 text-[#777777] text-sm leading-6 min-h-[135px]'>
                 <div className='display-name'>
-                  hung pham
+                  {user.userName}
                 </div>
                 <div className="email">
-                  hung@gmail.com
+                  {user.email}
                 </div>
               </div>
               {/* ACTION */}

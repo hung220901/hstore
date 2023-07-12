@@ -173,7 +173,7 @@ export default function Home() {
       <div className="flex flex-wrap h-full w-full">
         <div className=" flex justify-center w-full items-center md:basis-1/2 flex-wrap sm:flex-nowrap "> 
             {productFemale?.length > 0 &&  productFemale.map((prod, index)=>(
-              <Link to={`/product-detail/${prod.slug}`}>  
+              <Link key={prod._id} to={`/product-detail/${prod.slug}`}>  
                 <ProductCard key={index} product={prod}  onAddWishlist={handleToggleFavorite} favorite={isFavorite(prod._id)} />
               </Link>
             ))
@@ -206,7 +206,7 @@ export default function Home() {
           </div> 
           <div className="md:basis-1/2 flex justify-center items-center w-full flex-wrap sm:flex-nowrap">
             { productMale?.length > 0 && productMale.map((prod, index)=>(
-                <Link to={`/product-detail/${prod.slug}`}>  
+                <Link key={prod._id} to={`/product-detail/${prod.slug}`}>  
                   <ProductCard key={index} product={prod} onAddWishlist={handleToggleFavorite} favorite={isFavorite(prod._id)} /> 
                 </Link>
             ))}

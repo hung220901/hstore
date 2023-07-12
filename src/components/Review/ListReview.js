@@ -5,7 +5,7 @@ import {useDispatch, useSelector} from 'react-redux'
 import {getAllReview} from '../../redux/reviewSlice' 
 import Rating from '../Filter/Rating'
 export default function ListReview({product}) {
-  const reviews = useSelector(state=>state.reviews.items) 
+  const reviews = useSelector(state=>state.reviews.items)  
   const [filter, setFilter ] = useState(0)
   const dispatch = useDispatch() 
  

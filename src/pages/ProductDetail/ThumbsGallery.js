@@ -13,38 +13,43 @@ import "swiper/css/navigation";
 import "swiper/css/thumbs";
 import { useDispatch, useSelector } from 'react-redux'
 import {addToWishList, removeItemFromWishlist} from '../../redux/wishlistSlice'
-import { toast } from 'react-toastify';
-import { decrement, increment, updateQuantity } from '../../redux/productSlice';
+import { toast } from 'react-toastify'; 
 import { addToCart } from '../../redux/cartSlice';
 export default function ThumbsGallery({product}) { 
-  const wishlist = useSelector(state => state.wishlist.items)
-  const productS = useSelector(state => state.products.products)  
+  const wishlist = useSelector(state => state.wishlist.items) 
   const [thumbsSwiper, setThumbsSwiper] = useState(null);  
   SwiperCore.use([Zoom])  
   const dispatch = useDispatch() 
+  const [quantity, setQuantity] = useState(1)
 
+
+  
   const handleAddToCart = (prod)=>{
-    dispatch(addToCart({...prod,quantity:productS.quantity})) 
+    dispatch(addToCart({...prod,quantity})) 
   }
 
 
 
   const handleOnChangeInput = (e)=>{
     const newQuantity = parseInt(e.target.value) 
-    if(newQuantity >= 1){
-        dispatch(updateQuantity({ quantity: newQuantity }))
+    if(newQuantity >= 1){ 
+        setQuantity(newQuantity)
     }
-    else{
-        dispatch(updateQuantity({ quantity: 1 }))
+    else{ 
+        setQuantity(1)
     }   
   }
 
 
-  const handleIncrease = () =>{
-    dispatch(increment())
+  const handleIncrease = () =>{ 
+    setQuantity(quantity+1)
   }
-  const handleDecrease = () =>{ 
-    dispatch(decrement())
+  const handleDecrease = () =>{  
+    if(quantity > 1){
+      setQuantity(quantity-1)
+    }else{
+      setQuantity(1)
+    }
   } 
   const handleToggleWishlist = (prod)=>{
     const existedProduct = wishlist.find(item => item._id === prod._id) 
@@ -163,7 +168,7 @@ export default function ThumbsGallery({product}) {
           <div className="border-solid border-[#e7e7e7] border-t-[1px] border-b-[1px] py-5 w-full">
             <div className="flex items-center justify-start">
               <button className='h-10 w-12 border-solid border-[#e7e7e7] border-[1px] hover:text-[#666666]' onClick={ handleDecrease}>-</button>
-              <input value={productS.quantity} className='border-solid border-[#e7e7e7] border-[1px] outline-none h-10 w-12 text-center' type="number" onChange={e =>handleOnChangeInput(e,product._id)} min="1"  />
+              <input value={quantity} className='border-solid border-[#e7e7e7] border-[1px] outline-none h-10 w-12 text-center' type="number" onChange={e =>handleOnChangeInput(e,product._id)} min="1"  />
               <button className='h-10 w-12 border-solid border-[#e7e7e7] border-[1px] hover:text-[#666666]' onClick={handleIncrease}>+</button>
               <button className="bg-[#222529] text-white h-10 mx-2 px-[2em] uppercase text-[1em] font-bold leading-[3rem] flex items-center gap-2 hover:bg-white hover:text-[#222529] hover:border-[#222529] border-2 hover:border-solid"
                onClick={()=>handleAddToCart(product)}

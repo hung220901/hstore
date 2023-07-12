@@ -30,9 +30,9 @@ export const getAllUserWishlist = async(email) =>{
       console.log('something went wrong!');
     }
 }
-export const addProductToUserWishList = async(productId,email) =>{
+export const addProductToUserWishList = async(productId,email,options) =>{
     try {
-      const res = await request.put(`/user/wishlist/${productId}?email=${email}`)
+      const res = await request.put(`/user/wishlist/${productId}?email=${email}`,options)
         return res.users;
     } catch (error) {
       console.log('something went wrong!');
@@ -40,9 +40,9 @@ export const addProductToUserWishList = async(productId,email) =>{
 }
 
 
-export const addProductArrayToUserWishList = async(wishlist,email) =>{
+export const addProductArrayToUserWishList = async(wishlist,email,options) =>{
   try { 
-      const res = await request.put(`/user/wishlist?email=${email}`,wishlist)
+      const res = await request.put(`/user/wishlist?email=${email}`,wishlist,options)
       return res.data
   } catch (error) {
     console.log('something went wrong!');

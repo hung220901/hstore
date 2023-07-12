@@ -16,8 +16,8 @@ export default function Login() {
             const res = await request.login({
                 email,
                 password,
-            }) 
-            localStorage.setItem("token",res.token)
+            })  
+            localStorage.setItem("token",res.accessToken)
             dispatch(getCurrentUser({userName: res.userName,role: res.role}))
             navigate('/')
         } catch (error) {

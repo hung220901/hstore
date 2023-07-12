@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState,memo,lazy,Suspense }  from 'react'
+import React, { useEffect, useRef, useState,memo }  from 'react'
 import {Link, useNavigate} from 'react-router-dom' 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import {faUser, faHeart} from '@fortawesome/free-regular-svg-icons'
@@ -11,7 +11,7 @@ import Loading from '../../../Loading/Loading'
 import { useDispatch, useSelector } from 'react-redux'
 import {getCategoriesSuccess} from '../../../../redux/categorySlice'
 import {getProductsSuccess} from '../../../../redux/productSlice'
-import {getCartsSuccess, removeFromCart, saveCartToDb } from '../../../../redux/cartSlice'
+import {clearCartInDb, getCartsSuccess, removeFromCart, saveCartToDb } from '../../../../redux/cartSlice'
 import { getCurrentUser } from '../../../../redux/authSlice' 
 function Header() {
   const [show, setShow] = useState({
@@ -30,15 +30,12 @@ function Header() {
   const categories = useSelector((state) =>state.categories.categories) 
   const email = useSelector(state=>state.auth.users?.email)
   const [loading, setLoading] = useState(false)
-  const searchResult =products && products?.length >= 0 && products?.filter((prod)=>prod.name.toLowerCase().includes(searchValue)) 
+  const searchResult = products.length > 0 && products?.filter((prod)=>prod.name.toLowerCase().includes(searchValue))  
   const headerRef = useRef(null) 
   const searchRef = useRef(null);
   const cartRef = useRef(null);
-  const navigate = useNavigate()  
-  const LazyImage = lazy(() => import('../../../Image/LazyImage'));
- 
-
-
+  const navigate = useNavigate()   
+  
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (searchRef.current && !searchRef.current.contains(event.target)) {
@@ -105,7 +102,7 @@ function Header() {
       dispatch(getProductsSuccess(res)) 
     }
     searchValue && fetchApi() 
-  },[debounced,dispatch,searchValue])
+  },[debounced])
 
   // API CART
   useEffect(()=>{
@@ -139,10 +136,10 @@ function Header() {
   const handleRemoveItem = (e,id) =>{
     e.preventDefault()
     e.stopPropagation()
-    dispatch(removeFromCart(id))
+    dispatch(removeFromCart(id))   
   }
  
-// Handle Scroll Sticky 
+// Handle Scroll  Sticky 
 useEffect(()=>{
   window.addEventListener('scroll',function(){  
     if(document.documentElement.scrollTop > 90){ 
@@ -308,9 +305,9 @@ const handleOverlay = e =>{
                 <>
                   <div className='w-6 h-6'>
                     {
-                      user.avatar.url ?
+                      user?.avatar?.url ?
                       ( 
-                        <img src={user.avatar.url} alt="" className='w-full h-full rounded-full' referrerPolicy="no-referrer"/>
+                        <img src={user?.avatar?.url} alt="" className='w-full h-full rounded-full' referrerPolicy="no-referrer"/>
                       ) 
                       :
                       (
@@ -368,7 +365,7 @@ const handleOverlay = e =>{
             </div>
           <div className="absolute z-10  bg-white top-16 w-full rounded ">
               <ul className='list-none'>
-                {searchResult && searchValue?.length > 0 && searchResult.map((prod, index)=>(
+                {searchValue.length > 0 && searchResult.map((prod, index)=>(
                   <li className='px-5 py-3' key={index}>{prod.name }</li>
                 ))}
               </ul>

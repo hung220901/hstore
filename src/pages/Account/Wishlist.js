@@ -20,14 +20,14 @@ export default function Wishlist() {
       }
     }
    
-    !wishlist && fetchUserWishlist()
+    wishlist.length === 0 && fetchUserWishlist()
   },[email])
  
  
      
   const handleRemove = (id)=>{   
-    dispatch(saveWishlist(email))
     dispatch(removeItemFromWishlist(id)) 
+    dispatch(saveWishlist(email))
     toast.success('Đã xoá thành công!')
   }
   return (

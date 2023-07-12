@@ -21,7 +21,7 @@ export const login = async(data) =>{
 export const checkCurrentUser = async(token) =>{
     try {
       const res = await request.get('/auth/', {headers:{
-        Authorization: `Bearer ${token}`
+        Authorization : `Bearer ${token}`
       }})
         return res;
     } catch (error) {

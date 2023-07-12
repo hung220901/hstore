@@ -10,8 +10,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { getProductsStart, getProductsSuccess } from '../../redux/productSlice'
 import Loading from '../../components/Loading/Loading'
 export default function ProductDetail() { 
-  const params = useParams(); 
-  const dispatch = useDispatch()
+  const params = useParams();  
   const products = useSelector(state => state.products.products)  
   const [product, setProduct] = useState({})
 

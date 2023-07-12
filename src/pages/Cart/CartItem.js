@@ -24,8 +24,8 @@ export default function CartItem({product}) {
         }   
     } 
  
-   const handleRemoveItem = ()=>{
-    dispatch(removeFromCart(product._id))
+   const handleRemoveItem = ()=>{ 
+    dispatch(removeFromCart(product.product._id)) 
    }
    
    const handleOnChangeInput = (e, id) =>{

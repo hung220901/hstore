@@ -3,8 +3,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import  { faAngleDown, faAngleUp, faCheck} from '@fortawesome/free-solid-svg-icons'
 import * as request from '../../utils/requestCountry'
 import * as req from '../../utils/request'
-import {useSelector} from 'react-redux' 
-import StripeCheckout from 'react-stripe-checkout'; 
+import {useSelector} from 'react-redux'  
 import {toast} from 'react-toastify' 
 import { customAlphabet } from 'nanoid';
 
@@ -18,12 +17,10 @@ export default function Checkout() {
   const [district, setDistrict] = useState('') 
   const [wardsList, setWardsList] = useState([]) 
   const [ward, setWard] = useState('') 
-  const [address,setAddress] = useState({})
-  const [stripeToken, setStripeToken] = useState(null) 
+  const [address,setAddress] = useState({}) 
   const [order, setOrder ] = useState({})
   const cartItem = useSelector(state=>state.carts)
-  const email = useSelector(state=>state.auth.users.email)
-  const KEY = process.env.REACT_APP_STRIPE_KEY;     
+  const email = useSelector(state=>state.auth.users.email) 
   const nanoid = customAlphabet('0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz',8) 
 
 
@@ -55,7 +52,7 @@ export default function Checkout() {
           total:cartItem.total,
           amount:total*1000,
           bankCode:"",
-          language:"vn" 
+          language:"vn"  
         }) 
         window.location.replace(res.link)  
       }
@@ -64,17 +61,9 @@ export default function Checkout() {
     }
   }
  
-  const onToken = (token)=>{ 
-    setStripeToken(token) 
-    setOrder({
-      orderId: nanoid(),
-      email:token.email,
-      items:cartItem.items,
-      total:cartItem.total,
-      shippingAddress:{...address,zipCode:token.card.address_zip},
-      paymentMethod:token.card.brand, 
-    }) 
-  }
+ 
+
+  
   // Call API FOR SAVE ORDER TO DB
   const handleCheckOut = async()=>{
     try {
@@ -90,21 +79,6 @@ export default function Checkout() {
     }
   }
  
-// Call API STRIPE PAYMENT 
-  useEffect(()=>{
-    const payRequest = async ()=>{
-      try {
-        const res = await req.post("/checkout/payment",{
-          tokenId:stripeToken.id,
-          amount:cartItem.total,
-        })  
-        toast.success('Pay successfully') 
-      } catch (error) {
-        toast.error('Pay failed')
-      }
-    }
-    stripeToken && payRequest()
-  },[stripeToken, cartItem.total]) 
 
 
 
@@ -122,6 +96,7 @@ export default function Checkout() {
     } 
     fetchCountry()
   },[]) 
+
   useEffect(() => {
     const fetchDistrict = async()=>{
       const resD = await request.get(`/p/${country}?depth=2`)
@@ -131,6 +106,8 @@ export default function Checkout() {
     } 
     country && fetchDistrict() 
   }, [country]) 
+
+
   useEffect(() => {
     const fetchWards = async()=>{
       const resW = await request.get(`/d/${district}?depth=2`)
@@ -248,29 +225,12 @@ export default function Checkout() {
             <div className="order-note my-2">
               <textarea className='border-solid border-[1px] border-[#e7e7e7] w-full outline-none' placeholder='Leave a message...' name="note" cols="30" rows="10"></textarea>
             </div> 
-            <div className='flex justify-between'>
-              <StripeCheckout
-                name={`Order #${`XSD223SD`}`}
-                description={`Your total is $${cartItem.total} `}
-                stripeKey={KEY}
-                locale="en"
-                token={onToken}
-                panelLabel="Pay with Visa"
-                zipCode={true}
-                email={email}
-                closed={handleCheckOut}
-                >
-                <button className="bg-black text-white font-bold px-5 py-[5px] uppercase my-2 disabled:opacity-50">
-                  Payment & Order
-                </button>
-              </StripeCheckout>
-              {/* handleVNPayPayment */}
+            <div className='flex justify-between'> 
               <button className="bg-black text-white font-bold px-5 py-[5px] uppercase my-2 disabled:opacity-50" onClick={()=>handleVNPayPayment(cartItem.total)}>
                 Payment with VNPAY
               </button>
             </div>
-          </div> 
-          
+          </div>  
           <div className={`cart ${showCart ? 'max-md:fixed' : 'hidden'} w-full h-full top-0 right-0 z-20 left-[20%] bg-white 
            md:!block lg:!block xl:!block md:w-1/3
           before:bg-[rgba(0,0,0,.5)] before:w-[20%] before:h-full before:content-[""] before:${showCart?'fixed':'hidden'} before:-z-10 before:left-0 before:top-0

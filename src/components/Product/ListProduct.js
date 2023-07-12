@@ -92,7 +92,7 @@ export default function ListProduct() {
         const existedProduct = wishlist.find(item => item._id === prod._id) 
         if(existedProduct){
           toast.success('Remove product from wishlist successfully!')
-          dispatch(removeItemFromWishlist(prod._id))
+          dispatch(removeItemFromWishlist(prod._id)) 
         }
         else{
           toast.success('Add product to wishlist successfully!')
