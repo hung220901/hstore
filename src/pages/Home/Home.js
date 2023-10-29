@@ -70,6 +70,7 @@ export default function Home() {
               pagination={{ clickable: true }}
               loop={true}
               className={styles.bannerSlider}
+              autoplay={true}
             >
               <SwiperSlide>  
                 <div className='relative w-full bg-[#f4f4f4] min-h-[40vh] lt:min-h-[80vh] md:min-h-0 '>
