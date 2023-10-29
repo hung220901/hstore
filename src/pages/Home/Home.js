@@ -181,7 +181,7 @@ export default function Home() {
         </div>        
         <div className="relative md:basis-1/2">
           <img className='object-cover w-full h-full min-w-[205px] min-h-[235px]' src="https://res.cloudinary.com/dibmfkpyq/image/upload/v1682243373/women_go8pr9.jpg" alt="" />
-          <div className='absolute top-[1px] sm:top-1/4 left-[10%] text-left w-full'>
+          <div className='absolute top-[1px] sm:top-1/4 left-[10%] text-left'>
             <h3 className="text-[#222529] font-bold mb-4  text-3xl sm:text-5xl leading-[60px]  -tracking-[0.5px]">WOMEN'S <br/> COLLECTION</h3>
             <div className="text-[#777777] mb-4 sm:mb-6  text-xs sm:text-lg">Check out this week's hottest style</div>
             <button className='bg-transparent border-2 border-solid border-black text-black font-bold px-5 py-[5px] z-10 hover:bg-black hover:text-white whitespace-nowrap '>
@@ -196,7 +196,7 @@ export default function Home() {
       <div className="flex flex-wrap h-full w-full">
           <div className="relative md:basis-1/2">
             <img className='object-cover w-full h-full min-w-[205px] min-h-[235px]' src="https://res.cloudinary.com/dibmfkpyq/image/upload/v1682243374/men_hz7tup.jpg" alt="" />
-            <div className='absolute top-[1px] sm:top-1/4 right-[10%] text-right w-full'>
+            <div className='absolute top-[1px] sm:top-1/4 right-[10%] text-right '>
               <h3 className="text-[#222529] font-bold mb-4 text-3xl sm:text-5xl leading-[60px] -tracking-[0.5px]">MEN'S <br/>COLLECTION </h3>
               <div className="text-[#777777] mb-4 sm:mb-6  text-xs sm:text-lg">Check out this week's hottest style</div>
               <button className='bg-transparent border-2 border-solid border-black text-black font-bold px-5 py-[5px] z-10 hover:bg-black hover:text-white whitespace-nowrap'>
