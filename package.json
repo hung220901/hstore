@@ -1,7 +1,7 @@
 {
   "name": "hstore",
   "version": "0.1.0",
-  "proxy": "http://localhost:5000",
+  "proxy": "https://hstore-api.onrender.com",
   "private": true,
   "dependencies": {
     "@blacklab/react-image-magnify": "^4.1.1",

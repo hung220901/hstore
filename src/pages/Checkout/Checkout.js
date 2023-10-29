@@ -10,7 +10,7 @@ import { customAlphabet } from 'nanoid';
 
 
 export default function Checkout() {
-  const [showCart, setShowCart] = useState(false)
+  const [showCart, setShowCart] = useState(true)
   const [countryList, setCountryList] = useState([])
   const [country, setCountry] = useState('')
   const [districtList, setDistrictList] = useState([])
@@ -163,14 +163,14 @@ export default function Checkout() {
                 Shipping
               </div>
             </li>   
-            <li className='relative w-full before:content-[""] before:absolute before:w-full before:h-2 before:bg-[#e7e7e7] before:rounded-lg'> 
+            {/* <li className='relative w-full before:content-[""] before:absolute before:w-full before:h-2 before:bg-[#e7e7e7] before:rounded-lg'> 
               <div className='absolute rounded-full w-9 h-9 left-[40%] -top-3 bg-white border-solid border-[5px] border-[#e7e7e7] text-center font-semibold'>
                 2
               </div>
               <div className='absolute w-full text-center top-8 whitespace-nowrap'>
                 Review & payments
               </div>
-            </li>  
+            </li>   */}
           </ul>
         </div>
         <div className='flex justify-between gap-10'>
