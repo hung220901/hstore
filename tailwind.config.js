@@ -14,6 +14,9 @@ module.exports = {
         'segoe':['Segoe Script','Savoye LET'],
         'opensans':['Open Sans']
       }, 
+      screens:{
+        'lt':'320px',
+      }
     },
   },
   variants:{

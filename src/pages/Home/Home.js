@@ -72,15 +72,15 @@ export default function Home() {
               className={styles.bannerSlider}
             >
               <SwiperSlide>  
-                <div className='relative w-full bg-[#f4f4f4] min-h-[80vh] md:min-h-0 '>
+                <div className='relative w-full bg-[#f4f4f4] min-h-[40vh] lt:min-h-[80vh] md:min-h-0 '>
                   <div className='hidden md:block'>
-                    <img src="https://www.portotheme.com/magento2/porto/pub/media/wysiwyg/smartwave/porto/homepage/06/shop6_home_slide1.jpg" alt="" /> 
+                    <img className='object-cover' src="https://www.portotheme.com/magento2/porto/pub/media/wysiwyg/smartwave/porto/homepage/06/shop6_home_slide1.jpg" alt="" /> 
                   </div>
                 </div>
                 <div className='absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 py-20 text-[10px] lg:text-[0.875rem] xl:text-[1rem] '>
                   <div className='text-[2.375em] leading-[1] text-center font-normal tracking-wider text-red-500 whitespace-nowrap font-segoe'>Summer Fashion Trends</div>
                   <h1 className='text-[4.1875em] leading-[1] text-center'>BIG SALE UP TO</h1>
-                  <h2 className='text-[10.625em] leading-[1] text-center whitespace-nowrap'>80% <small className='inline-block text-[27%] break-all w-[1em] text-center font-black whitespace-normal'>OFF</small></h2>         
+                  <h2 className='text-[4.625em] leading-[1] text-center whitespace-nowrap'>80% <small className='inline-block text-[27%] break-all w-[1em] text-center font-black whitespace-normal'>OFF</small></h2>         
                   <div className="flex justify-center items-center gap-5">
                     <h5 className='text-xs font-bold h-5'>STARTING AT </h5>    
                     <h5 className='font-extrabold text-sm relative text-white pt-[6px] px-[10px] pb-1 after:content-[""] after:absolute after:bg-[#ff7272] after:z-[-1] after:top-0 after:right-0 after:left-0 after:bottom-0 after:rotate-[-2deg]'><b>$199</b>  99</h5>
@@ -93,12 +93,12 @@ export default function Home() {
                 </div>
               </SwiperSlide>
               <SwiperSlide>
-                <div className='relative w-full bg-[#facece] min-h-[80vh] md:min-h-0 '>
+                <div className='relative w-full bg-[#facece] min-h-[40vh] lt:min-h-[80vh] md:min-h-0 '>
                   <div className='hidden md:block'>
-                    <img src="https://res.cloudinary.com/dibmfkpyq/image/upload/v1676669092/home_slide2_qxksvx.jpg" alt="" /> 
+                    <img className='object-cover' src="https://res.cloudinary.com/dibmfkpyq/image/upload/v1676669092/home_slide2_qxksvx.jpg" alt="" /> 
                   </div>
                 </div>
-                <div className='absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 py-20 flex bg-[rgba(255,255,255,0.5)] text-[9px] md:text-[11px] lg:text-[1rem]'>
+                <div className='absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 py-20 flex bg-[rgba(255,255,255,0.5)] text-[6px] md:text-[11px] lg:text-[1rem]'>
                   <div className="py-[10px] px-5">
                     <div className='text-[2.375em] leading-[1] text-center font-normal tracking-wider text-black whitespace-nowrap font-segoe'>Summer Trends</div>
                     <h1 className='text-[8.75em] leading-[1] text-center whitespace-nowrap'>SALE</h1>
