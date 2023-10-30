@@ -26,7 +26,7 @@ export const saveCartToDb = createAsyncThunk('cart/saveCartToDb', async (cartIte
   } 
 
   // Thực hiện lưu cart vào db
-  const response = await request.post('/cart', 
+  const resCart = await request.post('/cart', 
     {
       items:carts.items,
       email,
@@ -38,8 +38,9 @@ export const saveCartToDb = createAsyncThunk('cart/saveCartToDb', async (cartIte
       }
     }
   ) 
-  localStorage.setItem('cartInfo',JSON.stringify({id:response.data._id,email}))
-  return response.data
+  console.log(resCart)
+  localStorage.setItem('cartInfo',JSON.stringify({id:resCart.data._id,email}))
+  return resCart.data
 });
 
 export const clearCartInDb = createAsyncThunk('cart/clearCartInDb', async (cartItems, { getState }) => {

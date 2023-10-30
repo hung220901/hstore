@@ -20,9 +20,11 @@ export const login = async(data) =>{
 
 export const checkCurrentUser = async(token) =>{
     try {
+      
       const res = await request.get('/auth/', {headers:{
         Authorization : `Bearer ${token}`
       }})
+      console.log(res)
         return res;
     } catch (error) {
       console.log('something went wrong!');

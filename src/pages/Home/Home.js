@@ -81,7 +81,7 @@ export default function Home() {
                 <div className='absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 py-20 text-[10px] lg:text-[0.875rem] xl:text-[1rem] '>
                   <div className='text-[2.375em] leading-[1] text-center font-normal tracking-wider text-red-500 whitespace-nowrap font-segoe'>Summer Fashion Trends</div>
                   <h1 className='text-[4.1875em] leading-[1] text-center'>BIG SALE UP TO</h1>
-                  <h2 className='text-[4.625em] leading-[1] text-center whitespace-nowrap'>80% <small className='inline-block text-[27%] break-all w-[1em] text-center font-black whitespace-normal'>OFF</small></h2>         
+                  <h2 className='text-[9em] leading-[1] text-center whitespace-nowrap'>80% <small className='inline-block text-[27%] break-all w-[1em] text-center font-black whitespace-normal'>OFF</small></h2>         
                   <div className="flex justify-center items-center gap-5">
                     <h5 className='text-xs font-bold h-5'>STARTING AT </h5>    
                     <h5 className='font-extrabold text-sm relative text-white pt-[6px] px-[10px] pb-1 after:content-[""] after:absolute after:bg-[#ff7272] after:z-[-1] after:top-0 after:right-0 after:left-0 after:bottom-0 after:rotate-[-2deg]'><b>$199</b>  99</h5>
